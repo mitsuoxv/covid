@@ -69,8 +69,7 @@ ui <- navbarPage("WHO, Covid-19 situation report",
                             
                             # Show a plot of the generated line chart
                             mainPanel(
-                              plotOutput("plot1"),
-                              plotOutput("plot2")
+                              plotOutput("plot1")
                             )
                           )
                  ),
@@ -123,7 +122,7 @@ server <- function(input, output) {
       labs(
         title = lookup[lookup$menu == input$select_concept_area, "title"] %>% as.character(),
         x = "published date", 
-        caption = str_c("Latest: ", max(publish_date))
+        caption = str_c("Latest: ", max(chart_data_area()$publish_date))
       ) +
       ylab(NULL) +
       theme(legend.position = "top",
@@ -147,7 +146,7 @@ server <- function(input, output) {
       labs(
         title = lookup[lookup$menu == input$select_concept_region, "title"] %>% as.character(),
         x = "published date", 
-        caption = str_c("Latest: ", max(publish_date))
+        caption = str_c("Latest: ", max(chart_data_region()$publish_date))
       ) +
       ylab(NULL) +
       theme(legend.position = "top",

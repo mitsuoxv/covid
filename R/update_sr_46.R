@@ -30,6 +30,10 @@ df_table1 <- df_table1 %>%
 
 tail(df_table1)
 
+# add publish_date
+df_table1 <- df_table1 %>% 
+  select(area, new_conf, new_deaths, cum_conf, cum_deaths) %>% 
+  mutate(publish_date = as.Date("2020-03-06"))
 
 # Table 2
 table_start2 <- str_which(lines, "^Table 2.")
@@ -79,3 +83,4 @@ table1 <- bind_rows(table1, df_table1)
 table2 <- bind_rows(table2, df_table2)
 
 save(table1, table2, file = "data/tables.rdata")
+
