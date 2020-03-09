@@ -16,10 +16,10 @@ load("data/tables.rdata")
 
 # tidy data
 outside_china <- table2 %>% 
-  gather(key = "concept", value = "value", new_conf:cum_deaths)
+  gather(key = "concept", value = "value", -area, -publish_date)
 
 in_china <- table1 %>% 
-  gather(key = "concept", value = "value", new_conf:cum_deaths)
+  gather(key = "concept", value = "value", -region, -publish_date)
 
 # create menus
 area_menu <- unique(table2$area) %>% sort()

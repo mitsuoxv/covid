@@ -9,6 +9,12 @@ make_lines <- function(a_list) {
     unlist()
 }
 
+# make character vector including space numeric
+make_numeric <- function(chr_vec) {
+  chr_vec %>% 
+    str_remove_all(" ") %>% 
+    as.numeric()
+}
 
 # read character vector into a data frame, split by >= 3 spaces
 read_chr_vec <- function(chr_vec, skip, expect_col_num,
@@ -83,3 +89,20 @@ correct_area <- function(df) {
            
     )
 }
+
+
+# correct region names
+correct_region <- function(df) {
+  df %>% 
+    mutate(
+      region = if_else(region == "Totals",
+                       "Total", region),
+      
+      region = if_else(region == "Hong Kong Sar",
+                       "Hong Kong SAR", region),
+      
+      region = if_else(region == "Macao Sar",
+                       "Macao SAR", region)
+    )
+}         
+
