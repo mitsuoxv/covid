@@ -5,7 +5,7 @@ library(pdftools)
 publish_date <- c(
   str_c("01", 21:31),
   str_c("020", 1:9), str_c("02", 10:29),
-  str_c("030", 1:6)
+  str_c("030", 1:8)
 )
 
 for (i in seq_along(publish_date)) {

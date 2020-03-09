@@ -65,6 +65,9 @@ correct_area <- function(df) {
                           "the United Kingdom", area),
            area = if_else(area == "Kingdom",
                           "the United Kingdom", area),
+           area = if_else(area == "The United Kingdom",
+                          "the United Kingdom", area),
+           
            
            area = if_else(area == "United Arab",
                           "United Arab Emirates", area),
