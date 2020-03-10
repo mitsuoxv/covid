@@ -22,21 +22,20 @@ in_china <- table1 %>%
   gather(key = "concept", value = "value", -region, -publish_date)
 
 # create menus
-area_menu <- unique(table2$area) %>% sort()
+area_menu <- unique(outside_china$area) %>% sort()
 
-concept_menu <- names(table2)[2:5]
+concept_menu <- unique(outside_china$concept) %>% sort()
 
-region_menu <- unique(table1$region)
+region_menu <- unique(in_china$region)
 
 # menu to title
 lookup <- tibble(
   menu = concept_menu,
   title = c(
-    "Confirmed cases (new)",
-    "Deaths (new)",
     "Confirmed cases (cumulative)",
-    "Deaths (cumulative)"
-  )
+    "Deaths (cumulative)",
+    "Confirmed cases (new)",
+    "Deaths (new)"  )
 )
 
 

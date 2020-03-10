@@ -64,6 +64,8 @@ correct_area <- function(df) {
                           "the United States", area),
            area = if_else(area == "United States of America",
                           "the United States", area),
+           area = if_else(area == "of the America",
+                          "the United States", area),
            
            area = if_else(area == "The United",
                           "the United Kingdom", area),
@@ -73,16 +75,28 @@ correct_area <- function(df) {
                           "the United Kingdom", area),
            area = if_else(area == "The United Kingdom",
                           "the United Kingdom", area),
+           area = if_else(area == "United Kingdom",
+                          "the United Kingdom", area),
            
+           area = if_else(area == "Bosnia and",
+                          "Bosnia and Herzegovina", area),
+           
+           area = if_else(area == "Republic of)",
+                          "Iran (Islamic Republic of)", area),
            
            area = if_else(area == "United Arab",
                           "United Arab Emirates", area),
+           
+           area = if_else(area == "territory",
+                          "occupied Palestinian territory", area),
            
            area = if_else(area == "International",
                           "International conveyance", area),
            area = if_else(area == "conveyance",
                           "International conveyance", area),
            area = if_else(area == "conveyance (Diamond",
+                          "International conveyance", area),
+           area = if_else(area == "conveyance (Japan)",
                           "International conveyance", area),
            area = if_else(area == "Princess)",
                           "International conveyance", area)
