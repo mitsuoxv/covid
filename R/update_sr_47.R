@@ -66,8 +66,8 @@ df_table2[(df_table2$area == ""), "area"] <-
   c("Bosnia and Herzegovina",
     "Iran (Islamic Republic of)",
     "United Arab Emirates",
-    "the United States",
-    "occupied Palestinian territory"
+    "occupied Palestinian territory",
+    "the United States"
     )
 
 # add publish_date

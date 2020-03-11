@@ -5,12 +5,12 @@ library(pdftools)
 source("R/utility.R")
 
 # Extract text
-sr48 <- pdf_text("pdf/sr48.pdf")
+sr50 <- pdf_text("pdf/sr50.pdf")
 
-str(sr48)
+str(sr50)
 
 # Split into lines
-lines <- sr48  %>% 
+lines <- sr50  %>% 
   make_lines()
 
 # Table 1
@@ -32,7 +32,7 @@ tail(df_table1)
 
 # add publish_date
 df_table1 <- df_table1 %>% 
-  mutate(publish_date = as.Date("2020-03-08"))
+  mutate(publish_date = as.Date("2020-03-10"))
 
 # Table 2
 table_start2 <- str_which(lines, "^Table 2.")
@@ -44,7 +44,7 @@ pattern <- "^\\s*([a-zA-z]+[^a-zA-z])*\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\
 
 df_table2 <- read_chr_vec3(lines_table2, pattern = pattern)
 
-# 24727 match!
+# 32778 match!
 df_table2 %>% 
   summarize(total = sum(cum_conf))
 
@@ -55,25 +55,13 @@ df_table2 <- df_table2 %>%
   correct_area()
 
 # Manually input missing area names
-# Bosnia and Herzegovina
-# Iran (Islamic Republic of)
-# United Arab Emirates
-# occupied Palestinian territory
-# the United States
+# None
 df_table2[(df_table2$area == ""), ]
-
-df_table2[(df_table2$area == ""), "area"] <- 
-  c("Bosnia and Herzegovina",
-    "Iran (Islamic Republic of)",
-    "United Arab Emirates",
-    "occupied Palestinian territory",
-    "the United States"
-    )
 
 # add publish_date
 df_table2 <- df_table2 %>% 
   select(area, new_conf, new_deaths, cum_conf, cum_deaths) %>% 
-  mutate(publish_date = as.Date("2020-03-08"))
+  mutate(publish_date = as.Date("2020-03-10"))
 
 # Merge
 # load data

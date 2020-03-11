@@ -1,3 +1,5 @@
+# I corrected update_sr_47 and 48. So don't run this again.
+
 library(tidyverse)
 
 load("data/tables.rdata")

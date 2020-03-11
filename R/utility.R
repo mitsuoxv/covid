@@ -54,52 +54,65 @@ read_chr_vec3 <- function(chr_vec, pattern) {
 
 
 # Correct area names
+# https://countrycode.org/
 correct_area <- function(df) {
   df %>% 
-    mutate(area = if_else(area == "United States of",
-                          "the United States", area),
-           area = if_else(area == "United States of",
-                          "the United States", area),
-           area = if_else(area == "America",
-                          "the United States", area),
-           area = if_else(area == "United States of America",
-                          "the United States", area),
-           area = if_else(area == "of the America",
-                          "the United States", area),
+    mutate(area = if_else(area %in% c("United States of",
+                                      "America",
+                                      "United States of America",
+                                      "of the America",
+                                      "the United States"
+                                      ), 
+                          "United States", area),
+
+           area = if_else(area %in% c("The United",
+                                      "Kingdom",
+                                      "The United Kingdom",
+                                      "the United Kingdom"
+                                      ),
+                          "United Kingdom", area),
+
+           area = if_else(area %in% c("Republic of)",
+                                      "Iran (Islamic Republic of)"), 
+                          "Iran", area),
            
-           area = if_else(area == "The United",
-                          "the United Kingdom", area),
-           area = if_else(area == "The United Kingdom",
-                          "the United Kingdom", area),
-           area = if_else(area == "Kingdom",
-                          "the United Kingdom", area),
-           area = if_else(area == "The United Kingdom",
-                          "the United Kingdom", area),
-           area = if_else(area == "United Kingdom",
-                          "the United Kingdom", area),
+           area = if_else(area == "Republic of Korea",
+                          "South Korea", area),
            
-           area = if_else(area == "Bosnia and",
+           area = if_else(area %in% c("Bosnia and",
+                                      "Herzegovina"
+                                      ), 
                           "Bosnia and Herzegovina", area),
            
-           area = if_else(area == "Republic of)",
-                          "Iran (Islamic Republic of)", area),
-           
-           area = if_else(area == "United Arab",
+           area = if_else(area %in% c("United Arab",
+                                      "Emirates"
+                                      ), 
                           "United Arab Emirates", area),
            
            area = if_else(area == "territory",
                           "occupied Palestinian territory", area),
            
-           area = if_else(area == "International",
-                          "International conveyance", area),
-           area = if_else(area == "conveyance",
-                          "International conveyance", area),
-           area = if_else(area == "conveyance (Diamond",
-                          "International conveyance", area),
-           area = if_else(area == "conveyance (Japan)",
-                          "International conveyance", area),
-           area = if_else(area == "Princess)",
-                          "International conveyance", area)
+           area = if_else(area == "Republic of Moldova",
+                          "Moldova", area),
+           
+           area = if_else(area %in% c("Dominican Republi",
+                                      "Dominican Republic"
+                                      ), 
+                          "Dominica", area),
+           
+           area = if_else(area == "Brunei Darussalam",
+                          "Brunei", area),
+           
+
+           
+           area = if_else(area %in% c("International",
+                                      "conveyance",
+                                      "conveyance (Diamond",
+                                      "conveyance (Japan)",
+                                      "Princess)",
+                                      "International conveyance"
+                                      ), 
+                          "International conveyance (Diamond Princess)", area)
            
     )
 }
