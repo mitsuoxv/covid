@@ -98,12 +98,17 @@ correct_area <- function(df) {
            area = if_else(area %in% c("Dominican Republi",
                                       "Dominican Republic"
                                       ), 
-                          "Dominica", area),
+                          "Dominican Republic", area),
            
            area = if_else(area == "Brunei Darussalam",
                           "Brunei", area),
            
-
+           area = if_else(area == "State of)",
+                          "Bolivia", area),
+           
+           area = if_else(area == "of the Congo",
+                          "Democratic Republic of the Congo", area),
+           
            
            area = if_else(area %in% c("International",
                                       "conveyance",
