@@ -73,7 +73,9 @@ correct_area <- function(df) {
                           "United Kingdom", area),
 
            area = if_else(area %in% c("Republic of)",
-                                      "Iran (Islamic Republic of)"), 
+                                      "Iran (Islamic Republic of)",
+                                      "of)"
+                                      ), 
                           "Iran", area),
            
            area = if_else(area == "Republic of Korea",
