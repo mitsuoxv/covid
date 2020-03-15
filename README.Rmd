@@ -5,6 +5,8 @@ date: "2020/3/7"
 output: 
   github_document:
     toc: TRUE
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -41,22 +43,24 @@ load("data/tables.rdata")
 I watch newly confirmed cases. China is suceeding to contain the coronavirus, but areas outside China now face the challenge.
 
 ```{r chart}
-chart_data <- table2 %>% 
-  group_by(publish_date) %>% 
-  summarize(new_conf = sum(new_conf, na.rm = TRUE))
+table2a <- table2 %>% 
+  left_join(area_cat, by = "area")
 
-chart_data$in_out <- "Outside China"
+table2a$cat[is.na(table2a$cat)] <- "other than Europe"
+
+chart_data <- table2a %>% 
+  group_by(publish_date, cat) %>% 
+  summarize(new_conf = sum(new_conf, na.rm = TRUE))
 
 china <- table1 %>%
   filter(region == "Total") %>% 
-  select(publish_date, new_conf)
-
-china$in_out <- "In China"
+  mutate(cat = "China") %>% 
+  select(publish_date, cat, new_conf)
 
 chart_data <- bind_rows(chart_data, china)
 
 chart_data %>% 
-  ggplot(aes(publish_date, new_conf, color = in_out)) +
+  ggplot(aes(publish_date, new_conf, color = cat)) +
   geom_hline(yintercept = 0, color = "white", size = 2) +
   geom_line(size = 1) +
   labs(
