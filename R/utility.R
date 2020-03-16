@@ -57,77 +57,90 @@ read_chr_vec3 <- function(chr_vec, pattern) {
 # https://countrycode.org/
 correct_area <- function(df) {
   df %>% 
-    mutate(area = if_else(area %in% c("United States of",
-                                      "America",
-                                      "United States of America",
-                                      "of the America",
-                                      "the United States"
-                                      ), 
-                          "United States", area),
+    mutate(
+      area = stringi::stri_trans_general(area, "latin-ascii"),
+      
+      area = if_else(area %in% c("United States of",
+                                 "America",
+                                 "United States of America",
+                                 "of the America",
+                                 "the United States"
+                                 ), 
+                     "United States", area),
 
-           area = if_else(area %in% c("The United",
-                                      "Kingdom",
-                                      "The United Kingdom",
-                                      "the United Kingdom"
-                                      ),
-                          "United Kingdom", area),
+      area = if_else(area %in% c("The United",
+                                 "Kingdom",
+                                 "The United Kingdom",
+                                 "the United Kingdom"
+                                 ),
+                     "United Kingdom", area),
 
-           area = if_else(area %in% c(
-                                      "Iran (Islamic Republic of)",
-                                      "of)"
-                                      ), 
-                          "Iran", area),
+      area = if_else(area %in% c(
+                                 "Iran (Islamic Republic of)",
+                                 "of)"
+                                 ), 
+                     "Iran", area),
            
-           area = if_else(area == "Republic of Korea",
-                          "South Korea", area),
+      area = if_else(area == "Republic of Korea",
+                     "South Korea", area),
+      
+      area = if_else(area == "Malyasia",
+                     "Malaysia", area),
+      
+      area = if_else(area == "Czechia",
+                     "Czech Republic", area),
+      
+      area = if_else(area %in% c("Bosnia and",
+                                 "Herzegovina"
+                                 ),
+                     "Bosnia and Herzegovina", area),
            
-           area = if_else(area %in% c("Bosnia and",
-                                      "Herzegovina"
-                                      ), 
-                          "Bosnia and Herzegovina", area),
+      area = if_else(area %in% c("United Arab",
+                                 "Emirates"
+                                 ), 
+                     "United Arab Emirates", area),
            
-           area = if_else(area %in% c("United Arab",
-                                      "Emirates"
-                                      ), 
-                          "United Arab Emirates", area),
+      area = if_else(area == "territory",
+                     "occupied Palestinian territory", area),
            
-           area = if_else(area == "territory",
-                          "occupied Palestinian territory", area),
+      area = if_else(area == "Republic of Moldova",
+                     "Moldova", area),
            
-           area = if_else(area == "Republic of Moldova",
-                          "Moldova", area),
+      area = if_else(area %in% c("Dominican Republi",
+                                 "Dominican Republic",
+                                 "Dominica"
+                                 ), 
+                     "Dominican Republic", area),
            
-           area = if_else(area %in% c("Dominican Republi",
-                                      "Dominican Republic"
-                                      ), 
-                          "Dominican Republic", area),
+      area = if_else(area == "Brunei Darussalam",
+                     "Brunei", area),
            
-           area = if_else(area == "Brunei Darussalam",
-                          "Brunei", area),
-           
-           area = if_else(area == "State of)",
-                          "Bolivia", area),
+      area = if_else(area == "State of)",
+                     "Bolivia", area),
 
-           area = if_else(area == "Republic of)",
-                          "Venezuela", area),
+      area = if_else(area == "Republic of)",
+                     "Venezuela", area),
            
-           area = if_else(area == "Grenadines",
-                          "Saint Vincent and the Grenadines", area),
+      area = if_else(area == "Grenadines",
+                     "Saint Vincent and the Grenadines", area),
            
-           area = if_else(area == "of the Congo",
-                          "Democratic Republic of the Congo", area),
+      area = if_else(area == "of the Congo",
+                     "Democratic Republic of the Congo", area),
+      
+      area = if_else(area == "Cote d Ivoire",
+                     "Cote d'Ivoire", area),
+      
+      area = if_else(area == "Republic",
+                     "Central African Republic", area),
            
-           area = if_else(area == "Republic",
-                          "Central African Republic", area),
-           
-           area = if_else(area %in% c("International",
-                                      "conveyance",
-                                      "conveyance (Diamond",
-                                      "conveyance (Japan)",
-                                      "Princess)",
-                                      "International conveyance"
-                                      ), 
-                          "International conveyance (Diamond Princess)", area)
+      area = if_else(area %in% c("International",
+                                 "conveyance",
+                                 "conveyance (Diamond",
+                                 "conveyance (Japan)",
+                                 "Princess)",
+                                 "International conveyance"
+                                 ), 
+                     "International conveyance (Diamond Princess)", area)
            
     )
 }
