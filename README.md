@@ -7,7 +7,7 @@ Mitsuo Shiota
   - [Load](#load)
   - [Chart](#chart)
 
-Updated: 2020-03-15
+Updated: 2020-03-16
 
 ## Summary
 
@@ -55,7 +55,7 @@ coronavirus, but areas outside China now face the challenge.
 table2a <- table2 %>% 
   left_join(area_cat, by = "area")
 
-table2a$cat[is.na(table2a$cat)] <- "other than Europe"
+# table2a$cat[is.na(table2a$cat)] <- "other than Europe"
 
 chart_data <- table2a %>% 
   group_by(publish_date, cat) %>% 
@@ -69,7 +69,8 @@ china <- table1 %>%
 chart_data <- bind_rows(chart_data, china)
 
 chart_data %>% 
-  ggplot(aes(publish_date, new_conf, color = cat)) +
+  ggplot(aes(publish_date, new_conf,
+             color = fct_reorder2(cat, publish_date, new_conf))) +
   geom_hline(yintercept = 0, color = "white", size = 2) +
   geom_line(size = 1) +
   labs(
@@ -79,7 +80,7 @@ chart_data %>%
     color = NULL
   ) +
   ylab(NULL) +
-  theme(legend.position = "top",
+  theme(
         plot.title = element_text(size = rel(2)))
 ```
 
