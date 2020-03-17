@@ -32,14 +32,15 @@ which are unfortunately pdf files.
 So I scratched numbers from pdf files, scratched my head learning
 regular expressions, and made the shiny app above. I would like to
 update frequently, but I am not sure. The ugly codes I wrote are in R
-directory. Data in Table 1 and Table 2 in the situation reports are in
+directory. Data in Table 1 (In China) and Table 2 (World including
+China) in the situation reports are in table1.csv, table2.csv and
 tables.rdata in data directory.
 
 ## Load
 
 Here, I load Table 1 and Table 2, which I managed to scratch from WHO
 situation reports. Beware Table 1 (in\_china) includes total, but Table
-2 (outside\_china) does not include subtotal or total, as I cut them.
+2 (world) does not include subtotal or total, as I cut them.
 
 ``` r
 # load data
@@ -52,21 +53,10 @@ I watch newly confirmed cases. China is suceeding to contain the
 coronavirus, but areas outside China now face the challenge.
 
 ``` r
-table2a <- table2 %>% 
-  left_join(area_cat, by = "area")
-
-chart_data <- table2a %>% 
+table2 %>% 
+  left_join(area_cat, by = "area") %>% 
   group_by(publish_date, cat) %>% 
-  summarize(new_conf = sum(new_conf, na.rm = TRUE))
-
-china <- table1 %>%
-  filter(region == "Total") %>% 
-  mutate(cat = "China") %>% 
-  select(publish_date, cat, new_conf)
-
-chart_data <- bind_rows(chart_data, china)
-
-chart_data %>% 
+  summarize(new_conf = sum(new_conf, na.rm = TRUE)) %>% 
   ggplot(aes(publish_date, new_conf,
              color = fct_reorder2(cat, publish_date, new_conf))) +
   geom_hline(yintercept = 0, color = "white", size = 2) +
@@ -74,15 +64,13 @@ chart_data %>%
   labs(
     title = "Confirmed cases (new)",
     x = "published date",
-    caption = str_c("Latest: ", max(chart_data$publish_date)),
+    caption = str_c("Latest: ", max(table2$publish_date)),
     color = NULL
   ) +
   ylab(NULL) +
   theme(
         plot.title = element_text(size = rel(2)))
 ```
-
-    ## Warning: Removed 1 rows containing missing values (geom_path).
 
 ![](README_files/figure-gfm/chart-1.png)<!-- -->
 
