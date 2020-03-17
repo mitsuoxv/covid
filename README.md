@@ -7,7 +7,7 @@ Mitsuo Shiota
   - [Load](#load)
   - [Chart](#chart)
 
-Updated: 2020-03-16
+Updated: 2020-03-17
 
 ## Summary
 
@@ -54,8 +54,6 @@ coronavirus, but areas outside China now face the challenge.
 ``` r
 table2a <- table2 %>% 
   left_join(area_cat, by = "area")
-
-# table2a$cat[is.na(table2a$cat)] <- "other than Europe"
 
 chart_data <- table2a %>% 
   group_by(publish_date, cat) %>% 

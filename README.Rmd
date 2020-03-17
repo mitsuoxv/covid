@@ -46,8 +46,6 @@ I watch newly confirmed cases. China is suceeding to contain the coronavirus, bu
 table2a <- table2 %>% 
   left_join(area_cat, by = "area")
 
-# table2a$cat[is.na(table2a$cat)] <- "other than Europe"
-
 chart_data <- table2a %>% 
   group_by(publish_date, cat) %>% 
   summarize(new_conf = sum(new_conf, na.rm = TRUE))
