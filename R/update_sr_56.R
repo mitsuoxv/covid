@@ -131,3 +131,16 @@ length(unique(table2$area))
 length(unique(area_cat$area))
 
 setdiff(unique(table2$area), unique(area_cat$area))
+
+# add China to table2
+table2 <- table1 %>% 
+  filter(region == "Total") %>% 
+  rename(area = region) %>% 
+  mutate(area = "China") %>% 
+  bind_rows(table2) %>% 
+  select(publish_date, area, new_conf, new_deaths, cum_conf, cum_deaths)
+
+table2 %>% 
+  write.csv("data/table2.csv", row.names = FALSE)
+
+save(table1, table2, area_cat, file = "data/tables.rdata")

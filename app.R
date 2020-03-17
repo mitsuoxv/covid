@@ -15,16 +15,16 @@ library(tidyverse)
 load("data/tables.rdata")
 
 # tidy data
-outside_china <- table2 %>% 
+world <- table2 %>% 
   gather(key = "concept", value = "value", -area, -publish_date)
 
 in_china <- table1 %>% 
   gather(key = "concept", value = "value", -region, -publish_date)
 
 # create menus
-area_menu <- unique(outside_china$area) %>% sort()
+area_menu <- unique(world$area) %>% sort()
 
-concept_menu <- unique(outside_china$concept) %>% sort()
+concept_menu <- unique(world$concept) %>% sort()
 
 region_menu <- unique(in_china$region)
 
@@ -42,7 +42,7 @@ lookup <- tibble(
 
 # Define UI for application
 ui <- navbarPage("WHO, Covid-19 situation report",
-                 tabPanel("Outside China",
+                 tabPanel("World",
                           sidebarLayout(
                             sidebarPanel(
                               selectInput("select_area1", label = h4("Select area1"),
@@ -55,6 +55,19 @@ ui <- navbarPage("WHO, Covid-19 situation report",
                               
                               selectInput("select_concept_area", label = h4("Select concept"),
                                           choices = concept_menu, selected = "new_conf"),
+                              
+                              hr(),
+                              
+                              # Sidebar with a slider input for date 
+                              sliderInput("date_range_world",
+                                          label = h4("Select date range"), 
+                                          min = min(world$publish_date),
+                                          max = max(world$publish_date),
+                                          value = c(
+                                            min(world$publish_date),
+                                            max(world$publish_date)
+                                          ),
+                                          timeFormat="%m %d"),
                               
                               hr(),
                               
@@ -88,6 +101,19 @@ ui <- navbarPage("WHO, Covid-19 situation report",
                               
                               hr(),
                               
+                              # Sidebar with a slider input for date 
+                              sliderInput("date_range_china",
+                                          label = h4("Select date range"), 
+                                          min = min(in_china$publish_date),
+                                          max = max(in_china$publish_date),
+                                          value = c(
+                                            min(in_china$publish_date),
+                                            max(in_china$publish_date)
+                                          ),
+                                          timeFormat="%m %d"),
+                              
+                              hr(),
+                              
                               # Show source and Shiny app creator
                               a(href = "https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports/",
                                 "Source: WHO"),
@@ -108,10 +134,11 @@ ui <- navbarPage("WHO, Covid-19 situation report",
 # Define server logic required to draw a chart
 server <- function(input, output) {
   chart_data_area <- reactive({
-    outside_china %>% 
+    world %>% 
       filter(area %in% c(input$select_area1, input$select_area2),
-             concept == input$select_concept_area)
-  })
+             concept == input$select_concept_area) %>% 
+      filter(publish_date >= input$date_range_world[1],
+             publish_date <= input$date_range_world[2])  })
   
   output$plot1 <- renderPlot({
     chart_data_area() %>% 
@@ -134,7 +161,9 @@ server <- function(input, output) {
   chart_data_region <- reactive({
     in_china %>% 
       filter(region %in% c(input$select_region1, input$select_region2),
-             concept == input$select_concept_region)
+             concept == input$select_concept_region) %>% 
+      filter(publish_date >= input$date_range_china[1],
+             publish_date <= input$date_range_china[2])
   })
   
   output$plot_region <- renderPlot({
