@@ -74,21 +74,6 @@ df_table2[(df_table2$area == ""), "area"] <-
     "Central African Republic"
   )
 
-# area category
-area_cat <- tibble(
-  area = df_table2$area,
-  cat = c(
-    rep("China", 1),
-    rep("South-East Asia, excl China", 12),
-    rep("Europe", 55),
-    rep("South-East Asia, excl China", 8),
-    rep("Eastern Mediterranean", 17),
-    rep("Americas", 34),
-    rep("Sub-Saharan Africa", 24),
-    rep("International conveyance", 1)
-    )
-)
-
 # add publish_date
 df_table2 <- df_table2 %>% 
   select(area, new_conf, new_deaths, cum_conf, cum_deaths) %>% 
@@ -106,6 +91,21 @@ df_table2 <- df_table2 %>%
 
 # load and check area names
 load("data/tables.rdata")
+
+# area category
+area_cat <- tibble(
+  area = df_table2$area,
+  cat = c(
+    rep("China", 1),
+    rep("South-East Asia, excl China", 12),
+    rep("Europe", 55),
+    rep("South-East Asia, excl China", 8),
+    rep("Eastern Mediterranean", 17),
+    rep("Americas", 34),
+    rep("Sub-Saharan Africa", 24),
+    rep("International conveyance", 1)
+  )
+)
 
 # merge
 table1 <- bind_rows(table1, df_table1)

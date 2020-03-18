@@ -70,6 +70,14 @@ df_table2[(df_table2$area == ""), ]
 df_table2[(df_table2$area == ""), "area"] <- 
   "International conveyance (Diamond Princess)"
 
+# add publish_date
+df_table2 <- df_table2 %>% 
+  select(area, new_conf, new_deaths, cum_conf, cum_deaths) %>% 
+  mutate(publish_date = DATE)
+
+# load and check area names
+load("data/tables.rdata")
+
 # area category
 area_cat <- tibble(
   area = df_table2$area,
@@ -81,16 +89,8 @@ area_cat <- tibble(
     rep("Americas", 30),
     rep("Sub-Saharan Africa", 22),
     rep("International conveyance", 1)
-    )
+  )
 )
-
-# add publish_date
-df_table2 <- df_table2 %>% 
-  select(area, new_conf, new_deaths, cum_conf, cum_deaths) %>% 
-  mutate(publish_date = DATE)
-
-# load and check area names
-load("data/tables.rdata")
 
 # tried to correct umlaut, but failed
 unique(table2$area) %>% sort()
