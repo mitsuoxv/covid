@@ -1,12 +1,17 @@
-# Remove disturbing characters, and split
+# Split by line
 make_lines <- function(a_list) {
   a_list %>% 
+    str_split("\r\n") %>% 
+    unlist()
+}
+
+# Remove disturbing characters
+remove_dis_char <- function(char_vec) {
+  char_vec %>% 
     str_remove_all("§") %>% 
     str_remove_all("‡") %>% 
     str_remove_all("\\*") %>% 
-    str_remove_all("\\^") %>% 
-    str_split("\r\n") %>% 
-    unlist()
+    str_remove_all("\\^")
 }
 
 # make character vector including space numeric
