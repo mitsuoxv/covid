@@ -105,8 +105,10 @@ correct_area <- function(df) {
                                  ), 
                      "United Arab Emirates", area),
            
-      area = if_else(area == "territory",
-                     "occupied Palestinian territory", area),
+      area = if_else(area %in% c("territory",
+                                 "occupied Palestinian territory"
+                                 ),
+                     "Palestine", area),
            
       area = if_else(area == "Republic of Moldova",
                      "Moldova", area),
@@ -131,8 +133,9 @@ correct_area <- function(df) {
       area = if_else(area == "of the Congo",
                      "Democratic Republic of the Congo", area),
       
-      area = if_else(area == "Cote d Ivoire",
-                     "Cote d'Ivoire", area),
+      area = if_else(area %in% c("Cote d Ivoire",
+                                 "Cote d'Ivoire"),
+                     "Ivory Coast", area),
       
       area = if_else(area == "Republic",
                      "Central African Republic", area),
@@ -144,7 +147,37 @@ correct_area <- function(df) {
                                  "Princess)",
                                  "International conveyance"
                                  ), 
-                     "International conveyance (Diamond Princess)", area)
+                     "International conveyance (Diamond Princess)", area),
+      
+      area = if_else(area == "Viet Nam",
+                     "Vietnam", area),
+      
+      area = if_else(area == "Russian Federation",
+                     "Russia", area),
+      
+      area = if_else(area == "North Macedonia",
+                     "Macedonia", area),
+      
+      area = if_else(area == "French Guiana",
+                     "Guiana", area),
+      
+      area = if_else(area == "Congo",
+                     "Republic of the Congo", area),
+      
+      area = if_else(area == "Eswatini",
+                     "Swaziland", area),
+      
+      area = if_else(area == "Timor-Leste",
+                     "East Timor", area),
+      
+      area = if_else(area == "Cabo Verde",
+                     "Cape Verde", area),
+      
+      area = if_else(area == "Kosovo[1]",
+                     "Kosovo", area),
+      
+      area = if_else(area == "Syrian Arab Republic",
+                     "Syria", area)
            
     )
 }
