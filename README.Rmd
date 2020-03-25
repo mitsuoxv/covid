@@ -27,6 +27,7 @@ So I scratched numbers from pdf files, scratched my head learning regular expres
 
 ```{r library, include=FALSE}
 library(tidyverse)
+library(rvest)
 ```
 
 ## Load
@@ -38,11 +39,11 @@ Here, I load Table 1 and Table 2, which I managed to scratch from WHO situation 
 load("data/tables.rdata")
 ```
 
-## Chart
+## Newly confirmed cases by region
 
 I watch newly confirmed cases. China is suceeding to contain the coronavirus, but areas outside China now face the challenge.
 
-```{r chart}
+```{r chart, echo=FALSE}
 table2 %>% 
   left_join(area_cat, by = "area") %>% 
   group_by(publish_date, cat) %>% 
@@ -61,6 +62,62 @@ table2 %>%
   theme(
         plot.title = element_text(size = rel(2)))
 
+```
+
+## Fastest spreading areas
+
+Among areas with more than 10 million population, highest "speed_since_100",  which is per day average newly confirmed cases since cumulative cases became more than 100, are:
+
+```{r per_capita, echo=FALSE}
+cc_html <- read_html("https://countrycode.org/")
+
+cc_df <- cc_html %>% 
+  html_nodes("table") %>% 
+  .[[1]] %>% 
+  html_table()
+
+cc_df$POPULATION <- as.numeric(str_remove_all(cc_df$POPULATION, ","))
+
+speed_raw <- table2 %>% 
+  left_join(cc_df, by = c("area" = "COUNTRY")) %>% 
+  filter(POPULATION >= 10000000) %>% 
+  group_by(area) %>% 
+  arrange(publish_date) %>% 
+  filter(cum_conf > 100) %>% 
+  mutate(
+    days_since_100 = row_number(publish_date),
+    speed_since_100 = (cum_conf - min(cum_conf)) / days_since_100
+    ) %>% 
+  ungroup()
+
+speed_raw %>% 
+  filter(publish_date == max(publish_date)) %>% 
+  arrange(desc(speed_since_100)) %>% 
+  select(area, speed_since_100, cum_conf, days_since_100) %>% 
+  head(20)
+```
+
+Above calculation might be unfair to populous areas. Below "per_capita_cum_conf" is cumulative cases per 1 million. Highest "speed_std_since_100", which is per day growth of cumulative cases per 1 million since cumulative cases became more than 100, are:
+
+```{r standardized, echo=FALSE}
+speed_std <- table2 %>% 
+  left_join(cc_df, by = c("area" = "COUNTRY")) %>% 
+  filter(POPULATION >= 10000000) %>% 
+  group_by(area) %>% 
+  arrange(publish_date) %>% 
+  filter(cum_conf > 100) %>% 
+  mutate(
+    days_since_100 = row_number(publish_date),
+    per_capita_cum_conf = cum_conf * 1000000 / POPULATION,
+    speed_std_since_100 = (cum_conf - min(cum_conf)) * 1000000 / POPULATION / days_since_100
+    ) %>% 
+  ungroup()
+
+speed_std %>% 
+  filter(publish_date == max(publish_date)) %>% 
+  arrange(desc(speed_std_since_100)) %>% 
+  select(area, speed_std_since_100, per_capita_cum_conf, days_since_100) %>% 
+  head(20)
 ```
 
 EOL

@@ -5,7 +5,8 @@ Mitsuo Shiota
 
   - [Summary](#summary)
   - [Load](#load)
-  - [Chart](#chart)
+  - [Newly confirmed cases by region](#newly-confirmed-cases-by-region)
+  - [Fastest spreading areas](#fastest-spreading-areas)
 
 Updated: 2020-03-25
 
@@ -47,31 +48,70 @@ situation reports. Beware Table 1 (in\_china) includes total, but Table
 load("data/tables.rdata")
 ```
 
-## Chart
+## Newly confirmed cases by region
 
 I watch newly confirmed cases. China is suceeding to contain the
 coronavirus, but areas outside China now face the challenge.
 
-``` r
-table2 %>% 
-  left_join(area_cat, by = "area") %>% 
-  group_by(publish_date, cat) %>% 
-  summarize(new_conf = sum(new_conf, na.rm = TRUE)) %>% 
-  ggplot(aes(publish_date, new_conf,
-             color = fct_reorder2(cat, publish_date, new_conf))) +
-  geom_hline(yintercept = 0, color = "white", size = 2) +
-  geom_line(size = 1) +
-  labs(
-    title = "Confirmed cases (new)",
-    x = "published date",
-    caption = str_c("Latest: ", max(table2$publish_date)),
-    color = NULL
-  ) +
-  ylab(NULL) +
-  theme(
-        plot.title = element_text(size = rel(2)))
-```
-
 ![](README_files/figure-gfm/chart-1.png)<!-- -->
+
+## Fastest spreading areas
+
+Among areas with more than 10 million population, highest
+“speed\_since\_100”, which is per day average newly confirmed cases
+since cumulative cases became more than 100, are:
+
+    ## # A tibble: 20 x 4
+    ##    area           speed_since_100 cum_conf days_since_100
+    ##    <chr>                    <dbl>    <dbl>          <int>
+    ##  1 Italy                   2127.     63927             30
+    ##  2 United States           2003.     42164             21
+    ##  3 Spain                   1499.     33089             22
+    ##  4 China                   1273.     81747             64
+    ##  5 Germany                 1264.     29212             23
+    ##  6 France                   883.     19615             22
+    ##  7 Iran                     848.     23049             27
+    ##  8 United Kingdom           344       6654             19
+    ##  9 South Korea              263.      9037             34
+    ## 10 Netherlands              257.      4749             18
+    ## 11 Turkey                   223       1529              6
+    ## 12 Belgium                  202.      3743             18
+    ## 13 Portugal                 177.      2060             11
+    ## 14 Brazil                   142.      1546             10
+    ## 15 Australia                114.      1709             14
+    ## 16 Canada                   108.      1432             12
+    ## 17 Ecuador                  106.       790              6
+    ## 18 Malaysia                  93.4     1518             15
+    ## 19 Czech Republic            93.3     1236             12
+    ## 20 Pakistan                  87.5      887              8
+
+Above calculation might be unfair to populous areas. Below
+“per\_capita\_cum\_conf” is cumulative cases per 1 million. Highest
+“speed\_std\_since\_100”, which is per day growth of cumulative cases
+per 1 million since cumulative cases became more than 100, are:
+
+    ## # A tibble: 20 x 4
+    ##    area           speed_std_since_100 per_capita_cum_conf days_since_100
+    ##    <chr>                        <dbl>               <dbl>          <int>
+    ##  1 Italy                        35.2               1059.              30
+    ##  2 Spain                        32.2                712.              22
+    ##  3 Belgium                      19.4                360.              18
+    ##  4 Portugal                     16.6                193.              11
+    ##  5 Germany                      15.5                357.              23
+    ##  6 Netherlands                  15.4                285.              18
+    ##  7 France                       13.6                303.              22
+    ##  8 Iran                         11.0                300.              27
+    ##  9 Czech Republic                8.91               118.              12
+    ## 10 Ecuador                       7.16                53.4              6
+    ## 11 United States                 6.46               136.              21
+    ## 12 United Kingdom                5.52               107.              19
+    ## 13 South Korea                   5.43               187.              34
+    ## 14 Australia                     5.30                79.4             14
+    ## 15 Chile                         4.40                44.5              8
+    ## 16 Greece                        4.25                63.2             10
+    ## 17 Malaysia                      3.30                53.7             15
+    ## 18 Canada                        3.20                42.5             12
+    ## 19 Turkey                        2.87                19.7              6
+    ## 20 Romania                       2.06                26.2             10
 
 EOL
