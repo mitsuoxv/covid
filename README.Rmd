@@ -66,7 +66,7 @@ table2 %>%
 
 ## Fastest spreading areas
 
-Among areas with more than 10 million population, highest "speed_since_100",  which is per day average newly confirmed cases since cumulative cases became more than 100, are:
+Among areas with more than 10 million population, highest "speed_since_100",  which is average number of newly confirmed cases per day since cumulative cases became more than 100, are:
 
 ```{r per_capita, echo=FALSE}
 cc_html <- read_html("https://countrycode.org/")
@@ -117,19 +117,19 @@ areas_10m %>%
 ```
 
 
-## Highest death rate areas
+## Highest fatality rate areas
 
-Among areas with more than 10 million population and more than 10 cumulative deaths, highest "death rate", which is cumulative deaths per 100 cumulative confirmed cases, are:
+Among areas with more than 10 million population and more than 10 cumulative deaths, highest "fatality_rate", which is cumulative deaths per 100 cumulative confirmed cases, are:
 
-```{r death_rates, echo=FALSE}
+```{r fatality_rates, echo=FALSE}
 areas_10m %>% 
   filter(
     cum_deaths > 10,
     publish_date == max(publish_date)
     ) %>% 
-  mutate(death_rate = cum_deaths * 100 / cum_conf) %>% 
-  arrange(desc(death_rate)) %>% 
-  select(area, death_rate, cum_deaths, cum_conf) %>% 
+  mutate(fatality_rate = cum_deaths * 100 / cum_conf) %>% 
+  arrange(desc(fatality_rate)) %>% 
+  select(area, fatality_rate, cum_deaths, cum_conf) %>% 
   head(20)
 ```
 
