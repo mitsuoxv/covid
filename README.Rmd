@@ -97,7 +97,7 @@ areas_10m %>%
   head(20)
 ```
 
-Above calculation might be unfair to populous areas. Below "per_capita_cum_conf" is cumulative cases per 1 million. Highest "speed_std_since_100", which is per day growth of cumulative cases per 1 million population since cumulative cases became more than 100, are:
+Above calculation might be unfair to populous areas. Below "per_capita_cum_conf" is cumulative cases per 1 million population. Highest "speed_std_since_100", which is per day growth of cumulative cases per 1 million population since cumulative cases became more than 100, are:
 
 ```{r standardized, echo=FALSE}
 areas_10m %>% 
