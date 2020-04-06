@@ -42,6 +42,9 @@ lookup <- tibble(
 
 # Define UI for application
 ui <- navbarPage("WHO, Covid-19 situation report",
+                 
+                 tags$head(includeHTML(("google-analytics.html"))),
+                 
                  tabPanel("World",
                           sidebarLayout(
                             sidebarPanel(
