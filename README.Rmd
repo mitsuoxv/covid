@@ -25,6 +25,8 @@ WHO offers those numbers in [the situation reports](https://www.who.int/emergenc
 
 So I scratched numbers from pdf files, scratched my head learning regular expressions, and made the shiny app above. I would like to update frequently, but I am not sure. The ugly codes I wrote are in R directory. Data in Table 1 (In China) and Table 2 (World including China) in the situation reports are in table1.csv, table2.csv and tables.rdata in data directory.
 
+Note that the confirmed cases are not the actual cases, due to delays from infection to symptoms, limited testing capacity, and so on, as [Nate Silver tells us](https://fivethirtyeight.com/features/coronavirus-case-counts-are-meaningless/).
+
 ```{r library, include=FALSE}
 library(tidyverse)
 library(rvest)
