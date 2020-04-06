@@ -45,6 +45,8 @@ ui <- navbarPage("WHO, Covid-19 situation report",
                  
                  tags$head(includeHTML(("google-analytics.html"))),
                  
+                 selected = "World",
+                 
                  tabPanel("World",
                           sidebarLayout(
                             sidebarPanel(
