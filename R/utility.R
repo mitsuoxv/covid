@@ -63,8 +63,6 @@ read_chr_vec3 <- function(chr_vec, pattern) {
 correct_area <- function(df) {
   df %>% 
     mutate(
-      area = stringi::stri_trans_general(area, "latin-ascii"),
-      
       area = if_else(area %in% c("United States of",
                                  "America",
                                  "United States of America",
@@ -154,6 +152,9 @@ correct_area <- function(df) {
                                  ),
                      "Central African Republic", area),
            
+      area = if_else(area == "Sao Tome and",
+                     "Sao Tome and Principe", area),
+      
       area = if_else(area %in% c("International",
                                  "conveyance",
                                  "conveyance (Diamond",
