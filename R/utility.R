@@ -53,7 +53,7 @@ read_chr_vec3 <- function(chr_vec, pattern) {
   
   df_no_name %>%
     mutate(area = area %>% 
-             str_sub(1L, 23L) %>% 
+             str_sub(1L, 20L) %>% 
              str_trim(side = "both"))
 }
 
@@ -140,11 +140,8 @@ correct_area <- function(df) {
       area = if_else(area %in% c("Cote d Ivoire",
                                  "Cote d'Ivoire"),
                      "Ivory Coast", area),
-      
-      area = if_else(area == "Democratic Republic",
-                     "Democratic Republic of the Congo", area),
-      
-      area = if_else(area == "United Republic of",
+
+            area = if_else(area == "United Republic of",
                      "Tanzania", area),
       
       area = if_else(area %in% c("Republic",
