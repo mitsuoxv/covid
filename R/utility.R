@@ -39,21 +39,23 @@ read_chr_vec <- function(chr_vec, skip, expect_col_num,
 
 # read character vector into a data frame
 read_chr_vec3 <- function(chr_vec, pattern) {
-  temp <- chr_vec %>% 
+  df_raw <- chr_vec %>% 
     str_subset(pattern) %>% 
     str_match(pattern) %>% 
     as_tibble(.name_repair = "minimal") %>% 
     `[`(c(1, 3:6))
   
-  df_no_name <- bind_cols(temp[1],
-                          map_dfr(temp[-1], as.numeric))
+  df <- map_dfc(df_raw[-1], as.numeric)
+
+  names(df) <- c("cum_conf", "new_conf", "cum_deaths", "new_deaths")
   
-  names(df_no_name) <- c("area", "cum_conf",
-                         "new_conf", "cum_deaths", "new_deaths")
+  area_mtx <- df_raw[[1]] %>% 
+    str_match("(\\D*)\\d")
   
-  df_no_name %>%
-    mutate(area = area %>% 
-             str_sub(1L, 20L) %>% 
+  df$area <- area_mtx[, 2]
+  
+  df %>% 
+    mutate(area = area %>%
              str_trim(side = "both"))
 }
 
@@ -198,7 +200,7 @@ correct_area <- function(df) {
       area = if_else(area == "Cabo Verde",
                      "Cape Verde", area),
       
-      area = if_else(area == "Kosovo[1]",
+      area = if_else(area == "Kosovo[",
                      "Kosovo", area),
       
       area = if_else(area == "Syrian Arab Republic",
