@@ -136,6 +136,9 @@ correct_area <- function(df) {
       area = if_else(area == "Bonaire, Sint Eustatius",
                      "Bonaire, Sint Eustatius and Saba", area),
       
+      area = if_else(area == "Saint Pierre and",
+                     "Saint Pierre and Miquelon", area),
+
       area = if_else(area == "of the Congo",
                      "Democratic Republic of the Congo", area),
       
