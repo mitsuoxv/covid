@@ -5,7 +5,7 @@ library(pdftools)
 source("R/utility.R")
 
 # Specify FILE
-FILE <- "20200424-sitrep-95-covid-19.pdf"
+FILE <- "20200425-sitrep-96-covid-19.pdf"
 
 DATE <- as.Date(
   str_c(str_sub(FILE, 1L, 4L), "-",
@@ -36,7 +36,7 @@ pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s*(\\d+)\\s+(\\d+)\\s+(\\d
 
 df_table2 <- read_chr_vec3(lines_table2, pattern = pattern)
 
-# 2626321 match!
+# 2719897 match!
 df_table2 %>% 
   summarize(total = sum(cum_conf))
 
