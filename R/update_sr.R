@@ -5,7 +5,7 @@ library(pdftools)
 source("R/utility.R")
 
 # Specify FILE
-FILE <- "20200429-sitrep-100-covid-19.pdf"
+FILE <- "20200430-sitrep-101-covid-19.pdf"
 
 DATE <- as.Date(
   str_c(str_sub(FILE, 1L, 4L), "-",
@@ -36,7 +36,7 @@ pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s*(\\d+)\\s+(\\d+)\\s+(\\d
 
 df_table2 <- read_chr_vec3(lines_table2, pattern = pattern)
 
-# 3018952 match!
+# 3090445 match!
 df_table2 %>% 
   summarize(total = sum(cum_conf))
 
@@ -50,31 +50,31 @@ df_table2$area
 # Democratic Republic: Laos and DRC
 df_table2[(df_table2$area == "Democratic Republic"), ]
 df_table2[(df_table2$area == "Democratic Republic"), "area"] <-
-  "Laos"
-#  "Democratic Republic of the Congo"
+#  "Laos"
+  "Democratic Republic of the Congo"
 
-df_table2[(df_table2$area == "the)"), ]
-df_table2[(df_table2$area == "the)"), "area"] <- "Northern Mariana Islands"
+# df_table2[(df_table2$area == "the)"), ]
+# df_table2[(df_table2$area == "the)"), "area"] <- "Northern Mariana Islands"
 # df_table2[(df_table2$area == ""), ]
 # df_table2[(df_table2$area == ""), "area"] <- c("Kosovo", "Guernsey")
-df_table2[(df_table2$area == "of)"), ]
-df_table2[(df_table2$area == "of)"), "area"] <- "Iran"
-df_table2[(df_table2$area == "State of)"), ]
-df_table2[(df_table2$area == "State of)"), "area"] <- "Bolivia"
-df_table2[(df_table2$area == "Republic of)"), ]
-df_table2[(df_table2$area == "Republic of)"), "area"] <- "Venezuela"
-df_table2[(df_table2$area == "Islands"), ]
-df_table2[(df_table2$area == "Islands"), "area"] <-
-  c("U.S. Virgin Islands", "Turks and Caicos Islands")
-df_table2[(df_table2$area == "and Saba"), ]
-df_table2[(df_table2$area == "and Saba"), "area"] <- "Bonaire, Sint Eustatius and Saba"
-df_table2[(df_table2$area == "(Malvinas)"), ]
-df_table2[(df_table2$area == "(Malvinas)"), "area"] <- "Falkland Islands"
-df_table2[(df_table2$area == "Principe"), ]
-df_table2[(df_table2$area == "Principe"), "area"] <- "Sao Tome and Principe"
+# df_table2[(df_table2$area == "of)"), ]
+# df_table2[(df_table2$area == "of)"), "area"] <- "Iran"
+# df_table2[(df_table2$area == "State of)"), ]
+# df_table2[(df_table2$area == "State of)"), "area"] <- "Bolivia"
+# df_table2[(df_table2$area == "Republic of)"), ]
+# df_table2[(df_table2$area == "Republic of)"), "area"] <- "Venezuela"
+# df_table2[(df_table2$area == "Islands"), ]
+# df_table2[(df_table2$area == "Islands"), "area"] <-
+#   c("U.S. Virgin Islands", "Turks and Caicos Islands")
+# df_table2[(df_table2$area == "(Malvinas)"), ]
+# df_table2[(df_table2$area == "(Malvinas)"), "area"] <- "Falkland Islands"
+# df_table2[(df_table2$area == "and Saba"), ]
+# df_table2[(df_table2$area == "and Saba"), "area"] <- "Bonaire, Sint Eustatius and Saba"
+# df_table2[(df_table2$area == "Miquelon"), ]
+# df_table2[(df_table2$area == "Miquelon"), "area"] <- "Saint Pierre and Miquelon"
+# df_table2[(df_table2$area == "Principe"), ]
+# df_table2[(df_table2$area == "Principe"), "area"] <- "Sao Tome and Principe"
 
-df_table2[(df_table2$area == "Miquelon"), ]
-df_table2[(df_table2$area == "Miquelon"), "area"] <- "Saint Pierre and Miquelon"
 
 # add publish_date
 df_table2 <- df_table2 %>% 
