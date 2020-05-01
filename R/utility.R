@@ -86,10 +86,10 @@ correct_area <- function(df) {
                                  ), 
                      "Iran", area),
            
-      area = if_else(area == "Lao People's",
+      area = if_else(area %in% c("Lao People's", "Republic"),
                      "Laos", area),
       
-      area = if_else(area == "Northern Mariana",
+      area = if_else(area %in% c("Northern Mariana", "(Commonwealth of the)"),
                      "Northern Mariana Islands", area),
       
       area = if_else(area %in% c("Bosnia and",
@@ -116,7 +116,7 @@ correct_area <- function(df) {
       area = if_else(area == "Brunei Darussalam",
                      "Brunei", area),
            
-      area = if_else(area == "Bolivia (Plurinational",
+      area = if_else(area %in% c("Bolivia (Plurinational", "Bolivia (Plurinational State of)"),
                      "Bolivia", area),
 
       area = if_else(area == "Venezuela (Bolivarian",
@@ -127,29 +127,29 @@ correct_area <- function(df) {
                                  ),
                      "Saint Vincent and the Grenadines", area),
       
-      area = if_else(area == "United States Virgin",
+      area = if_else(area %in% c("United States Virgin", "United States Virgin Islands"),
                      "U.S. Virgin Islands", area),
+      
+      area = if_else(area %in% c("(Malvinas)", "Falkland Islands (Malvinas)"),
+                     "Falkland Islands", area),
       
       area = if_else(area == "Turks and Caicos",
                      "Turks and Caicos Islands", area),
       
-      area = if_else(area == "Bonaire, Sint Eustatius",
+      area = if_else(area %in% c("Bonaire, Sint Eustatius", "and Saba", "Saba"),
                      "Bonaire, Sint Eustatius and Saba", area),
       
       area = if_else(area == "Saint Pierre and",
                      "Saint Pierre and Miquelon", area),
 
-      area = if_else(area == "of the Congo",
-                     "Democratic Republic of the Congo", area),
-      
       area = if_else(area %in% c("Cote d Ivoire",
                                  "Cote d'Ivoire"),
                      "Ivory Coast", area),
 
-            area = if_else(area == "United Republic of",
+            area = if_else(area %in% c("United Republic of", "United Republic of Tanzania"),
                      "Tanzania", area),
       
-      area = if_else(area %in% c("Republic",
+      area = if_else(area %in% c(
                                  "Central African"
                                  ),
                      "Central African Republic", area),
@@ -190,9 +190,6 @@ correct_area <- function(df) {
       
       area = if_else(area == "French Guiana",
                      "Guiana", area),
-      
-      area = if_else(area == "Congo",
-                     "Republic of the Congo", area),
       
       area = if_else(area == "Eswatini",
                      "Swaziland", area),
