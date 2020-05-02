@@ -5,7 +5,7 @@ library(pdftools)
 source("R/utility.R")
 
 # Specify FILE
-FILE <- "20200501-covid-19-sitrep.pdf"
+FILE <- "20200502-covid-19-sitrep-103.pdf"
 
 DATE <- as.Date(
   str_c(str_sub(FILE, 1L, 4L), "-",
@@ -36,8 +36,7 @@ pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s*(\\d+)\\s+(\\d+)\\s+(\\d
 
 df_table2 <- read_chr_vec3(lines_table2, pattern = pattern)
 
-# less than 3175207 by 712, change pattern
-# 3175207 match!
+# 3267184 match!
 df_table2 %>% 
   summarize(total = sum(cum_conf))
 
@@ -48,8 +47,8 @@ df_table2 <- df_table2 %>%
 df_table2$area
 
 # Manually correct area names
-df_table2[(df_table2$area == "Republic of the Congo"), ]
-df_table2[(df_table2$area == "Republic of the Congo"), "area"] <- 
+df_table2[(df_table2$area == "Congo"), ]
+df_table2[(df_table2$area == "Congo"), "area"] <- 
   c("Democratic Republic of the Congo", "Republic of the Congo")
 
 df_table2[(df_table2$area == "of)"), ]
