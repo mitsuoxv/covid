@@ -5,7 +5,7 @@ library(pdftools)
 source("R/utility.R")
 
 # Specify FILE
-FILE <- "20200503-covid-19-sitrep-104.pdf"
+FILE <- "20200504-covid-19-sitrep-105.pdf"
 
 DATE <- as.Date(
   str_c(str_sub(FILE, 1L, 4L), "-",
@@ -36,9 +36,22 @@ pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s*(\\d+)\\s+(\\d+)\\s+(\\d
 
 df_table2 <- read_chr_vec3(lines_table2, pattern = pattern)
 
-# 3349786 match!
+# less than 3435894 by 1125719, United States
+# 3435894 - 2310175
 df_table2 %>% 
   summarize(total = sum(cum_conf))
+
+# manually add United States
+df_table2 <- bind_rows(
+  df_table2,
+  tibble(
+    area = "United States",
+    cum_conf = 1125719,
+    new_conf = 31839,
+    cum_deaths = 60710,
+    new_deaths = -1696
+    )
+)
 
 # correct long area names
 df_table2 <- df_table2 %>% 
@@ -56,6 +69,9 @@ df_table2[(df_table2$area == "of)"), "area"] <- "Venezuela"
 
 df_table2[(df_table2$area == "Other"), ]
 df_table2[(df_table2$area == "Other"), "area"] <- "International conveyance (Diamond Princess)"
+
+df_table2[(df_table2$area == ""), ]
+df_table2[(df_table2$area == ""), "area"] <- "Kosovo"
 
 df_table2 %>% 
   count(area) %>% 
@@ -99,13 +115,14 @@ area_cat <- tibble(
   area = df_table2$area,
   cat = c(
     rep("Sub-Saharan Africa", 48),
-    rep("Americas", 54),
+    rep("Americas", 53),
     rep("Eastern Mediterranean", 22),
     rep("Europe", 61),
     rep("South East Asia, excl China", 10),
     rep("China", 1),
     rep("South East Asia, excl China", 18),
-    rep("International conveyance", 1)
+    rep("International conveyance", 1),
+    rep("Americas", 1)
   )
 )
 
