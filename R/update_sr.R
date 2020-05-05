@@ -32,26 +32,17 @@ lines_table2 <- lines[table_start2:table_end2] %>%
   str_remove_all("†") %>% 
   stringi::stri_trans_general("latin-ascii")
 
-pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s*(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+[a-zA-z\\-]+"
+pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s*(\\d+)\\s+(-?\\d+)\\s+(\\d+)\\s+(-?\\d+)\\s+[a-zA-z\\-]+"
 
 df_table2 <- read_chr_vec3(lines_table2, pattern = pattern)
 
-# less than 3435894 by 1125719, United States
-# 3435894 - 2310175
+# less than 3435894 by 1125719, United States, change pattern
+# 3435894 match!
 df_table2 %>% 
   summarize(total = sum(cum_conf))
 
-# manually add United States
-df_table2 <- bind_rows(
-  df_table2,
-  tibble(
-    area = "United States",
-    cum_conf = 1125719,
-    new_conf = 31839,
-    cum_deaths = 60710,
-    new_deaths = -1696
-    )
-)
+df_table2 %>% 
+  summarize(total = sum(new_deaths))
 
 # correct long area names
 df_table2 <- df_table2 %>% 
@@ -92,6 +83,12 @@ df_table1[df_table1$region == "China", "region"] <- "Total"
 # load
 load("data/tables.rdata")
 
+table1 <- table1 %>% 
+  filter(publish_date < DATE)
+
+table2 <- table2 %>% 
+  filter(publish_date < DATE)
+
 # check new entry
 length(unique(table2$area))
 length(df_table2$area)
@@ -115,14 +112,13 @@ area_cat <- tibble(
   area = df_table2$area,
   cat = c(
     rep("Sub-Saharan Africa", 48),
-    rep("Americas", 53),
+    rep("Americas", 54),
     rep("Eastern Mediterranean", 22),
     rep("Europe", 61),
     rep("South East Asia, excl China", 10),
     rep("China", 1),
     rep("South East Asia, excl China", 18),
-    rep("International conveyance", 1),
-    rep("Americas", 1)
+    rep("International conveyance", 1)
   )
 )
 
