@@ -5,7 +5,7 @@ library(pdftools)
 source("R/utility.R")
 
 # Specify FILE
-FILE <- "20200505covid-19-sitrep-106.pdf"
+FILE <- "20200506covid-19-sitrep-107.pdf"
 
 DATE <- as.Date(
   str_c(str_sub(FILE, 1L, 4L), "-",
@@ -32,13 +32,27 @@ lines_table2 <- lines[table_start2:table_end2] %>%
   str_remove_all("†") %>% 
   stringi::stri_trans_general("latin-ascii")
 
-pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s*(\\d+)\\s+(-?\\d+)\\s+(\\d+)\\s+(-?\\d+)\\s+[a-zA-z\\-]+"
+pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s+((\\d+\\s?)+)\\s+(-?(\\d+\\s?)+)\\s+((\\d+\\s?)+)\\s+(-?(\\d+\\s?)+)\\s+[a-zA-z\\-]+"
 
 df_table2 <- read_chr_vec3(lines_table2, pattern = pattern)
 
-# 3517345 match!
+# 231091 much less than 3588773, because of a space in digits
+# change pattern
+# 3588773 match!
 df_table2 %>% 
   summarize(total = sum(cum_conf))
+
+# 71463 match!
+df_table2 %>% 
+  summarize(total = sum(new_conf))
+
+# 247503 match!
+df_table2 %>% 
+  summarize(total = sum(cum_deaths))
+
+# 4102 match!
+df_table2 %>% 
+  summarize(total = sum(new_deaths))
 
 # correct long area names
 df_table2 <- df_table2 %>% 
@@ -78,12 +92,6 @@ df_table1[df_table1$region == "China", "region"] <- "Total"
 
 # load
 load("data/tables.rdata")
-
-table1 <- table1 %>% 
-  filter(publish_date < DATE)
-
-table2 <- table2 %>% 
-  filter(publish_date < DATE)
 
 # check new entry
 length(unique(table2$area))
@@ -133,4 +141,15 @@ table2 %>%
   write.csv("data/table2.csv", row.names = FALSE)
 
 save(table1, table2, area_cat, file = "data/tables.rdata")
+
+# check NA
+sum(is.na(table1))
+temp <- table1 %>% 
+  filter(publish_date >= "2020-04-01")
+sum(is.na(temp))
+
+sum(is.na(table2))
+temp <- table2 %>% 
+  filter(publish_date >= "2020-04-01")
+sum(is.na(temp))
 

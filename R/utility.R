@@ -14,10 +14,10 @@ remove_dis_char <- function(char_vec) {
     str_remove_all("\\^")
 }
 
-# make character vector including space numeric
+# make numeric vector from character vector including space numeric
 make_numeric <- function(chr_vec) {
   chr_vec %>% 
-    str_remove_all(" ") %>% 
+    str_remove_all("\\s") %>% 
     as.numeric()
 }
 
@@ -36,16 +36,15 @@ read_chr_vec <- function(chr_vec, skip, expect_col_num,
             map_dfr(df_no_name[, -column_chr], as.numeric))
 }
 
-
 # read character vector into a data frame
 read_chr_vec3 <- function(chr_vec, pattern) {
   df_raw <- chr_vec %>% 
     str_subset(pattern) %>% 
     str_match(pattern) %>% 
     as_tibble(.name_repair = "minimal") %>% 
-    `[`(c(1, 3:6))
+    `[`(c(1, 3, 5, 7, 9))
   
-  df <- map_dfc(df_raw[-1], as.numeric)
+  df <- map_dfc(df_raw[-1], make_numeric)
 
   names(df) <- c("cum_conf", "new_conf", "cum_deaths", "new_deaths")
   
