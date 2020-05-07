@@ -5,7 +5,7 @@ library(pdftools)
 source("R/utility.R")
 
 # Specify FILE
-FILE <- "20200506covid-19-sitrep-107.pdf"
+FILE <- "20200507covid-19-sitrep-108.pdf"
 
 DATE <- as.Date(
   str_c(str_sub(FILE, 1L, 4L), "-",
@@ -36,21 +36,19 @@ pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s+((\\d+\\s?)+)\\s+(-?(\\d
 
 df_table2 <- read_chr_vec3(lines_table2, pattern = pattern)
 
-# 231091 much less than 3588773, because of a space in digits
-# change pattern
-# 3588773 match!
+# 3 672 238 match!
 df_table2 %>% 
   summarize(total = sum(cum_conf))
 
-# 71463 match!
+# 83 465 match!
 df_table2 %>% 
   summarize(total = sum(new_conf))
 
-# 247503 match!
+# 254 045 match!
 df_table2 %>% 
   summarize(total = sum(cum_deaths))
 
-# 4102 match!
+# 6539 match!
 df_table2 %>% 
   summarize(total = sum(new_deaths))
 
@@ -142,14 +140,4 @@ table2 %>%
 
 save(table1, table2, area_cat, file = "data/tables.rdata")
 
-# check NA
-sum(is.na(table1))
-temp <- table1 %>% 
-  filter(publish_date >= "2020-04-01")
-sum(is.na(temp))
-
-sum(is.na(table2))
-temp <- table2 %>% 
-  filter(publish_date >= "2020-04-01")
-sum(is.na(temp))
 
