@@ -5,7 +5,7 @@ library(pdftools)
 source("R/utility.R")
 
 # Specify FILE
-FILE <- "20200507covid-19-sitrep-108.pdf"
+FILE <- readline(prompt = "Input file name: ")
 
 DATE <- as.Date(
   str_c(str_sub(FILE, 1L, 4L), "-",
@@ -25,32 +25,41 @@ lines <- sr  %>%
 
 # Table 1. or 2.
 table_start2 <- str_which(lines, "^Table \\d. Countries")
-table_end2 <- str_which(lines, "Grand total")
+table_end2 <- str_which(lines, "Grand total") + 1
 
 lines_table2 <- lines[table_start2:table_end2] %>% 
   remove_dis_char() %>% 
   str_remove_all("†") %>% 
   stringi::stri_trans_general("latin-ascii")
 
-pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s+((\\d+\\s?)+)\\s+(-?(\\d+\\s?)+)\\s+((\\d+\\s?)+)\\s+(-?(\\d+\\s?)+)\\s+[a-zA-z\\-]+"
+pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s+((\\d+\\s?)+)\\s+(-?(\\d+\\s?)+)\\s+((\\d+\\s?)+)\\s+(-?(\\d+\\s?)+)"
 
-df_table2 <- read_chr_vec3(lines_table2, pattern = pattern)
+df_all <- read_chr_vec3(lines_table2, pattern = pattern)
 
-# 3 672 238 match!
-df_table2 %>% 
-  summarize(total = sum(cum_conf))
+# check and correct "Grand total"
+tail(df_all)
 
-# 83 465 match!
-df_table2 %>% 
-  summarize(total = sum(new_conf))
+df_all[df_all$area == "", ]
+df_all[df_all$area == "", "area"] <- c("Kosovo", "Grand total")
 
-# 254 045 match!
-df_table2 %>% 
-  summarize(total = sum(cum_deaths))
+df_table2 <- df_all %>% 
+  filter(!(area %in% c("Subtotal for all regions", "Grand total")))
 
-# 6539 match!
-df_table2 %>% 
-  summarize(total = sum(new_deaths))
+# check sum
+sum_calc <- df_table2 %>% 
+  select(-area) %>% 
+  map_dbl(sum)
+
+sum_to_be <- df_all %>% 
+  filter(area == "Grand total") %>% 
+  select(-area) %>% 
+  unlist()
+
+sum_calc
+
+sum_to_be
+
+sum_calc - sum_to_be
 
 # correct long area names
 df_table2 <- df_table2 %>% 
@@ -68,9 +77,6 @@ df_table2[(df_table2$area == "of)"), "area"] <- "Venezuela"
 
 df_table2[(df_table2$area == "Other"), ]
 df_table2[(df_table2$area == "Other"), "area"] <- "International conveyance (Diamond Princess)"
-
-df_table2[(df_table2$area == ""), ]
-df_table2[(df_table2$area == ""), "area"] <- "Kosovo"
 
 df_table2 %>% 
   count(area) %>% 
