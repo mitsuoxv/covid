@@ -40,7 +40,7 @@ df_all <- read_chr_vec3(lines_table2, pattern = pattern)
 tail(df_all)
 
 df_all[df_all$area == "", ]
-df_all[df_all$area == "", "area"] <- c("Kosovo", "Grand total")
+df_all[df_all$area == "", "area"] <- "Grand total"
 
 df_table2 <- df_all %>% 
   filter(!(area %in% c("Subtotal for all regions", "Grand total")))
@@ -75,9 +75,7 @@ df_table2[(df_table2$area == "Congo"), "area"] <-
 df_table2[(df_table2$area == "of)"), ]
 df_table2[(df_table2$area == "of)"), "area"] <- "Venezuela"
 
-df_table2[(df_table2$area == "Other"), ]
-df_table2[(df_table2$area == "Other"), "area"] <- "International conveyance (Diamond Princess)"
-
+# check duplication in area name
 df_table2 %>% 
   count(area) %>% 
   filter(n > 1)
@@ -126,7 +124,7 @@ area_cat <- tibble(
     rep("South East Asia, excl China", 10),
     rep("China", 1),
     rep("South East Asia, excl China", 18),
-    rep("International conveyance", 1)
+    rep("Other", 1)
   )
 )
 
