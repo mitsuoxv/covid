@@ -32,7 +32,7 @@ lines_table2 <- lines[table_start2:table_end2] %>%
   str_remove_all("†") %>% 
   stringi::stri_trans_general("latin-ascii")
 
-pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s+((\\d+\\s?)+)\\s+(-?(\\d+\\s?)+)\\s+((\\d+\\s?)+)\\s+(-?(\\d+\\s?)+)"
+pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s*((\\d+\\s?)+)\\s+(-?(\\d+\\s?)+)\\s+((\\d+\\s?)+)\\s+(-?(\\d+\\s?)+)"
 
 df_all <- read_chr_vec3(lines_table2, pattern = pattern)
 
@@ -95,11 +95,13 @@ df_table1[df_table1$region == "China", "region"] <- "Total"
 # load
 load("data/tables.rdata")
 
-# check new entry
+# check entry
 length(unique(table2$area))
 length(df_table2$area)
 
 setdiff(df_table2$area, unique(table2$area))
+
+setdiff(unique(table2$area), df_table2$area)
 
 # merge table1 and table2
 table1 <- bind_rows(table1, df_table1)
