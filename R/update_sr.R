@@ -32,7 +32,7 @@ lines_table2 <- lines[table_start2:table_end2] %>%
   str_remove_all("†") %>% 
   stringi::stri_trans_general("latin-ascii")
 
-pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s*((\\d+\\s?)+)\\s+(-?(\\d+\\s?)+)\\s+((\\d+\\s?)+)\\s+(-?(\\d+\\s?)+)"
+pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s*((\\d+\\s?)+)\\s+(-?\\s?(\\d+\\s?)+)\\s+((\\d+\\s?)+)\\s+(-?\\s?(\\d+\\s?)+)"
 
 df_all <- read_chr_vec3(lines_table2, pattern = pattern)
 
