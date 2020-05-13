@@ -39,8 +39,8 @@ df_all <- read_chr_vec3(lines_table2, pattern = pattern)
 # check and correct "Grand total"
 tail(df_all)
 
-df_all[df_all$area == "", ]
-df_all[df_all$area == "", "area"] <- "Grand total"
+# df_all[df_all$area == "", ]
+# df_all[df_all$area == "", "area"] <- "Grand total"
 
 df_table2 <- df_all %>% 
   filter(!(area %in% c("Subtotal for all regions", "Grand total")))
@@ -68,12 +68,13 @@ df_table2 <- df_table2 %>%
 df_table2$area
 
 # Manually correct area names
+# "Democratic Republic of the Congo"
 df_table2[(df_table2$area == "Congo"), ]
 df_table2[(df_table2$area == "Congo"), "area"] <- 
-  c("Democratic Republic of the Congo", "Republic of the Congo")
+  c("Republic of the Congo")
 
-df_table2[(df_table2$area == "of)"), ]
-df_table2[(df_table2$area == "of)"), "area"] <- "Venezuela"
+# df_table2[(df_table2$area == "of)"), ]
+# df_table2[(df_table2$area == "of)"), "area"] <- "Venezuela"
 
 # check duplication in area name
 df_table2 %>% 

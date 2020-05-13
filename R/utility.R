@@ -85,7 +85,8 @@ correct_area <- function(df) {
                                  ), 
                      "Iran", area),
            
-      area = if_else(area %in% c("Lao People's", "Republic"),
+      area = if_else(area %in% c("Lao People's", "Republic",
+                                 "Lao People's Democratic Republic"),
                      "Laos", area),
       
       area = if_else(area %in% c("Northern Mariana", "(Commonwealth of the)"),
@@ -118,7 +119,8 @@ correct_area <- function(df) {
       area = if_else(area %in% c("Bolivia (Plurinational", "Bolivia (Plurinational State of)"),
                      "Bolivia", area),
 
-      area = if_else(area == "Venezuela (Bolivarian",
+      area = if_else(area %in% c("Venezuela (Bolivarian",
+                                    "Venezuela (Bolivarian Republic of)"),
                      "Venezuela", area),
            
       area = if_else(area %in% c("Grenadines",
