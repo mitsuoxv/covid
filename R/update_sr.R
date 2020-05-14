@@ -120,7 +120,7 @@ df_table2$area
 area_cat <- tibble(
   area = df_table2$area,
   cat = c(
-    rep("Sub-Saharan Africa", 48),
+    rep("Sub-Saharan Africa", 49),
     rep("Americas", 54),
     rep("Eastern Mediterranean", 22),
     rep("Europe", 61),
