@@ -135,6 +135,24 @@ areas_10m %>%
   head(20)
 ```
 
+## Highest deaths per population areas
+
+Among areas with more than 10 million population, highest "deaths_per_1m", which is cumulative deaths per 1 million population, are:
+
+```{r deaths_per_population, echo=FALSE}
+areas_10m %>% 
+  filter(
+    publish_date == max(publish_date)
+    ) %>% 
+  mutate(
+    pop_mil = POPULATION / 1000000,
+    deaths_per_1m = cum_deaths / pop_mil
+    ) %>% 
+  arrange(desc(deaths_per_1m)) %>% 
+  select(area, deaths_per_1m, cum_deaths, pop_mil) %>% 
+  head(20)
+```
+
 
 EOL
 
