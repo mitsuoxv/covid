@@ -18,10 +18,10 @@ DATE <- as.Date(
   )
 
 # Check FILE is really new
-if (DATE == max(table2$publish_date)) {
-  print("Stop! Date is not new.")
+if (DATE == max(table2$publish_date) + 1) {
+  print("OK.")
 } else {
-  print("OK.") 
+  print("Stop! Date is not new.") 
 }
   
 # Extract text
