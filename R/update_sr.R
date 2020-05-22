@@ -1,8 +1,12 @@
+# Libraries
 library(tidyverse)
 library(pdftools)
 
-# load utility
+# Load utility
 source("R/utility.R")
+
+# Load old data
+load("data/tables.rdata")
 
 # Specify FILE
 FILE <- readline(prompt = "Input file name: ")
@@ -13,6 +17,13 @@ DATE <- as.Date(
         str_sub(FILE, 7L, 8L))
   )
 
+# Check FILE is really new
+if (DATE == max(table2$publish_date)) {
+  print("Stop! Date is not new.")
+} else {
+  print("OK.") 
+}
+  
 # Extract text
 sr <- pdf_text(str_c("pdf/", FILE))
 
@@ -36,7 +47,7 @@ pattern <- "^\\s*([a-zA-z\\(\\),]+[^a-zA-z\\(\\),])*\\s*((\\d+\\s?)+)\\s+(-?\\s?
 
 df_all <- read_chr_vec3(lines_table2, pattern = pattern)
 
-# check and correct "Grand total"
+# Check and correct "Grand total"
 tail(df_all)
 
 # df_all[df_all$area == "", ]
@@ -45,7 +56,7 @@ tail(df_all)
 df_table2 <- df_all %>% 
   filter(!(area %in% c("Subtotal for all regions", "Grand total")))
 
-# check sum
+# Check sum
 sum_calc <- df_table2 %>% 
   select(-area) %>% 
   map_dbl(sum)
@@ -61,7 +72,7 @@ sum_to_be
 
 sum_calc - sum_to_be
 
-# correct long area names
+# Correct long area names
 df_table2 <- df_table2 %>% 
   correct_area()
 
@@ -76,12 +87,12 @@ df_table2[(df_table2$area == "Congo"), "area"] <-
 # df_table2[(df_table2$area == "of)"), ]
 # df_table2[(df_table2$area == "of)"), "area"] <- "Venezuela"
 
-# check duplication in area name
+# Check duplication in area name
 df_table2 %>% 
   count(area) %>% 
   filter(n > 1)
 
-# add publish_date
+# Add publish_date
 df_table2 <- df_table2 %>% 
   select(area, new_conf, new_deaths, cum_conf, cum_deaths) %>% 
   mutate(publish_date = DATE)
@@ -93,10 +104,8 @@ df_table1 <- df_table2 %>%
 
 df_table1[df_table1$region == "China", "region"] <- "Total"
 
-# load
-load("data/tables.rdata")
 
-# check entry
+# Check entry
 length(unique(table2$area))
 length(df_table2$area)
 
@@ -104,7 +113,7 @@ setdiff(df_table2$area, unique(table2$area))
 
 setdiff(unique(table2$area), df_table2$area)
 
-# merge table1 and table2
+# Merge table1 and table2
 table1 <- bind_rows(table1, df_table1)
 table2 <- bind_rows(table2, df_table2)
 
@@ -114,7 +123,7 @@ table1 <- table1 %>%
 table2 <- table2 %>% 
   select(publish_date, area, new_conf, new_deaths, cum_conf, cum_deaths)
 
-# update area category
+# Make area category
 df_table2$area
 
 area_cat <- tibble(
@@ -131,14 +140,14 @@ area_cat <- tibble(
   )
 )
 
-# check
+# Check
 length(unique(table2$area))
 
 length(unique(area_cat$area))
 
 setdiff(unique(table2$area), unique(area_cat$area))
 
-# save
+# Save updated data
 table1 %>% 
   write.csv("data/table1.csv", row.names = FALSE)
 
