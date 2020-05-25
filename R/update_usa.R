@@ -65,48 +65,19 @@ deaths %>%
 # Bind
 data_usa <- left_join(conf, deaths, by = c("State", "publish_date"))
 
-# states
+# Add state name column
 states <- 
   bind_rows(
-  tibble(
-    State = state.abb,
-    state_name = state.name
-  ),
-  tibble(
-    State = "DC",
-    state_name = "District of Columbia"
+    tibble(
+      State = state.abb,
+      state_name = state.name
+    ),
+    tibble(
+      State = "DC",
+      state_name = "District of Columbia"
+    )
   )
-)
 
-gov_html <- read_html("https://en.wikipedia.org/wiki/List_of_United_States_governors")
-
-gov_df <- gov_html %>% 
-  html_nodes("table") %>% 
-  .[[1]] %>% 
-  html_table(fill = TRUE)
-
-gov_df <- gov_df[-1, c(1, 5)]
-
-names(gov_df) <- c("state_name", "party")
-
-gov_df <- gov_df %>% 
-  mutate(party = str_sub(party, 1L, 10L))
-
-dc_df <- gov_html %>% 
-  html_nodes("table") %>% 
-  .[[3]] %>% 
-  html_table(fill = TRUE)
-
-dc_df <- dc_df[-1, c(1, 5)]
-
-names(dc_df) <- c("state_name", "party")
-
-gov_dc_df <- bind_rows(gov_df, dc_df)
-
-states <- states %>% 
-  left_join(gov_dc_df, by = "state_name")
-
-# data_usa with govornors
 data_usa <- data_usa %>% 
   left_join(states, by = "State")
 

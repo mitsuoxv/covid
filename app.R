@@ -22,7 +22,7 @@ in_china <- table1 %>%
   gather(key = "concept", value = "value", -region, -publish_date)
 
 in_usa <- data_usa %>% 
-  gather(key = "concept", value = "value", -State, -publish_date, -state_name, -party) %>% 
+  gather(key = "concept", value = "value", -State, -publish_date, -state_name) %>% 
   select(-State) %>% 
   rename(state = state_name)
 

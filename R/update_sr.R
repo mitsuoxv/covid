@@ -154,6 +154,6 @@ table1 %>%
 table2 %>% 
   write.csv("data/table2.csv", row.names = FALSE)
 
-save(table1, table2, area_cat, file = "data/tables.rdata")
+save(table1, table2, area_cat, data_usa, file = "data/tables.rdata")
 
 
