@@ -10,6 +10,8 @@ Mitsuo Shiota
   - [Highest fatality rate areas](#highest-fatality-rate-areas)
   - [Highest deaths per population
     areas](#highest-deaths-per-population-areas)
+  - [U.S. deaths (new) by red or blue
+    states](#u.s.-deaths-new-by-red-or-blue-states)
 
 Updated: 2020-05-25
 
@@ -44,6 +46,17 @@ Note that the confirmed cases are not the actual cases, due to delays
 from infection to symptoms, limited testing capacity, and so on, as
 [Nate Silver tells
 us](https://fivethirtyeight.com/features/coronavirus-case-counts-are-meaningless/).
+
+I later found [Johns Hopkins University, Coronavirus Resource
+Center](https://coronavirus.jhu.edu/) and [Financial Times, Coronavirus
+tracked](https://www.ft.com/content/a26fbf7e-48f8-11ea-aeb3-955839e06441)
+are very informative, and that they provide some time-series charts of
+the newly confirmed cases.
+
+I added the United States page to [my Shiny
+App](https://mitsuoxv.shinyapps.io/covid/) on May 25, 2020. I use data
+from [USAFacts
+page](https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/).
 
 ## Load
 
@@ -182,5 +195,15 @@ population, are:
     ## 18 Chile                   40.2        673    16.7
     ## 19 Czech Republic          30.0        314    10.5
     ## 20 Poland                  25.8        993    38.5
+
+## U.S. deaths (new) by red or blue states
+
+I am worrying that too vigorous “reopen economy” movements in the red
+states in the United States may cause the second wave. I separate red or
+blue by state governors (in case of DC, a mayor), according to [List of
+United States
+governors](https://en.wikipedia.org/wiki/List_of_United_States_governors).
+
+![](README_files/figure-gfm/chart_usa-1.png)<!-- -->
 
 EOL

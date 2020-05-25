@@ -21,12 +21,19 @@ world <- table2 %>%
 in_china <- table1 %>% 
   gather(key = "concept", value = "value", -region, -publish_date)
 
+in_usa <- data_usa %>% 
+  gather(key = "concept", value = "value", -State, -publish_date, -state_name, -party) %>% 
+  select(-State) %>% 
+  rename(state = state_name)
+
 # create menus
 area_menu <- unique(world$area) %>% sort()
 
 concept_menu <- unique(world$concept) %>% sort()
 
 region_menu <- unique(in_china$region)
+
+state_menu <- unique(in_usa$state)
 
 # menu to title
 lookup <- tibble(
@@ -132,6 +139,49 @@ ui <- navbarPage("WHO, Covid-19 situation report",
                               plotOutput("plot_region")
                             )
                           ),
+             ),
+             tabPanel("In the United States",
+                      sidebarLayout(
+                        sidebarPanel(
+                          selectInput("select_state1", label = h4("Select state1"),
+                                      choices = state_menu, selected = "New York"),
+                          
+                          selectInput("select_state2", label = h4("Select state2"),
+                                      choices = state_menu, selected = "Florida"),
+                          
+                          hr(),
+                          
+                          selectInput("select_concept_state", label = h4("Select concept"),
+                                      choices = concept_menu, selected = "new_conf"),
+                          
+                          hr(),
+                          
+                          # Sidebar with a slider input for date 
+                          sliderInput("date_range_usa",
+                                      label = h4("Select date range"), 
+                                      min = min(in_usa$publish_date),
+                                      max = max(in_usa$publish_date),
+                                      value = c(
+                                        min(in_usa$publish_date),
+                                        max(in_usa$publish_date)
+                                      ),
+                                      timeFormat="%m %d"),
+                          
+                          hr(),
+                          
+                          # Show source and Shiny app creator
+                          a(href = "https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/",
+                            "Source: USAFacts"),
+                          br(),
+                          a(href = "https://mitsuoxv.rbind.io/",
+                            "Shiny app creator: Mitsuo Shiota")
+                        ),
+                        
+                        # Show a plot of the generated line chart
+                        mainPanel(
+                          plotOutput("plot_state")
+                        )
+                      ),
              )
 )
 
@@ -161,8 +211,6 @@ server <- function(input, output) {
   })
 
 
-
-    
   chart_data_region <- reactive({
     in_china %>% 
       filter(region %in% c(input$select_region1, input$select_region2),
@@ -186,6 +234,30 @@ server <- function(input, output) {
             plot.title = element_text(size = rel(2)))
   })
 
+  
+  
+  chart_data_state <- reactive({
+    in_usa %>% 
+      filter(state %in% c(input$select_state1, input$select_state2),
+             concept == input$select_concept_state) %>% 
+      filter(publish_date >= input$date_range_usa[1],
+             publish_date <= input$date_range_usa[2])
+  })
+  
+  output$plot_state <- renderPlot({
+    chart_data_state() %>% 
+      ggplot(aes(publish_date, value, color = state)) +
+      geom_hline(yintercept = 0, color = "white", size = 2) +
+      geom_line(size = 1) +
+      labs(
+        title = lookup[lookup$menu == input$select_concept_state, "title"] %>% as.character(),
+        x = "published date", 
+        caption = str_c("Latest: ", max(chart_data_state()$publish_date))
+      ) +
+      ylab(NULL) +
+      theme(legend.position = "top",
+            plot.title = element_text(size = rel(2)))
+  })
 }
 
 # Run the application 
