@@ -110,17 +110,17 @@ data_usa %>%
   labs(
     title = "Deaths (new) by red or blue states",
     x = "published date",
+    y = NULL,
     caption = str_c("Latest: ", max(data_usa$publish_date)),
     color = NULL
   ) +
-  ylab(NULL) +
   theme(
     plot.title = element_text(size = rel(2)))
 ```
 
 I download population data in data directory from [Census Bureau page](https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html), and use estimated population as of July 1, 2019. Populations in millions are:
 
-```{r chart2, echo=FALSE}
+```{r population_by_party, echo=FALSE}
 data_usa %>% 
   filter(publish_date == max(publish_date)) %>% 
   group_by(party) %>% 
@@ -155,7 +155,6 @@ states_map %>%
   scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
                        midpoint = median(states_speed$speed_since_100)) +
   theme_void()
-
 ```
 
 Above calculation might be unfair to populous states. Below "per_capita_cum_conf" is cumulative cases per 1 million population. Highest "speed_std_since_100", which is per day growth of cumulative cases per 1 million population since cumulative cases became more than 100, are:
