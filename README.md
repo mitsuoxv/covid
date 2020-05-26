@@ -10,10 +10,10 @@ Mitsuo Shiota
   - [Highest fatality rate areas](#highest-fatality-rate-areas)
   - [Highest deaths per population
     areas](#highest-deaths-per-population-areas)
-  - [U.S. deaths (new) by red or blue
-    states](#u.s.-deaths-new-by-red-or-blue-states)
 
 Updated: 2020-05-26
+
+I added “USA, Covid-19 situation by state” in [another page](USA.md).
 
 ## Summary
 
@@ -195,15 +195,5 @@ population, are:
     ## 18 Chile                   42.9        718    16.7
     ## 19 Czech Republic          30.1        315    10.5
     ## 20 Poland                  25.9        996    38.5
-
-## U.S. deaths (new) by red or blue states
-
-I am worrying that too vigorous “reopen economy” movements in the red
-states in the United States may cause the second wave. I separate red or
-blue by state governors (in case of DC, a mayor), according to [List of
-United States
-governors](https://en.wikipedia.org/wiki/List_of_United_States_governors).
-
-![](README_files/figure-gfm/chart_usa-1.png)<!-- -->
 
 EOL

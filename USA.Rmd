@@ -1,0 +1,244 @@
+---
+title: "USA, Covid-19 situation by state"
+author: "Mitsuo Shiota"
+date: "2020/5/26"
+output: 
+  github_document:
+    toc: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Updated: `r Sys.Date()`
+
+## Summary
+
+I added the United States page to [my Shiny App](https://mitsuoxv.shinyapps.io/covid/) on May 25, 2020. I use data of 50 states and 1 federal district (District of Columbia) from [USAFacts page](https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/).
+
+```{r library, include=FALSE}
+library(tidyverse)
+library(rvest)
+library(readxl)
+library(maps)
+```
+
+
+```{r preparation, echo=FALSE, message=FALSE}
+# load data
+load("data/tables.rdata")
+
+# add party
+gov_html <- read_html("https://en.wikipedia.org/wiki/List_of_United_States_governors")
+
+gov_df <- gov_html %>% 
+  html_nodes("table") %>% 
+  .[[1]] %>% 
+  html_table(fill = TRUE)
+
+gov_df <- gov_df[-1, c(1, 5)]
+
+names(gov_df) <- c("state_name", "party")
+
+gov_df <- gov_df %>% 
+  mutate(party = str_sub(party, 1L, 10L))
+
+dc_df <- gov_html %>% 
+  html_nodes("table") %>% 
+  .[[3]] %>% 
+  html_table(fill = TRUE)
+
+dc_df <- dc_df[-1, c(1, 5)]
+
+names(dc_df) <- c("state_name", "party")
+
+gov_dc_df <- bind_rows(gov_df, dc_df)
+
+data_usa <- data_usa %>% 
+  left_join(gov_dc_df, by = "state_name")
+
+# add population
+population <- read_excel("data/nst-est2019-01.xlsx", 
+    col_names = FALSE, skip = 9)
+
+population <- population[1:51, c(1, 13)]
+
+names(population) <- c("state_name", "pop")
+
+population <- population %>% 
+  mutate(
+    state_name = str_sub(state_name, 2L, -1L)
+    )
+
+data_usa <- data_usa %>% 
+  left_join(population, by = "state_name")
+```
+
+## U.S. deaths (new) by red or blue states
+
+I separate red or blue by state governors (in case of DC, a mayor), according to [List of United States governors](https://en.wikipedia.org/wiki/List_of_United_States_governors). Out of the map below, Alaska is red and Hawaii is blue.
+
+```{r map, echo=FALSE}
+states_map <- map_data("state")
+
+states_party <- gov_dc_df %>% 
+  mutate(state = tolower(state_name)) %>% 
+  select(-state_name)
+
+states_map %>% 
+  left_join(states_party, by = c("region" = "state")) %>% 
+  ggplot(aes(x = long, y = lat, group = group, fill = party)) +
+  geom_polygon(color = "white") +
+  coord_map("polyconic") +
+  scale_fill_manual(values = c("blue", "red")) +
+  theme_void()
+
+```
+
+I am worrying that too vigorous "reopen economy" movements in the red states in the United States may cause the second wave.
+
+```{r chart1, echo=FALSE, warning=FALSE}
+data_usa %>% 
+  group_by(publish_date, party) %>% 
+  summarize(new_deaths = sum(new_deaths)) %>% 
+  ggplot(aes(publish_date, new_deaths, color = party)) +
+  geom_line(size = 1) +
+  scale_color_manual(values = c("blue", "red")) +
+  labs(
+    title = "Deaths (new) by red or blue states",
+    x = "published date",
+    caption = str_c("Latest: ", max(data_usa$publish_date)),
+    color = NULL
+  ) +
+  ylab(NULL) +
+  theme(
+    plot.title = element_text(size = rel(2)))
+```
+
+I download population data in data directory from [Census Bureau page](https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html), and use estimated population as of July 1, 2019. Populations in millions are:
+
+```{r chart2, echo=FALSE}
+data_usa %>% 
+  filter(publish_date == max(publish_date)) %>% 
+  group_by(party) %>% 
+  summarize(pop_mil = sum(pop) / 1000000)
+```
+
+
+## Fastest spreading states
+
+Highest "speed_since_100",  which is average number of newly confirmed cases per day since cumulative cases became more than 100, are:
+
+```{r per_capita, echo=FALSE}
+states_speed <- data_usa %>% 
+  group_by(state_name) %>% 
+  arrange(publish_date) %>% 
+  filter(cum_conf > 100) %>% 
+  mutate(
+    days_since_100 = row_number(publish_date),
+    speed_since_100 = (cum_conf - min(cum_conf)) / days_since_100
+    ) %>% 
+  ungroup() %>% 
+  filter(publish_date == max(publish_date)) %>% 
+  select(state_name, speed_since_100) %>% 
+  mutate(state = tolower(state_name)) %>% 
+  select(-state_name)
+
+states_map %>% 
+  left_join(states_speed, by = c("region" = "state")) %>% 
+  ggplot(aes(x = long, y = lat, group = group, fill = speed_since_100)) +
+  geom_polygon(color = "white") +
+  coord_map("polyconic") +
+  scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
+                       midpoint = median(states_speed$speed_since_100)) +
+  theme_void()
+
+```
+
+Above calculation might be unfair to populous states. Below "per_capita_cum_conf" is cumulative cases per 1 million population. Highest "speed_std_since_100", which is per day growth of cumulative cases per 1 million population since cumulative cases became more than 100, are:
+
+```{r standardized, echo=FALSE}
+states_speed_std <- data_usa %>% 
+  group_by(state_name) %>% 
+  arrange(publish_date) %>% 
+  filter(cum_conf > 100) %>% 
+  mutate(
+    days_since_100 = row_number(publish_date),
+    per_capita_cum_conf = cum_conf * 1000000 / pop,
+    speed_std_since_100 = (cum_conf - min(cum_conf)) * 1000000 / pop / days_since_100
+    ) %>% 
+  ungroup() %>% 
+  filter(publish_date == max(publish_date)) %>% 
+  select(state_name, speed_std_since_100) %>% 
+  mutate(state = tolower(state_name)) %>% 
+  select(-state_name)
+
+states_map %>% 
+  left_join(states_speed_std, by = c("region" = "state")) %>% 
+  ggplot(aes(x = long, y = lat, group = group, fill = speed_std_since_100)) +
+  geom_polygon(color = "white") +
+  coord_map("polyconic") +
+  scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
+                       midpoint = median(states_speed_std$speed_std_since_100)) +
+  theme_void()
+```
+
+
+## Highest fatality rate states
+
+Among states with more than 10 cumulative deaths, highest "fatality_rate", which is cumulative deaths per 100 cumulative confirmed cases, are:
+
+```{r fatality_rates, echo=FALSE}
+states_fatality <- data_usa %>% 
+  filter(
+    cum_deaths > 10,
+    publish_date == max(publish_date)
+    ) %>% 
+  mutate(fatality_rate = cum_deaths * 100 / cum_conf) %>% 
+  select(state_name, fatality_rate) %>% 
+  mutate(state = tolower(state_name)) %>% 
+  select(-state_name)
+
+states_map %>% 
+  left_join(states_fatality, by = c("region" = "state")) %>% 
+  ggplot(aes(x = long, y = lat, group = group, fill = fatality_rate)) +
+  geom_polygon(color = "white") +
+  coord_map("polyconic") +
+  scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
+                       midpoint = median(states_fatality$fatality_rate)) +
+  theme_void()
+```
+
+## Highest deaths per population states
+
+Highest "deaths_per_1m", which is cumulative deaths per 1 million population, are:
+
+```{r deaths_per_population, echo=FALSE}
+states_deaths <- data_usa %>% 
+  filter(
+    publish_date == max(publish_date)
+    ) %>% 
+  mutate(
+    pop_mil = pop / 1000000,
+    deaths_per_1m = cum_deaths / pop_mil
+    ) %>% 
+  select(state_name, deaths_per_1m) %>% 
+  mutate(state = tolower(state_name)) %>% 
+  select(-state_name)
+
+states_map %>% 
+  left_join(states_deaths, by = c("region" = "state")) %>% 
+  ggplot(aes(x = long, y = lat, group = group, fill = deaths_per_1m)) +
+  geom_polygon(color = "white") +
+  coord_map("polyconic") +
+  scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
+                       midpoint = median(states_deaths$deaths_per_1m)) +
+  theme_void()
+```
+
+
+EOL
+

@@ -15,6 +15,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Updated: `r Sys.Date()`
 
+I added "USA, Covid-19 situation by state" in [another page](USA.md).
+
 ## Summary
 
 <https://mitsuoxv.shinyapps.io/covid/>
@@ -155,56 +157,6 @@ areas_10m %>%
   arrange(desc(deaths_per_1m)) %>% 
   select(area, deaths_per_1m, cum_deaths, pop_mil) %>% 
   head(20)
-```
-
-## U.S. deaths (new) by red or blue states
-
-I am worrying that too vigorous "reopen economy" movements in the red states in the United States may cause the second wave. I separate red or blue by state governors (in case of DC, a mayor), according to [List of United States governors](https://en.wikipedia.org/wiki/List_of_United_States_governors).
-
-```{r chart_usa, echo=FALSE, warning=FALSE}
-# states by party
-gov_html <- read_html("https://en.wikipedia.org/wiki/List_of_United_States_governors")
-
-gov_df <- gov_html %>% 
-  html_nodes("table") %>% 
-  .[[1]] %>% 
-  html_table(fill = TRUE)
-
-gov_df <- gov_df[-1, c(1, 5)]
-
-names(gov_df) <- c("state_name", "party")
-
-gov_df <- gov_df %>% 
-  mutate(party = str_sub(party, 1L, 10L))
-
-dc_df <- gov_html %>% 
-  html_nodes("table") %>% 
-  .[[3]] %>% 
-  html_table(fill = TRUE)
-
-dc_df <- dc_df[-1, c(1, 5)]
-
-names(dc_df) <- c("state_name", "party")
-
-gov_dc_df <- bind_rows(gov_df, dc_df)
-
-# chart
-data_usa %>% 
-  left_join(gov_dc_df, by = "state_name") %>% 
-  group_by(publish_date, party) %>% 
-  summarize(new_deaths = sum(new_deaths)) %>% 
-  ggplot(aes(publish_date, new_deaths, color = party)) +
-  geom_line(size = 1) +
-  scale_color_manual(values = c("blue", "red")) +
-  labs(
-    title = "Deaths (new) in the United States",
-    x = "published date",
-    caption = str_c("Latest: ", max(data_usa$publish_date)),
-    color = NULL
-  ) +
-  ylab(NULL) +
-  theme(
-    plot.title = element_text(size = rel(2)))
 ```
 
 

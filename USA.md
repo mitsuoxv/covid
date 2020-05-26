@@ -1,0 +1,79 @@
+USA, Covid-19 situation by state
+================
+Mitsuo Shiota
+2020/5/26
+
+  - [Summary](#summary)
+  - [U.S. deaths (new) by red or blue
+    states](#u.s.-deaths-new-by-red-or-blue-states)
+  - [Fastest spreading states](#fastest-spreading-states)
+  - [Highest fatality rate states](#highest-fatality-rate-states)
+  - [Highest deaths per population
+    states](#highest-deaths-per-population-states)
+
+Updated: 2020-05-26
+
+## Summary
+
+I added the United States page to [my Shiny
+App](https://mitsuoxv.shinyapps.io/covid/) on May 25, 2020. I use data
+of 50 states and 1 federal district (District of Columbia) from
+[USAFacts
+page](https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/).
+
+## U.S. deaths (new) by red or blue states
+
+I separate red or blue by state governors (in case of DC, a mayor),
+according to [List of United States
+governors](https://en.wikipedia.org/wiki/List_of_United_States_governors).
+Out of the map below, Alaska is red and Hawaii is blue.
+
+![](USA_files/figure-gfm/map-1.png)<!-- -->
+
+I am worrying that too vigorous “reopen economy” movements in the red
+states in the United States may cause the second wave.
+
+![](USA_files/figure-gfm/chart1-1.png)<!-- -->
+
+I download population data in data directory from [Census Bureau
+page](https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html),
+and use estimated population as of July 1, 2019. Populations in millions
+are:
+
+    ## # A tibble: 2 x 2
+    ##   party      pop_mil
+    ##   <chr>        <dbl>
+    ## 1 Democratic    179.
+    ## 2 Republican    150.
+
+## Fastest spreading states
+
+Highest “speed\_since\_100”, which is average number of newly confirmed
+cases per day since cumulative cases became more than 100, are:
+
+![](USA_files/figure-gfm/per_capita-1.png)<!-- -->
+
+Above calculation might be unfair to populous states. Below
+“per\_capita\_cum\_conf” is cumulative cases per 1 million population.
+Highest “speed\_std\_since\_100”, which is per day growth of cumulative
+cases per 1 million population since cumulative cases became more than
+100, are:
+
+![](USA_files/figure-gfm/standardized-1.png)<!-- -->
+
+## Highest fatality rate states
+
+Among states with more than 10 cumulative deaths, highest
+“fatality\_rate”, which is cumulative deaths per 100 cumulative
+confirmed cases, are:
+
+![](USA_files/figure-gfm/fatality_rates-1.png)<!-- -->
+
+## Highest deaths per population states
+
+Highest “deaths\_per\_1m”, which is cumulative deaths per 1 million
+population, are:
+
+![](USA_files/figure-gfm/deaths_per_population-1.png)<!-- -->
+
+EOL
