@@ -21,24 +21,24 @@ of 50 states and 1 federal district (District of Columbia) from
 [USAFacts
 page](https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/).
 
-## U.S. deaths (new) by red or blue states
-
 I separate red or blue by state governors (in case of DC, a mayor),
 according to [List of United States
 governors](https://en.wikipedia.org/wiki/List_of_United_States_governors).
-Out of the map below, Alaska is red and Hawaii is blue.
+Out of the map below, Alaska is red and Hawaii is blue. I download
+population data in data directory from [Census Bureau
+page](https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html),
+and use estimated population as of July 1, 2019.
 
 ![](USA_files/figure-gfm/map-1.png)<!-- -->
+
+## U.S. deaths (new) by red or blue states
 
 I am worrying that too vigorous “reopen economy” movements in the red
 states in the United States may cause the second wave.
 
 ![](USA_files/figure-gfm/chart1-1.png)<!-- -->
 
-I download population data in data directory from [Census Bureau
-page](https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html),
-and use estimated population as of July 1, 2019. Populations in millions
-are:
+Populations in millions by red or blue are:
 
     ## # A tibble: 2 x 2
     ##   party      pop_mil
