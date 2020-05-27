@@ -85,7 +85,7 @@ df_table2[(df_table2$area == "Congo"), "area"] <-
   c("Republic of the Congo")
 
 df_table2[(df_table2$area == ""), ]
-df_table2[(df_table2$area == ""), "area"] <- "French Polynesia"
+# df_table2[(df_table2$area == ""), "area"] <- "French Polynesia"
   
 # df_table2[(df_table2$area == "of)"), ]
 # df_table2[(df_table2$area == "of)"), "area"] <- "Venezuela"
@@ -116,6 +116,17 @@ setdiff(df_table2$area, unique(table2$area))
 
 setdiff(unique(table2$area), df_table2$area)
 
+table2 %>% 
+  filter(area == "International commercial vessel")
+
+table2 %>% 
+  filter(area == "Other", publish_date == "2020-05-26")
+
+table2 <- table2 %>% 
+  filter(area != "International commercial vessel")
+
+table2[table2$area == "Other" & table2$publish_date == "2020-05-26", "cum_conf"] <- (712 + 29)
+
 # Merge table1 and table2
 table1 <- bind_rows(table1, df_table1)
 table2 <- bind_rows(table2, df_table2)
@@ -144,7 +155,7 @@ area_cat <- tibble(
     rep("South East Asia, excl China", 10),
     rep("China", 1),
     rep("South East Asia, excl China", 18),
-    rep("Other", 2)
+    rep("Other", 1)
   )
 )
 
