@@ -119,14 +119,6 @@ setdiff(unique(table2$area), df_table2$area)
 table2 %>% 
   filter(area == "International commercial vessel")
 
-table2 %>% 
-  filter(area == "Other", publish_date == "2020-05-26")
-
-table2 <- table2 %>% 
-  filter(area != "International commercial vessel")
-
-table2[table2$area == "Other" & table2$publish_date == "2020-05-26", "cum_conf"] <- (712 + 29)
-
 # Merge table1 and table2
 table1 <- bind_rows(table1, df_table1)
 table2 <- bind_rows(table2, df_table2)
