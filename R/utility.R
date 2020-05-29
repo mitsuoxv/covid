@@ -1,7 +1,7 @@
 # Split by line
 make_lines <- function(a_list) {
   a_list %>% 
-    str_split("\r\n") %>% 
+    str_split("\n") %>% 
     unlist()
 }
 
