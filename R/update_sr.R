@@ -25,7 +25,7 @@ if (DATE == max(table2$publish_date) + 1) {
 }
   
 # Extract text
-sr <- pdf_text(str_c("pdf/", FILE))
+sr <- pdf_text(str_c("~/Downloads/", FILE))
 
 str(sr)
 
@@ -116,9 +116,6 @@ setdiff(df_table2$area, unique(table2$area))
 
 setdiff(unique(table2$area), df_table2$area)
 
-table2 %>% 
-  filter(area == "International commercial vessel")
-
 # Merge table1 and table2
 table1 <- bind_rows(table1, df_table1)
 table2 <- bind_rows(table2, df_table2)
@@ -137,10 +134,8 @@ area_cat <- tibble(
   cat = c(
     rep("Sub-Saharan Africa", 49),
     rep("North America", 1), # United States
-    rep("Latin America and the Caribbean", 2),
-    rep("North America", 1), # Canada
-    rep("Latin America and the Caribbean", 1),
-    rep("North America", 1), # Mexico
+    rep("Latin America and the Caribbean", 3),
+    rep("North America", 2), # Canada and Mexico
     rep("Latin America and the Caribbean", 48),
     rep("Eastern Mediterranean", 22),
     rep("Europe", 61),
