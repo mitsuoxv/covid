@@ -25,7 +25,7 @@ if (DATE == max(table2$publish_date) + 1) {
 }
   
 # Extract text
-sr <- pdf_text(str_c("~/Downloads/", FILE))
+sr <- pdf_text(str_c("~/Downloads/", FILE, ".pdf"))
 
 str(sr)
 
