@@ -74,7 +74,7 @@ table2 %>%
 
 ## Fastest spreading areas
 
-Among areas with more than 10 million population, highest "speed_since_100",  which is average number of newly confirmed cases per day since cumulative cases became more than 100, are:
+Among areas with more than 5 million population, highest "speed_since_100",  which is average number of newly confirmed cases per day since cumulative cases became more than 100, are:
 
 ```{r per_capita, echo=FALSE}
 cc_html <- read_html("https://countrycode.org/")
@@ -86,11 +86,11 @@ cc_df <- cc_html %>%
 
 cc_df$POPULATION <- as.numeric(str_remove_all(cc_df$POPULATION, ","))
 
-areas_10m <- table2 %>% 
+areas_5m <- table2 %>% 
   left_join(cc_df, by = c("area" = "COUNTRY")) %>% 
-  filter(POPULATION >= 10000000)
+  filter(POPULATION >= 5000000)
 
-areas_10m %>% 
+areas_5m %>% 
   group_by(area) %>% 
   arrange(publish_date) %>% 
   filter(cum_conf > 100) %>% 
@@ -108,7 +108,7 @@ areas_10m %>%
 Above calculation might be unfair to populous areas. Below "per_capita_cum_conf" is cumulative cases per 1 million population. Highest "speed_std_since_100", which is per day growth of cumulative cases per 1 million population since cumulative cases became more than 100, are:
 
 ```{r standardized, echo=FALSE}
-areas_10m %>% 
+areas_5m %>% 
   group_by(area) %>% 
   arrange(publish_date) %>% 
   filter(cum_conf > 100) %>% 
@@ -127,10 +127,10 @@ areas_10m %>%
 
 ## Highest fatality rate areas
 
-Among areas with more than 10 million population and more than 10 cumulative deaths, highest "fatality_rate", which is cumulative deaths per 100 cumulative confirmed cases, are:
+Among areas with more than 5 million population and more than 10 cumulative deaths, highest "fatality_rate", which is cumulative deaths per 100 cumulative confirmed cases, are:
 
 ```{r fatality_rates, echo=FALSE}
-areas_10m %>% 
+areas_5m %>% 
   filter(
     cum_deaths > 10,
     publish_date == max(publish_date)
@@ -143,10 +143,10 @@ areas_10m %>%
 
 ## Highest deaths per population areas
 
-Among areas with more than 10 million population, highest "deaths_per_1m", which is cumulative deaths per 1 million population, are:
+Among areas with more than 5 million population, highest "deaths_per_1m", which is cumulative deaths per 1 million population, are:
 
 ```{r deaths_per_population, echo=FALSE}
-areas_10m %>% 
+areas_5m %>% 
   filter(
     publish_date == max(publish_date)
     ) %>% 
