@@ -144,10 +144,10 @@ ui <- navbarPage("WHO, Covid-19 situation report",
                       sidebarLayout(
                         sidebarPanel(
                           selectInput("select_state1", label = h4("Select state1"),
-                                      choices = state_menu, selected = "New York"),
+                                      choices = state_menu, selected = "Total"),
                           
                           selectInput("select_state2", label = h4("Select state2"),
-                                      choices = state_menu, selected = "Florida"),
+                                      choices = state_menu, selected = "New York"),
                           
                           hr(),
                           

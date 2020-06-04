@@ -58,6 +58,7 @@ names(dc_df) <- c("state_name", "party")
 gov_dc_df <- bind_rows(gov_df, dc_df)
 
 data_usa <- data_usa %>% 
+  filter(State != "Total") %>% 
   left_join(gov_dc_df, by = "state_name")
 
 # add population

@@ -21,7 +21,20 @@ conf_raw <- read_url("https://usafactsstatic.blob.core.windows.net/public/data/c
 
 names(conf_raw) <- str_replace(names(conf_raw), "200", "")
 
-conf <- conf_raw %>% 
+conf_total <- conf_raw %>% 
+  gather(key = "publish_date", value = "cum_conf", -c(1:4)) %>% 
+  mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
+  group_by(publish_date) %>% 
+  summarize(cum_conf = sum(cum_conf)) %>% 
+  mutate(
+    cum_conf_lag = lag(cum_conf),
+    new_conf = cum_conf - cum_conf_lag
+  ) %>% 
+  ungroup() %>% 
+  select(-cum_conf_lag) %>% 
+  mutate(State = "Total")
+
+conf_by_state <- conf_raw %>% 
   gather(key = "publish_date", value = "cum_conf", -c(1:4)) %>% 
   mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
   group_by(State, publish_date) %>% 
@@ -33,10 +46,15 @@ conf <- conf_raw %>%
   ungroup() %>% 
   select(-cum_conf_lag)
 
+conf <- bind_rows(conf_total, conf_by_state)
+
 # Check sum
 # close enough
 conf %>% 
-  filter(publish_date == max(publish_date)) %>% 
+  filter(State == "Total", publish_date == max(publish_date))
+
+conf %>% 
+  filter(State != "Total", publish_date == max(publish_date)) %>% 
   summarize(cum_conf = sum(cum_conf))
 
 # Read deaths
@@ -44,7 +62,20 @@ deaths_raw <- read_csv("https://usafactsstatic.blob.core.windows.net/public/data
 
 # names(deaths_raw)
 
-deaths <- deaths_raw %>% 
+deaths_total <- deaths_raw %>% 
+  gather(key = "publish_date", value = "cum_deaths", -c(1:4)) %>% 
+  mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
+  group_by(publish_date) %>% 
+  summarize(cum_deaths = sum(cum_deaths)) %>% 
+  mutate(
+    cum_deaths_lag = lag(cum_deaths),
+    new_deaths = cum_deaths - cum_deaths_lag
+  ) %>% 
+  ungroup() %>% 
+  select(-cum_deaths_lag) %>% 
+  mutate(State = "Total")
+
+deaths_by_state <- deaths_raw %>% 
   gather(key = "publish_date", value = "cum_deaths", -c(1:4)) %>% 
   mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
   group_by(State, publish_date) %>% 
@@ -56,10 +87,15 @@ deaths <- deaths_raw %>%
   ungroup() %>% 
   select(-cum_deaths_lag)
 
+deaths <- bind_rows(deaths_total, deaths_by_state)
+
 # Check sum
 # match
 deaths %>% 
-  filter(publish_date == max(publish_date)) %>% 
+  filter(State == "Total", publish_date == max(publish_date))
+
+deaths %>% 
+  filter(State != "Total", publish_date == max(publish_date)) %>% 
   summarize(cum_deaths = sum(cum_deaths))
 
 # Bind
@@ -73,8 +109,8 @@ states <-
       state_name = state.name
     ),
     tibble(
-      State = "DC",
-      state_name = "District of Columbia"
+      State = c("DC", "Total"),
+      state_name = c("District of Columbia", "Total")
     )
   )
 
