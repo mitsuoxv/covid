@@ -11,7 +11,7 @@ Mitsuo Shiota
   - [Highest deaths per population
     states](#highest-deaths-per-population-states)
 
-Updated: 2020-06-06
+Updated: 2020-06-07
 
 ## Summary
 
@@ -36,9 +36,13 @@ and use estimated population as of July 1, 2019.
 I am worrying that too vigorous “reopen economy” movements in the red
 states in the United States may cause the second wave.
 
+    ## `summarise()` regrouping output by 'publish_date' (override with `.groups` argument)
+
 ![](USA_files/figure-gfm/chart1-1.png)<!-- -->
 
 Populations in millions by red or blue are:
+
+    ## `summarise()` ungrouping output (override with `.groups` argument)
 
     ## # A tibble: 2 x 2
     ##   party      pop_mil
