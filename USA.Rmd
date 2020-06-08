@@ -24,6 +24,8 @@ library(tidyverse)
 library(rvest)
 library(readxl)
 library(maps)
+library(tsibble)
+library(tqr)
 ```
 
 
@@ -107,13 +109,15 @@ I am worrying that too vigorous "reopen economy" movements in the red states in 
 ```{r chart1, echo=FALSE, warning=FALSE}
 data_usa %>% 
   group_by(publish_date, party) %>% 
-  summarize(new_deaths = sum(new_deaths)) %>% 
+  summarize(new_deaths = sum(new_deaths), .groups = "drop_last") %>% 
+  as_tsibble(key = party, index = publish_date) %>% 
+  tq_ma(7) %>% 
   ggplot(aes(publish_date, new_deaths, color = party)) +
   geom_line(size = 1) +
   scale_color_manual(values = c("blue", "red")) +
   labs(
     title = "Deaths (new) by red or blue states",
-    x = "published date",
+    x = "published date (7 days average)",
     y = NULL,
     caption = str_c("Latest: ", max(data_usa$publish_date)),
     color = NULL
@@ -128,7 +132,7 @@ Populations in millions by red or blue are:
 data_usa %>% 
   filter(publish_date == max(publish_date)) %>% 
   group_by(party) %>% 
-  summarize(pop_mil = sum(pop) / 1000000)
+  summarize(pop_mil = sum(pop) / 1000000, .groups = "drop_last")
 ```
 
 
