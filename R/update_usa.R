@@ -25,12 +25,11 @@ conf_total <- conf_raw %>%
   gather(key = "publish_date", value = "cum_conf", -c(1:4)) %>% 
   mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
   group_by(publish_date) %>% 
-  summarize(cum_conf = sum(cum_conf)) %>% 
+  summarize(cum_conf = sum(cum_conf), .groups = "drop_last") %>% 
   mutate(
     cum_conf_lag = lag(cum_conf),
     new_conf = cum_conf - cum_conf_lag
   ) %>% 
-  ungroup() %>% 
   select(-cum_conf_lag) %>% 
   mutate(State = "Total")
 
@@ -38,12 +37,11 @@ conf_by_state <- conf_raw %>%
   gather(key = "publish_date", value = "cum_conf", -c(1:4)) %>% 
   mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
   group_by(State, publish_date) %>% 
-  summarize(cum_conf = sum(cum_conf)) %>% 
+  summarize(cum_conf = sum(cum_conf), .groups = "drop_last") %>% 
   mutate(
     cum_conf_lag = lag(cum_conf),
     new_conf = cum_conf - cum_conf_lag
   ) %>% 
-  ungroup() %>% 
   select(-cum_conf_lag)
 
 conf <- bind_rows(conf_total, conf_by_state)
@@ -66,12 +64,11 @@ deaths_total <- deaths_raw %>%
   gather(key = "publish_date", value = "cum_deaths", -c(1:4)) %>% 
   mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
   group_by(publish_date) %>% 
-  summarize(cum_deaths = sum(cum_deaths)) %>% 
+  summarize(cum_deaths = sum(cum_deaths), .groups = "drop_last") %>% 
   mutate(
     cum_deaths_lag = lag(cum_deaths),
     new_deaths = cum_deaths - cum_deaths_lag
   ) %>% 
-  ungroup() %>% 
   select(-cum_deaths_lag) %>% 
   mutate(State = "Total")
 
@@ -79,12 +76,11 @@ deaths_by_state <- deaths_raw %>%
   gather(key = "publish_date", value = "cum_deaths", -c(1:4)) %>% 
   mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
   group_by(State, publish_date) %>% 
-  summarize(cum_deaths = sum(cum_deaths)) %>% 
+  summarize(cum_deaths = sum(cum_deaths), .groups = "drop_last") %>% 
   mutate(
     cum_deaths_lag = lag(cum_deaths),
     new_deaths = cum_deaths - cum_deaths_lag
   ) %>% 
-  ungroup() %>% 
   select(-cum_deaths_lag)
 
 deaths <- bind_rows(deaths_total, deaths_by_state)
