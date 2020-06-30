@@ -4,14 +4,15 @@ Mitsuo Shiota
 2020/5/26
 
   - [Summary](#summary)
-  - [U.S. deaths (new) by red or blue
-    states](#u.s.-deaths-new-by-red-or-blue-states)
-  - [Fastest spreading states](#fastest-spreading-states)
+  - [U.S. confirmed cases (new) by red or blue
+    states](#u.s.-confirmed-cases-new-by-red-or-blue-states)
+  - [Fastest spreading states in the last 14
+    days](#fastest-spreading-states-in-the-last-14-days)
   - [Highest fatality rate states](#highest-fatality-rate-states)
   - [Highest deaths per population
     states](#highest-deaths-per-population-states)
 
-Updated: 2020-06-30
+Updated: 2020-07-01
 
 ## Summary
 
@@ -31,7 +32,7 @@ and use estimated population as of July 1, 2019.
 
 ![](USA_files/figure-gfm/map-1.png)<!-- -->
 
-## U.S. deaths (new) by red or blue states
+## U.S. confirmed cases (new) by red or blue states
 
 I am worrying that too vigorous “reopen economy” movements in the red
 states in the United States may cause the second wave.
@@ -46,18 +47,16 @@ Populations in millions by red or blue are:
     ## 1 Democratic    179.
     ## 2 Republican    150.
 
-## Fastest spreading states
+## Fastest spreading states in the last 14 days
 
-Highest “speed\_since\_100”, which is average number of newly confirmed
-cases per day since cumulative cases became more than 100, are:
+Highest “increase\_in\_14\_days”, which is an increase in cumulative
+confirmed cases in the last 14 days, are:
 
 ![](USA_files/figure-gfm/per_capita-1.png)<!-- -->
 
-Above calculation might be unfair to populous states. Below
-“per\_capita\_cum\_conf” is cumulative cases per 1 million population.
-Highest “speed\_std\_since\_100”, which is per day growth of cumulative
-cases per 1 million population since cumulative cases became more than
-100, are:
+Above calculation might be unfair to populous states. Highest
+“increase\_std\_in\_14\_days”, which is an increase in cumulative
+confirmed cases in the last 14 days per 1 million population, are:
 
 ![](USA_files/figure-gfm/standardized-1.png)<!-- -->
 

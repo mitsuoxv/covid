@@ -102,21 +102,21 @@ states_map %>%
   theme_void()
 ```
 
-## U.S. deaths (new) by red or blue states
+## U.S. confirmed cases (new) by red or blue states
 
 I am worrying that too vigorous "reopen economy" movements in the red states in the United States may cause the second wave.
 
 ```{r chart1, echo=FALSE, warning=FALSE}
 data_usa %>% 
   group_by(publish_date, party) %>% 
-  summarize(new_deaths = sum(new_deaths), .groups = "drop_last") %>% 
+  summarize(new_conf = sum(new_conf), .groups = "drop_last") %>% 
   as_tsibble(key = party, index = publish_date) %>% 
   tq_ma(7) %>% 
-  ggplot(aes(publish_date, new_deaths, color = party)) +
+  ggplot(aes(publish_date, new_conf, color = party)) +
   geom_line(size = 1) +
   scale_color_manual(values = c("blue", "red")) +
   labs(
-    title = "Deaths (new) by red or blue states",
+    title = "Confirmed cases (new) by red or blue states",
     x = "published date (7 days average)",
     y = NULL,
     caption = str_c("Latest: ", max(data_usa$publish_date)),
@@ -136,60 +136,45 @@ data_usa %>%
 ```
 
 
-## Fastest spreading states
+## Fastest spreading states in the last 14 days
 
-Highest "speed_since_100",  which is average number of newly confirmed cases per day since cumulative cases became more than 100, are:
+Highest "increase_in_14_days",  which is an increase in cumulative confirmed cases in the last 14 days, are:
 
 ```{r per_capita, echo=FALSE}
 states_speed <- data_usa %>% 
   group_by(state_name) %>% 
-  arrange(publish_date) %>% 
-  filter(cum_conf > 100) %>% 
-  mutate(
-    days_since_100 = row_number(publish_date),
-    speed_since_100 = (cum_conf - min(cum_conf)) / days_since_100
-    ) %>% 
-  ungroup() %>% 
-  filter(publish_date == max(publish_date)) %>% 
-  select(state_name, speed_since_100) %>% 
+  filter(publish_date > max(publish_date) - 14) %>% 
+  summarize(increase_in_14_days = sum(new_conf), .groups = "drop_last") %>% 
   mutate(state = tolower(state_name)) %>% 
   select(-state_name)
 
 states_map %>% 
   left_join(states_speed, by = c("region" = "state")) %>% 
-  ggplot(aes(x = long, y = lat, group = group, fill = speed_since_100)) +
+  ggplot(aes(x = long, y = lat, group = group, fill = increase_in_14_days)) +
   geom_polygon(color = "white") +
   coord_map("polyconic") +
   scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
-                       midpoint = median(states_speed$speed_since_100)) +
+                       midpoint = median(states_speed$increase_in_14_days)) +
   theme_void()
 ```
 
-Above calculation might be unfair to populous states. Below "per_capita_cum_conf" is cumulative cases per 1 million population. Highest "speed_std_since_100", which is per day growth of cumulative cases per 1 million population since cumulative cases became more than 100, are:
+Above calculation might be unfair to populous states. Highest "increase_std_in_14_days", which is an increase in cumulative confirmed cases in the last 14 days per 1 million population, are:
 
 ```{r standardized, echo=FALSE}
 states_speed_std <- data_usa %>% 
   group_by(state_name) %>% 
-  arrange(publish_date) %>% 
-  filter(cum_conf > 100) %>% 
-  mutate(
-    days_since_100 = row_number(publish_date),
-    per_capita_cum_conf = cum_conf * 1000000 / pop,
-    speed_std_since_100 = (cum_conf - min(cum_conf)) * 1000000 / pop / days_since_100
-    ) %>% 
-  ungroup() %>% 
-  filter(publish_date == max(publish_date)) %>% 
-  select(state_name, speed_std_since_100) %>% 
+  filter(publish_date > max(publish_date) - 14) %>% 
+  summarize(increase_std_in_14_days = sum(new_conf * 1000000 / pop), .groups = "drop_last") %>% 
   mutate(state = tolower(state_name)) %>% 
   select(-state_name)
 
 states_map %>% 
   left_join(states_speed_std, by = c("region" = "state")) %>% 
-  ggplot(aes(x = long, y = lat, group = group, fill = speed_std_since_100)) +
+  ggplot(aes(x = long, y = lat, group = group, fill = increase_std_in_14_days)) +
   geom_polygon(color = "white") +
   coord_map("polyconic") +
   scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
-                       midpoint = median(states_speed_std$speed_std_since_100)) +
+                       midpoint = median(states_speed_std$increase_std_in_14_days)) +
   theme_void()
 ```
 
