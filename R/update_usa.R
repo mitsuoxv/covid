@@ -44,7 +44,8 @@ conf_by_state <- conf_raw %>%
   ) %>% 
   select(-cum_conf_lag)
 
-conf <- bind_rows(conf_total, conf_by_state)
+conf <- bind_rows(conf_total, conf_by_state) %>% 
+  filter(!is.na(publish_date))
 
 # Check sum
 # close enough
@@ -83,7 +84,8 @@ deaths_by_state <- deaths_raw %>%
   ) %>% 
   select(-cum_deaths_lag)
 
-deaths <- bind_rows(deaths_total, deaths_by_state)
+deaths <- bind_rows(deaths_total, deaths_by_state) %>% 
+  filter(!is.na(publish_date))
 
 # Check sum
 # match
