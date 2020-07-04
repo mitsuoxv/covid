@@ -135,8 +135,10 @@ area_cat <- tibble(
     rep("Sub-Saharan Africa", 49),
     rep("North America", 1), # United States
     rep("Latin America and the Caribbean", 3),
-    rep("North America", 2), # Canada and Mexico
-    rep("Latin America and the Caribbean", 48),
+    rep("North America", 1), # Mexico
+    rep("Latin America and the Caribbean", 1),
+    rep("North America", 1), # Canada
+    rep("Latin America and the Caribbean", 47),
     rep("Eastern Mediterranean", 22),
     rep("Europe", 61),
     rep("South East Asia, excl China", 10),
