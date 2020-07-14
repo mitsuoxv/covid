@@ -85,7 +85,7 @@ df_table2[(df_table2$area == "Congo"), "area"] <-
   c("Republic of the Congo")
 
 df_table2[(df_table2$area == ""), ]
-# df_table2[(df_table2$area == ""), "area"] <- "Kosovo"
+df_table2[(df_table2$area == ""), "area"] <- "Kosovo"
   
 # df_table2[(df_table2$area == "of)"), ]
 # df_table2[(df_table2$area == "of)"), "area"] <- "Venezuela"
