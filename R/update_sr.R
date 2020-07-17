@@ -85,7 +85,7 @@ df_table2[(df_table2$area == "Congo"), "area"] <-
   c("Republic of the Congo")
 
 df_table2[(df_table2$area == ""), ]
-df_table2[(df_table2$area == ""), "area"] <- "Kosovo"
+df_table2[(df_table2$area == ""), "area"] <- "French Polynesia"
   
 # df_table2[(df_table2$area == "of)"), ]
 # df_table2[(df_table2$area == "of)"), "area"] <- "Venezuela"
@@ -136,9 +136,9 @@ area_cat <- tibble(
     rep("North America", 1), # United States
     rep("Latin America and the Caribbean", 3),
     rep("North America", 1), # Mexico
-    rep("Latin America and the Caribbean", 1),
+    rep("Latin America and the Caribbean", 2),
     rep("North America", 1), # Canada
-    rep("Latin America and the Caribbean", 47),
+    rep("Latin America and the Caribbean", 46),
     rep("Eastern Mediterranean", 22),
     rep("Europe", 61),
     rep("South East Asia, excl China", 10),
