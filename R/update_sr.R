@@ -85,7 +85,7 @@ df_table2[(df_table2$area == "Congo"), "area"] <-
   c("Republic of the Congo")
 
 df_table2[(df_table2$area == ""), ]
-df_table2[(df_table2$area == ""), "area"] <- "Kosovo"
+df_table2[(df_table2$area == ""), "area"] <- "French Polynesia"
   
 # df_table2[(df_table2$area == "of)"), ]
 # df_table2[(df_table2$area == "of)"), "area"] <- "Venezuela"
@@ -127,33 +127,33 @@ table2 <- table2 %>%
   select(publish_date, area, new_conf, new_deaths, cum_conf, cum_deaths)
 
 # Make area category
-df_table2$area
-
-area_cat <- tibble(
-  area = df_table2$area,
-  cat = c(
-    rep("Sub-Saharan Africa", 49),
-    rep("North America", 1), # United States
-    rep("Latin America and the Caribbean", 2),
-    rep("North America", 1), # Mexico
-    rep("Latin America and the Caribbean", 3),
-    rep("North America", 1), # Canada
-    rep("Latin America and the Caribbean", 46),
-    rep("Eastern Mediterranean", 22),
-    rep("Europe", 61),
-    rep("South East Asia, excl China", 10),
-    rep("China", 1),
-    rep("South East Asia, excl China", 18),
-    rep("Other", 1)
-  )
-)
+# df_table2$area
+# 
+# area_cat <- tibble(
+#   area = df_table2$area,
+#   cat = c(
+#     rep("Sub-Saharan Africa", 49),
+#     rep("North America", 1), # United States
+#     rep("Latin America and the Caribbean", 2),
+#     rep("North America", 1), # Mexico
+#     rep("Latin America and the Caribbean", 3),
+#     rep("North America", 1), # Canada
+#     rep("Latin America and the Caribbean", 46),
+#     rep("Eastern Mediterranean", 22),
+#     rep("Europe", 61),
+#     rep("South East Asia, excl China", 10),
+#     rep("China", 1),
+#     rep("South East Asia, excl China", 18),
+#     rep("Other", 1)
+#   )
+# )
 
 # Check
-length(unique(table2$area))
-
-length(unique(area_cat$area))
-
-setdiff(unique(table2$area), unique(area_cat$area))
+# length(unique(table2$area))
+# 
+# length(unique(area_cat$area))
+# 
+# setdiff(unique(table2$area), unique(area_cat$area))
 
 # Save updated data
 table1 %>% 
@@ -162,6 +162,6 @@ table1 %>%
 table2 %>% 
   write.csv("data/table2.csv", row.names = FALSE)
 
-save(table1, table2, area_cat, data_usa, file = "data/tables.rdata")
+save(table1, table2, data_usa, file = "data/tables.rdata")
 
 

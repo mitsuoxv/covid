@@ -36,6 +36,9 @@ I added the United States page to [my Shiny App](https://mitsuoxv.shinyapps.io/c
 ```{r library, include=FALSE}
 library(tidyverse)
 library(rvest)
+library(readxl)
+library(tsibble)
+library(tqr)
 ```
 
 ## Load
@@ -51,32 +54,9 @@ load("data/tables.rdata")
 
 I watch newly confirmed cases. China is suceeding to contain the coronavirus, but areas outside China now face the challenge.
 
-```{r chart, echo=FALSE}
-table2 %>% 
-  left_join(area_cat, by = "area") %>% 
-  group_by(publish_date, cat) %>% 
-  summarize(new_conf = sum(new_conf, na.rm = TRUE)) %>% 
-  ggplot(aes(publish_date, new_conf,
-             color = fct_reorder2(cat, publish_date, new_conf))) +
-  geom_hline(yintercept = 0, color = "white", size = 2) +
-  geom_line(size = 1) +
-  labs(
-    title = "Confirmed cases (new)",
-    x = "published date",
-    caption = str_c("Latest: ", max(table2$publish_date)),
-    color = NULL
-  ) +
-  ylab(NULL) +
-  theme(
-        plot.title = element_text(size = rel(2)))
+Region classification is mostly based on [UN M49 Standard](https://unstats.un.org/unsd/methodology/m49/).
 
-```
-
-## Fastest spreading areas
-
-Among areas with more than 5 million population, highest "speed_since_100",  which is average number of newly confirmed cases per day since cumulative cases became more than 100, are:
-
-```{r per_capita, echo=FALSE}
+```{r chart, echo=FALSE, warning=FALSE}
 cc_html <- read_html("https://countrycode.org/")
 
 cc_df <- cc_html %>% 
@@ -86,6 +66,50 @@ cc_df <- cc_html %>%
 
 cc_df$POPULATION <- as.numeric(str_remove_all(cc_df$POPULATION, ","))
 
+cc_df <- cc_df %>% 
+  mutate(
+    iso_alpha2 = str_sub(`ISO CODES`, 1L, 2L)
+  )
+
+UNSD_Methodology <- read_excel("data/UNSD — Methodology.xlsx")
+
+cc_df <- cc_df %>% 
+  left_join(UNSD_Methodology, by = c("iso_alpha2" = "ISO-alpha2 Code"))
+
+cc_df <- cc_df %>% 
+  mutate(
+    region = if_else(`Sub-region Name` %in% c("Southern Europe", "Northern Europe", "Western Europe"), "West Europe", 
+                     if_else(`Sub-region Name` %in% c("Australia and New Zealand", "Melanesia", "Micronesia", "Polynesia"), "Oceania", `Sub-region Name`)
+                    )
+  )
+
+table2 %>% 
+  left_join(cc_df, by = c("area" = "COUNTRY")) %>% 
+  drop_na(region) %>% 
+  group_by(publish_date, region) %>% 
+  summarize(new_conf = sum(new_conf, na.rm = TRUE), .groups = "drop_last") %>% 
+  as_tsibble(key = region, index = publish_date) %>% 
+  tq_ma(n = 7) %>% 
+  ggplot(aes(publish_date, new_conf,
+             color = fct_reorder2(region, publish_date, new_conf))) +
+  geom_hline(yintercept = 0, color = "white", size = 2) +
+  geom_line(size = 1) +
+  labs(
+    title = "Confirmed cases (new)",
+    x = "published date (7 days average)",
+    caption = str_c("Latest: ", max(table2$publish_date)),
+    color = NULL
+  ) +
+  ylab(NULL) +
+  theme(
+        plot.title = element_text(size = rel(2)))
+```
+
+## Fastest spreading areas
+
+Among areas with more than 5 million population, highest "speed_since_100",  which is average number of newly confirmed cases per day since cumulative cases became more than 100, are:
+
+```{r per_capita, echo=FALSE}
 areas_5m <- table2 %>% 
   left_join(cc_df, by = c("area" = "COUNTRY")) %>% 
   filter(POPULATION >= 5000000)
