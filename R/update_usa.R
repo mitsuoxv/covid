@@ -21,6 +21,9 @@ conf_raw <- read_url("https://usafactsstatic.blob.core.windows.net/public/data/c
 
 names(conf_raw) <- str_replace(names(conf_raw), "200", "")
 
+conf_raw <- conf_raw %>% 
+  drop_na(countyFIPS)
+
 conf_total <- conf_raw %>% 
   gather(key = "publish_date", value = "cum_conf", -c(1:4)) %>% 
   mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
