@@ -91,7 +91,7 @@ deaths <- bind_rows(deaths_total, deaths_by_state) %>%
   filter(!is.na(publish_date))
 
 # Check sum
-# match
+# close enough
 deaths %>% 
   filter(State == "Total", publish_date == max(publish_date))
 
