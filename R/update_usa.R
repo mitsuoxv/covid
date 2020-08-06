@@ -119,6 +119,6 @@ data_usa <- data_usa %>%
   left_join(states, by = "State")
 
 # Save updated data
-save(table1, table2, area_cat, data_usa, file = "data/tables.rdata")
+save(table1, table2, data_usa, file = "data/tables.rdata")
 
 
