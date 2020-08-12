@@ -71,7 +71,7 @@ cc_df <- cc_df %>%
     iso_alpha2 = str_sub(`ISO CODES`, 1L, 2L)
   )
 
-UNSD_Methodology <- read_excel("data/UNSD — Methodology.xlsx")
+UNSD_Methodology <- read_excel("data/UNSD-Methodology.xlsx")
 
 cc_df <- cc_df %>% 
   left_join(UNSD_Methodology, by = c("iso_alpha2" = "ISO-alpha2 Code"))
