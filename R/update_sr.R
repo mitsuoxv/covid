@@ -23,9 +23,16 @@ if (DATE == max(table2$publish_date) + 1) {
 } else {
   print("Stop! Date is not new.") 
 }
-  
+
+# Check OS
+if (.Platform$OS.type == "windows") {
+  file_pdf <- str_c("~/../Downloads/", FILE)
+} else {
+  file_pdf <- str_c("~/Downloads/", FILE, ".pdf")
+}
+
 # Extract text
-sr <- pdf_text(str_c("~/Downloads/", FILE, ".pdf"))
+sr <- pdf_text(file_pdf)
 
 str(sr)
 
