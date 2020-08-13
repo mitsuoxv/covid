@@ -104,7 +104,8 @@ correct_area <- function(df) {
            
       area = if_else(area %in% c("territory",
                                  "occupied Palestinian territory",
-                                 "occupied Palestinian"
+                                 "occupied Palestinian",
+                                 "Occupied Palestinian territory"
                                  ),
                      "Palestine", area),
            
