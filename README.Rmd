@@ -23,9 +23,9 @@ I added "USA, Covid-19 situation by state" in [another page](USA.md).
 
 Coronavirus is affecting the world economy. Uncertaintiy is very high. I searched around and found some informative sites, like [Coronavirus Situation Dashboard](https://who.maps.arcgis.com/apps/opsdashboard/index.html#/c88e37cfc43b4ed3baf977d77e4a0667) and [Coronavirus Update by worldometer](https://www.worldometers.info/coronavirus/). But they fail to offer time-series data of the newly confirmed cases by each area, in which I am most interested. If the average number of infections one infected person inflict is even slightly more than one, infections grow exponentially. If less than one, the newly confirmed cases begin to decrease, and the virus will be contained eventually in that area.
 
-WHO offers those numbers in [the situation reports](https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports/), which are unfortunately pdf files.
+WHO offers those numbers at [Data Table tab in its Dashboard](https://covid19.who.int/table). Fortunately I can download a csv file, whose URL is https://covid19.who.int/WHO-COVID-19-global-data.csv.
 
-So I scratched numbers from pdf files, scratched my head learning regular expressions, and made the shiny app above. I would like to update frequently, but I am not sure. The ugly codes I wrote are in R directory. Data in Table 1 (In China) and Table 2 (World including China) in the situation reports are in table1.csv, table2.csv and tables.rdata in data directory.
+The ugly codes I wrote are in R directory. Data in Table 1 (In China) and Table 2 (World including China) are in table1.csv, table2.csv and tables.rdata in data directory in this repository.
 
 Note that the confirmed cases are not the actual cases, due to delays from infection to symptoms, limited testing capacity, and so on, as [Nate Silver tells us](https://fivethirtyeight.com/features/coronavirus-case-counts-are-meaningless/).
 
@@ -35,15 +35,13 @@ I added the United States page to [my Shiny App](https://mitsuoxv.shinyapps.io/c
 
 ```{r library, include=FALSE}
 library(tidyverse)
-library(rvest)
-library(readxl)
 library(tsibble)
 library(tqr)
 ```
 
 ## Load
 
-Here, I load Table 1 and Table 2, which I managed to scratch from WHO situation reports. Beware Table 1 (in_china) includes total, but Table 2 (world) does not include subtotal or total, as I cut them.
+Here, I load Table 1 and Table 2. Beware Table 1 (in_china) includes total, but Table 2 (world) does not include subtotal or total.
 
 ```{r load}
 # load data
@@ -57,34 +55,7 @@ I watch newly confirmed cases. China is suceeding to contain the coronavirus, bu
 Region classification is mostly based on [UN M49 Standard](https://unstats.un.org/unsd/methodology/m49/).
 
 ```{r chart, echo=FALSE, warning=FALSE}
-cc_html <- read_html("https://countrycode.org/")
-
-cc_df <- cc_html %>% 
-  html_nodes("table") %>% 
-  .[[1]] %>% 
-  html_table()
-
-cc_df$POPULATION <- as.numeric(str_remove_all(cc_df$POPULATION, ","))
-
-cc_df <- cc_df %>% 
-  mutate(
-    iso_alpha2 = str_sub(`ISO CODES`, 1L, 2L)
-  )
-
-UNSD_Methodology <- read_excel("data/UNSD-Methodology.xlsx")
-
-cc_df <- cc_df %>% 
-  left_join(UNSD_Methodology, by = c("iso_alpha2" = "ISO-alpha2 Code"))
-
-cc_df <- cc_df %>% 
-  mutate(
-    region = if_else(`Sub-region Name` %in% c("Southern Europe", "Northern Europe", "Western Europe"), "West Europe", 
-                     if_else(`Sub-region Name` %in% c("Australia and New Zealand", "Melanesia", "Micronesia", "Polynesia"), "Oceania", `Sub-region Name`)
-                    )
-  )
-
 table2 %>% 
-  left_join(cc_df, by = c("area" = "COUNTRY")) %>% 
   drop_na(region) %>% 
   group_by(publish_date, region) %>% 
   summarize(new_conf = sum(new_conf, na.rm = TRUE), .groups = "drop_last") %>% 
@@ -111,7 +82,6 @@ Among areas with more than 5 million population, highest "speed_since_100",  whi
 
 ```{r per_capita, echo=FALSE}
 areas_5m <- table2 %>% 
-  left_join(cc_df, by = c("area" = "COUNTRY")) %>% 
   filter(POPULATION >= 5000000)
 
 areas_5m %>% 

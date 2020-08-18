@@ -228,7 +228,10 @@ correct_area <- function(df) {
                      "Kosovo", area),
       
       area = if_else(area == "Syrian Arab Republic",
-                     "Syria", area)
+                     "Syria", area),
+      
+      area = if_else(area == "Congo",
+                     "Republic of the Congo", area)
            
     )
 }

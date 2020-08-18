@@ -16,6 +16,7 @@ load("data/tables.rdata")
 
 # tidy data
 world <- table2 %>% 
+  select(publish_date, area, new_conf, new_deaths, cum_conf, cum_deaths) %>% 
   gather(key = "concept", value = "value", -area, -publish_date)
 
 in_china <- table1 %>% 
