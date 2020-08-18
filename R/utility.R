@@ -58,6 +58,28 @@ read_chr_vec3 <- function(chr_vec, pattern) {
              str_trim(side = "both"))
 }
 
+# read character vector into a data frame
+read_chr_vec_weekly <- function(chr_vec, pattern) {
+  df_raw <- chr_vec %>% 
+    str_subset(pattern) %>% 
+    str_match(pattern) %>% 
+    as_tibble(.name_repair = "minimal") %>% 
+    `[`(c(1, 3, 5, 9, 11))
+  
+  df <- map_dfc(df_raw[-1], make_numeric)
+  
+  names(df) <- c("new_conf", "cum_conf", "new_deaths", "cum_deaths")
+  
+  area_mtx <- df_raw[[1]] %>% 
+    str_match("(\\D*)\\d")
+  
+  df$area <- area_mtx[, 2]
+  
+  df %>% 
+    mutate(area = area %>%
+             str_trim(side = "both"))
+}
+
 
 # Correct area names
 # https://countrycode.org/
