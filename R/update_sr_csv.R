@@ -8,8 +8,8 @@ load("data/tables.rdata")
 
 # Read csv from url
 WHO_COVID_19_global_data <- read_csv("https://covid19.who.int/WHO-COVID-19-global-data.csv",
-                        col_types = cols(Date_reported = col_date(format = "%Y-%m-%d"))
-)
+                        col_types = cols(Date_reported = col_date(format = "%Y-%m-%d")),
+                        na = c(""))
 
 table2 <- WHO_COVID_19_global_data %>% 
   select(Date_reported, Country_code, Country, New_cases, Cumulative_cases, New_deaths, Cumulative_deaths)
@@ -37,9 +37,6 @@ table1 <- table1 %>%
   select(publish_date, region, new_conf, new_deaths, cum_conf, cum_deaths)
 
 # Add info to table2
-# Namibia's iso_alpha2 in not NA (Not Available) but "NA"
-table2[table2$area == "Namibia", "iso_alpha2"] <- "NA"
-
 cc_html <- read_html("https://countrycode.org/")
 
 cc_df <- cc_html %>% 
