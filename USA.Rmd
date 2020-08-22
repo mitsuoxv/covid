@@ -22,7 +22,6 @@ I added the United States page to [my Shiny App](https://mitsuoxv.shinyapps.io/c
 ```{r library, include=FALSE}
 library(tidyverse)
 library(rvest)
-library(httr)
 library(readxl)
 library(maps)
 library(tsibble)
