@@ -22,17 +22,112 @@ I added the United States page to [my Shiny App](https://mitsuoxv.shinyapps.io/c
 ```{r library, include=FALSE}
 library(tidyverse)
 library(rvest)
+library(httr)
 library(readxl)
 library(maps)
 library(tsibble)
 library(tqr)
 ```
 
+```{r read_from_USAfacts, echo=FALSE, cache=FALSE}
+# https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/
+# Read confirmed cases
+conf_raw <- read_csv("https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_confirmed_usafacts.csv",
+                     col_types = cols(
+                       .default = col_double(),
+                       `County Name` = col_character(),
+                       State = col_character()
+                       )
+                     )
+
+conf_raw <- conf_raw %>% 
+  drop_na(countyFIPS)
+
+conf_total <- conf_raw %>% 
+  gather(key = "publish_date", value = "cum_conf", -c(1:4)) %>% 
+  mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
+  group_by(publish_date) %>% 
+  summarize(cum_conf = sum(cum_conf), .groups = "drop_last") %>% 
+  mutate(
+    cum_conf_lag = lag(cum_conf),
+    new_conf = cum_conf - cum_conf_lag
+  ) %>% 
+  select(-cum_conf_lag) %>% 
+  mutate(State = "Total")
+
+conf_by_state <- conf_raw %>% 
+  gather(key = "publish_date", value = "cum_conf", -c(1:4)) %>% 
+  mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
+  group_by(State, publish_date) %>% 
+  summarize(cum_conf = sum(cum_conf), .groups = "drop_last") %>% 
+  mutate(
+    cum_conf_lag = lag(cum_conf),
+    new_conf = cum_conf - cum_conf_lag
+  ) %>% 
+  select(-cum_conf_lag)
+
+conf <- bind_rows(conf_total, conf_by_state) %>% 
+  filter(!is.na(publish_date))
+
+# Read deaths
+deaths_raw <- read_csv("https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_deaths_usafacts.csv",
+                       col_types = cols(
+                         .default = col_double(),
+                         `County Name` = col_character(),
+                         State = col_character()
+                         )
+                       )
+
+deaths_total <- deaths_raw %>% 
+  gather(key = "publish_date", value = "cum_deaths", -c(1:4)) %>% 
+  mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
+  group_by(publish_date) %>% 
+  summarize(cum_deaths = sum(cum_deaths), .groups = "drop_last") %>% 
+  mutate(
+    cum_deaths_lag = lag(cum_deaths),
+    new_deaths = cum_deaths - cum_deaths_lag
+  ) %>% 
+  select(-cum_deaths_lag) %>% 
+  mutate(State = "Total")
+
+deaths_by_state <- deaths_raw %>% 
+  gather(key = "publish_date", value = "cum_deaths", -c(1:4)) %>% 
+  mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
+  group_by(State, publish_date) %>% 
+  summarize(cum_deaths = sum(cum_deaths), .groups = "drop_last") %>% 
+  mutate(
+    cum_deaths_lag = lag(cum_deaths),
+    new_deaths = cum_deaths - cum_deaths_lag
+  ) %>% 
+  select(-cum_deaths_lag)
+
+deaths <- bind_rows(deaths_total, deaths_by_state) %>% 
+  filter(!is.na(publish_date))
+
+# Bind
+data_usa <- left_join(conf, deaths, by = c("State", "publish_date"))
+
+# Add state name column
+states <- 
+  bind_rows(
+    tibble(
+      State = state.abb,
+      state_name = state.name
+    ),
+    tibble(
+      State = c("DC", "Total"),
+      state_name = c("District of Columbia", "Total")
+    )
+  )
+
+data_usa <- data_usa %>% 
+  left_join(states, by = "State")
+
+saveRDS(data_usa, "data/data_usa.rds")
+```
+
 
 ```{r preparation, echo=FALSE, message=FALSE}
-# load data
-load("data/tables.rdata")
-
 # add party
 gov_html <- read_html("https://en.wikipedia.org/wiki/List_of_United_States_governors")
 
@@ -230,7 +325,6 @@ states_map %>%
                        midpoint = median(states_deaths$deaths_per_1m)) +
   theme_void()
 ```
-
 
 EOL
 

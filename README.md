@@ -4,12 +4,13 @@ Mitsuo Shiota
 2020/3/7
 
   - [Summary](#summary)
-  - [Load](#load)
+  - [Read data from WHO](#read-data-from-who)
   - [Newly confirmed cases by region](#newly-confirmed-cases-by-region)
   - [Fastest spreading areas](#fastest-spreading-areas)
   - [Highest fatality rate areas](#highest-fatality-rate-areas)
   - [Highest deaths per population
     areas](#highest-deaths-per-population-areas)
+  - [Save data](#save-data)
 
 Updated: 2020-08-22
 
@@ -31,15 +32,6 @@ infected person inflict is even slightly more than one, infections grow
 exponentially. If less than one, the newly confirmed cases begin to
 decrease, and the virus will be contained eventually in that area.
 
-WHO offers those numbers at [Data Table tab in its
-Dashboard](https://covid19.who.int/table). Fortunately I can download a
-csv file, whose URL is
-<https://covid19.who.int/WHO-COVID-19-global-data.csv>.
-
-The ugly codes I wrote are in R directory. Data in Table 1 (In China)
-and Table 2 (World including China) are in table1.csv, table2.csv and
-tables.rdata in data directory in this repository.
-
 Note that the confirmed cases are not the actual cases, due to delays
 from infection to symptoms, limited testing capacity, and so on, as
 [Nate Silver tells
@@ -56,15 +48,14 @@ App](https://mitsuoxv.shinyapps.io/covid/) on May 25, 2020. I use data
 from [USAFacts
 page](https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/).
 
-## Load
+## Read data from WHO
 
-Here, I load Table 1 and Table 2. Beware Table 1 (in\_china) includes
-total, but Table 2 (world) does not include subtotal or total.
+WHO offers [Data Table in its Dashboard](https://covid19.who.int/table).
+I use the data from
+<https://covid19.who.int/WHO-COVID-19-global-data.csv>.
 
-``` r
-# load data
-load("data/tables.rdata")
-```
+I also use the data, like area name and population, from
+<https://countrycode.org/>.
 
 ## Newly confirmed cases by region
 
@@ -72,7 +63,10 @@ I watch newly confirmed cases. China is suceeding to contain the
 coronavirus, but areas outside China now face the challenge.
 
 Region classification is mostly based on [UN M49
-Standard](https://unstats.un.org/unsd/methodology/m49/).
+Standard](https://unstats.un.org/unsd/methodology/m49/). One exception
+is “West Europe”, which I make by combining “Western”, “Northern” and
+“Southern Europe”. “West Europe” is basically Europe other than
+“Eastern Europe”.
 
 ![](README_files/figure-gfm/chart-1.png)<!-- -->
 
@@ -195,5 +189,10 @@ population, are:
     ## 18 South Africa            258.      12618   49   
     ## 19 Switzerland             227.       1718    7.58
     ## 20 Iraq                    209.       6208   29.7
+
+## Save data
+
+You can see the data I use in table2.csv in data directory of this
+repository.
 
 EOL

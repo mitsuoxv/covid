@@ -23,10 +23,6 @@ I added "USA, Covid-19 situation by state" in [another page](USA.md).
 
 Coronavirus is affecting the world economy. Uncertaintiy is very high. I searched around and found some informative sites, like [Coronavirus Situation Dashboard](https://who.maps.arcgis.com/apps/opsdashboard/index.html#/c88e37cfc43b4ed3baf977d77e4a0667) and [Coronavirus Update by worldometer](https://www.worldometers.info/coronavirus/). But they fail to offer time-series data of the newly confirmed cases by each area, in which I am most interested. If the average number of infections one infected person inflict is even slightly more than one, infections grow exponentially. If less than one, the newly confirmed cases begin to decrease, and the virus will be contained eventually in that area.
 
-WHO offers those numbers at [Data Table tab in its Dashboard](https://covid19.who.int/table). Fortunately I can download a csv file, whose URL is https://covid19.who.int/WHO-COVID-19-global-data.csv.
-
-The ugly codes I wrote are in R directory. Data in Table 1 (In China) and Table 2 (World including China) are in table1.csv, table2.csv and tables.rdata in data directory in this repository.
-
 Note that the confirmed cases are not the actual cases, due to delays from infection to symptoms, limited testing capacity, and so on, as [Nate Silver tells us](https://fivethirtyeight.com/features/coronavirus-case-counts-are-meaningless/).
 
 I later found [Johns Hopkins University, Coronavirus Resource Center](https://coronavirus.jhu.edu/) and [Financial Times, Coronavirus tracked](https://www.ft.com/content/a26fbf7e-48f8-11ea-aeb3-955839e06441) are very informative, and that they provide some time-series charts of the newly confirmed cases.
@@ -37,22 +33,68 @@ I added the United States page to [my Shiny App](https://mitsuoxv.shinyapps.io/c
 library(tidyverse)
 library(tsibble)
 library(tqr)
+library(rvest)
+library(readxl)
 ```
 
-## Load
+## Read data from WHO
 
-Here, I load Table 1 and Table 2. Beware Table 1 (in_china) includes total, but Table 2 (world) does not include subtotal or total.
+WHO offers [Data Table in its Dashboard](https://covid19.who.int/table). I use the data from https://covid19.who.int/WHO-COVID-19-global-data.csv.
 
-```{r load}
-# load data
-load("data/tables.rdata")
+I also use the data, like area name and population, from https://countrycode.org/.
+
+```{r read_from_WHO, echo=FALSE}
+# Read csv from url
+WHO_COVID_19_global_data <- read_csv("https://covid19.who.int/WHO-COVID-19-global-data.csv",
+                        col_types = cols(Date_reported = col_date(format = "%Y-%m-%d")),
+                        na = c(""))
+
+table2 <- WHO_COVID_19_global_data %>% 
+  select(Date_reported, Country_code, Country, New_cases, Cumulative_cases, New_deaths, Cumulative_deaths)
+
+names(table2) <- c("publish_date", "iso_alpha2", "area", "new_conf", "cum_conf", "new_deaths", "cum_deaths")
+
+# Add info to table2
+cc_html <- read_html("https://countrycode.org/")
+
+cc_df <- cc_html %>% 
+  html_nodes("table") %>% 
+  .[[1]] %>% 
+  html_table()
+
+cc_df$POPULATION <- as.numeric(str_remove_all(cc_df$POPULATION, ","))
+
+cc_df <- cc_df %>% 
+  mutate(
+    iso_alpha2 = str_sub(`ISO CODES`, 1L, 2L)
+  )
+
+UNSD_Methodology <- read_excel("data/UNSD-Methodology.xlsx")
+
+cc_df <- cc_df %>% 
+  left_join(UNSD_Methodology, by = c("iso_alpha2" = "ISO-alpha2 Code"))
+
+cc_df <- cc_df %>% 
+  mutate(
+    region = if_else(`Sub-region Name` %in% c("Southern Europe", "Northern Europe", "Western Europe"), "West Europe", 
+                     if_else(`Sub-region Name` %in% c("Australia and New Zealand", "Melanesia", "Micronesia", "Polynesia"), "Oceania", `Sub-region Name`)
+    )
+  )
+
+# Change area name according to countrycode.org
+table2 <- table2 %>% 
+  left_join(cc_df, by = "iso_alpha2") %>% 
+  mutate(COUNTRY = if_else(is.na(COUNTRY), area, COUNTRY)) %>% 
+  select(-area) %>% 
+  rename(area = COUNTRY)
+
 ```
 
 ## Newly confirmed cases by region
 
 I watch newly confirmed cases. China is suceeding to contain the coronavirus, but areas outside China now face the challenge.
 
-Region classification is mostly based on [UN M49 Standard](https://unstats.un.org/unsd/methodology/m49/).
+Region classification is mostly based on [UN M49 Standard](https://unstats.un.org/unsd/methodology/m49/). One exception is "West Europe", which I make by combining "Western", "Northern" and "Southern Europe". "West Europe" is basically Europe other than "Eastern Europe".
 
 ```{r chart, echo=FALSE, warning=FALSE}
 table2 %>% 
@@ -68,10 +110,10 @@ table2 %>%
   labs(
     title = "Confirmed cases (new)",
     x = "published date (7 days average)",
+    y = NULL,
     caption = str_c("Latest: ", max(table2$publish_date)),
     color = NULL
   ) +
-  ylab(NULL) +
   theme(
         plot.title = element_text(size = rel(2)))
 ```
@@ -153,6 +195,19 @@ areas_5m %>%
   head(20)
 ```
 
+## Save data
+
+You can see the data I use in table2.csv in data directory of this repository.
+
+```{r save, echo=FALSE}
+table2 %>% 
+  write.csv("data/table2.csv", row.names = FALSE)
+
+table2 <- table2 %>% 
+  select(publish_date, area, new_conf, new_deaths, cum_conf, cum_deaths)
+
+saveRDS(table2, "data/table2.rds")
+```
 
 EOL
 

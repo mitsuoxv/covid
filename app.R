@@ -12,11 +12,19 @@ library(shiny)
 library(tidyverse)
 
 # load data
-load("data/tables.rdata")
+table1 <- readRDS("data/table1.rds")
+table2 <- readRDS("data/table2.rds")
+data_usa <- readRDS("data/data_usa.rds")
+
+# make table1 with Total
+table1 <- table2 %>% 
+  filter(area == "China") %>% 
+  rename(region = area) %>% 
+  mutate(region = "Total") %>% 
+  bind_rows(table1)
 
 # tidy data
 world <- table2 %>% 
-  select(publish_date, area, new_conf, new_deaths, cum_conf, cum_deaths) %>% 
   gather(key = "concept", value = "value", -area, -publish_date)
 
 in_china <- table1 %>% 
