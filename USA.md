@@ -12,7 +12,7 @@ Mitsuo Shiota
   - [Highest deaths per population
     states](#highest-deaths-per-population-states)
 
-Updated: 2020-09-22
+Updated: 2020-09-23
 
 ## Summary
 
