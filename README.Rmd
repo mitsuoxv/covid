@@ -206,6 +206,7 @@ temp %>%
   summarize(new_conf = sum(new_conf, na.rm = TRUE), .groups = "drop_last") %>% 
   as_tsibble(key = region, index = publish_date) %>% 
   tq_ma(n = 7) %>% 
+  spread(region, new_conf, fill = 0) %>% 
   write.csv("data/new_conf_7ma_by_region.csv", row.names = FALSE)
 
 temp %>% 
@@ -213,6 +214,7 @@ temp %>%
   summarize(new_deaths = sum(new_deaths, na.rm = TRUE), .groups = "drop_last") %>% 
   as_tsibble(key = region, index = publish_date) %>% 
   tq_ma(n = 7) %>% 
+  spread(region, new_deaths, fill = 0) %>% 
   write.csv("data/new_deaths_7ma_by_region.csv", row.names = FALSE)
 
 ```
