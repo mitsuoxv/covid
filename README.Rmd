@@ -197,11 +197,11 @@ areas_5m %>%
 
 ## Save data
 
-```{r save_temp, echo=FALSE}
-temp <- table2 %>% 
+```{r save_region, echo=FALSE}
+table2a <- table2 %>% 
   replace_na(list(region = "Others"))
 
-temp %>% 
+table2a %>% 
   group_by(publish_date, region) %>% 
   summarize(new_conf = sum(new_conf, na.rm = TRUE), .groups = "drop_last") %>% 
   as_tsibble(key = region, index = publish_date) %>% 
@@ -209,13 +209,35 @@ temp %>%
   spread(region, new_conf, fill = 0) %>% 
   write.csv("data/new_conf_7ma_by_region.csv", row.names = FALSE)
 
-temp %>% 
+table2a %>% 
   group_by(publish_date, region) %>% 
   summarize(new_deaths = sum(new_deaths, na.rm = TRUE), .groups = "drop_last") %>% 
   as_tsibble(key = region, index = publish_date) %>% 
   tq_ma(n = 7) %>% 
   spread(region, new_deaths, fill = 0) %>% 
   write.csv("data/new_deaths_7ma_by_region.csv", row.names = FALSE)
+
+```
+
+```{r save_europe, echo=FALSE}
+europe <- table2 %>% 
+  filter(iso_alpha2 %in% c("FR", "DE", "IT", "ES", "GB"))
+
+europe %>% 
+  group_by(publish_date, area) %>% 
+  summarize(new_conf = sum(new_conf, na.rm = TRUE), .groups = "drop_last") %>% 
+  as_tsibble(key = area, index = publish_date) %>% 
+  tq_ma(n = 7) %>% 
+  spread(area, new_conf, fill = 0) %>% 
+  write.csv("data/new_conf_7ma_europe.csv", row.names = FALSE)
+
+europe %>% 
+  group_by(publish_date, area) %>% 
+  summarize(new_deaths = sum(new_deaths, na.rm = TRUE), .groups = "drop_last") %>% 
+  as_tsibble(key = area, index = publish_date) %>% 
+  tq_ma(n = 7) %>% 
+  spread(area, new_deaths, fill = 0) %>% 
+  write.csv("data/new_deaths_7ma_europe.csv", row.names = FALSE)
 
 ```
 
