@@ -12,7 +12,7 @@ Mitsuo Shiota
     areas](#highest-deaths-per-population-areas)
   - [Save data](#save-data)
 
-Updated: 2020-11-30
+Updated: 2020-12-01
 
 I added “USA, Covid-19 situation by state” in [another page](USA.md).
 
@@ -79,26 +79,26 @@ per day since cumulative cases became more than 100, are:
     ## # A tibble: 20 x 4
     ##    area           speed_since_100 cum_conf days_since_100
     ##    <chr>                    <dbl>    <dbl>          <int>
-    ##  1 United States           47572. 12939666            272
-    ##  2 India                   36126.  9392919            260
-    ##  3 Brazil                  23810.  6238350            262
-    ##  4 Russia                   8864.  2269316            256
-    ##  5 France                   7948.  2169811            273
-    ##  6 Spain                    5986.  1628208            272
-    ##  7 United Kingdom           5923.  1605176            271
-    ##  8 Italy                    5587.  1564532            280
-    ##  9 Argentina                5475.  1407277            257
-    ## 10 Colombia                 5041.  1290510            256
-    ## 11 Mexico                   4260.  1090675            256
-    ## 12 Germany                  3805.  1042700            274
-    ## 13 Poland                   3744.   973593            260
-    ## 14 Peru                     3728.   958324            257
-    ## 15 Iran                     3366.   935799            278
-    ## 16 South Africa             3055.   785139            257
-    ## 17 Ukraine                  2890.   722679            250
-    ## 18 Chile                    2127.   548941            258
-    ## 19 Belgium                  2127.   574352            270
-    ## 20 Iraq                     2110.   548821            260
+    ##  1 United States           47922. 13082877            273
+    ##  2 India                   36136.  9431691            261
+    ##  3 Brazil                  23917.  6290272            263
+    ##  4 Russia                   8932.  2295654            257
+    ##  5 France                   7954.  2179481            274
+    ##  6 Spain                    5964.  1628208            273
+    ##  7 United Kingdom           5946.  1617331            272
+    ##  8 Italy                    5641.  1585178            281
+    ##  9 Argentina                5478.  1413375            258
+    ## 10 Colombia                 5056.  1299613            257
+    ## 11 Mexico                   4282.  1100683            257
+    ## 12 Germany                  3832.  1053869            275
+    ## 13 Poland                   3774.   985075            261
+    ## 14 Peru                     3722.   960368            258
+    ## 15 Iran                     3400.   948749            279
+    ## 16 South Africa             3053.   787702            258
+    ## 17 Ukraine                  2918.   732625            251
+    ## 18 Belgium                  2127.   576503            271
+    ## 19 Chile                    2125.   550430            259
+    ## 20 Iraq                     2108.   550435            261
 
 Above calculation might be unfair to populous areas. Below
 “per\_capita\_cum\_conf” is cumulative cases per 1 million population.
@@ -109,26 +109,26 @@ cases per 1 million population since cumulative cases became more than
     ## # A tibble: 20 x 4
     ##    area           speed_std_since_100 per_capita_cum_conf days_since_100
     ##    <chr>                        <dbl>               <dbl>          <int>
-    ##  1 Belgium                      204.               55210.            270
-    ##  2 Czech Republic               189.               49508.            262
-    ##  3 Israel                       173.               45172.            261
-    ##  4 Switzerland                  154.               41817.            272
-    ##  5 United States                153.               41710.            272
-    ##  6 Argentina                    132.               34039.            257
-    ##  7 Jordan                       130.               32887.            252
-    ##  8 Spain                        129.               35011.            272
-    ##  9 Chile                        127.               32779.            258
-    ## 10 Austria                      126.               33428.            266
-    ## 11 Peru                         125.               32043.            257
-    ## 12 France                       123.               33501.            273
-    ## 13 Brazil                       118.               31021.            262
-    ## 14 Netherlands                  115.               30802.            268
-    ## 15 Colombia                     105.               27004.            256
-    ## 16 Portugal                     104.               27230.            261
-    ## 17 Poland                        97.3              25288.            260
-    ## 18 United Kingdom                95.0              25745.            271
-    ## 19 Sweden                        94.9              25443.            268
-    ## 20 Italy                         92.6              25928.            280
+    ##  1 Belgium                      204.               55417.            271
+    ##  2 Czech Republic               189.               49611.            263
+    ##  3 Israel                       172.               45172.            262
+    ##  4 United States                154.               42171.            273
+    ##  5 Switzerland                  153.               41817.            273
+    ##  6 Argentina                    132.               34186.            258
+    ##  7 Jordan                       132.               33448.            253
+    ##  8 Spain                        128.               35011.            273
+    ##  9 Austria                      127.               33904.            267
+    ## 10 Chile                        127.               32868.            259
+    ## 11 Peru                         124.               32112.            258
+    ## 12 France                       123.               33650.            274
+    ## 13 Brazil                       119.               31279.            263
+    ## 14 Netherlands                  116.               31137.            269
+    ## 15 Colombia                     106.               27194.            257
+    ## 16 Portugal                     105.               27613.            262
+    ## 17 Poland                        98.0              25586.            261
+    ## 18 United Kingdom                95.4              25940.            272
+    ## 19 Sweden                        94.5              25443.            269
+    ## 20 Italy                         93.5              26271.            281
 
 ## Highest fatality rate areas
 
@@ -139,26 +139,26 @@ per 100 cumulative confirmed cases, are:
     ## # A tibble: 20 x 4
     ##    area           fatality_rate cum_deaths cum_conf
     ##    <chr>                  <dbl>      <dbl>    <dbl>
-    ##  1 Yemen                  29.1         605     2078
-    ##  2 Mexico                  9.62     104873  1090675
+    ##  1 Yemen                  29.1         606     2081
+    ##  2 Mexico                  9.58     105459  1100683
     ##  3 Sudan                   7.10       1235    17404
-    ##  4 Ecuador                 7.00      13371   190909
-    ##  5 Bolivia                 6.19       8943   144494
-    ##  6 Chad                    6.07        101     1663
-    ##  7 Egypt                   5.75       6621   115183
-    ##  8 Syria                   5.30        409     7715
-    ##  9 China                   5.09       4750    93329
-    ## 10 Iran                    5.07      47486   935799
-    ## 11 Niger                   4.76         70     1472
+    ##  4 Ecuador                 6.99      13423   192117
+    ##  5 Bolivia                 6.19       8949   144592
+    ##  6 Chad                    6.00        101     1682
+    ##  7 Egypt                   5.74       6636   115541
+    ##  8 Syria                   5.30        413     7797
+    ##  9 China                   5.08       4750    93465
+    ## 10 Iran                    5.05      47875   948749
+    ## 11 Niger                   4.62         70     1516
     ## 12 Tanzania                4.13         21      509
-    ## 13 Afghanistan             3.81       1752    45966
-    ## 14 Peru                    3.74      35839   958324
-    ## 15 United Kingdom          3.62      58030  1605176
-    ## 16 Italy                   3.47      54363  1564532
+    ## 13 Afghanistan             3.81       1763    46215
+    ## 14 Peru                    3.74      35879   960368
+    ## 15 United Kingdom          3.60      58245  1617331
+    ## 16 Italy                   3.46      54904  1585178
     ## 17 Nicaragua               3.46        160     4629
-    ## 18 Guatemala               3.42       4161   121798
-    ## 19 Tunisia                 3.32       3153    94980
-    ## 20 Canada                  3.31      11894   359064
+    ## 18 Guatemala               3.42       4166   121971
+    ## 19 Tunisia                 3.34       3219    96251
+    ## 20 Canada                  3.28      11976   364810
 
 ## Highest deaths per population areas
 
@@ -169,26 +169,26 @@ population, are:
     ## # A tibble: 20 x 4
     ##    area           deaths_per_1m cum_deaths pop_mil
     ##    <chr>                  <dbl>      <dbl>   <dbl>
-    ##  1 Belgium                1582.      16461   10.4 
-    ##  2 Peru                   1198.      35839   29.9 
+    ##  1 Belgium                1591.      16547   10.4 
+    ##  2 Peru                   1200.      35879   29.9 
     ##  3 Spain                   960.      44668   46.5 
-    ##  4 Mexico                  932.     104873  112.  
-    ##  5 United Kingdom          931.      58030   62.3 
-    ##  6 Argentina               924.      38216   41.3 
-    ##  7 Chile                   915.      15322   16.7 
-    ##  8 Ecuador                 904.      13371   14.8 
-    ##  9 Italy                   901.      54363   60.3 
-    ## 10 Bolivia                 899.       8943    9.95
-    ## 11 Brazil                  855.     171974  201.  
-    ## 12 United States           847.     262736  310.  
-    ## 13 France                  799.      51767   64.8 
-    ## 14 Czech Republic          769.       8054   10.5 
-    ## 15 Colombia                758.      36214   47.8 
+    ##  4 Mexico                  938.     105459  112.  
+    ##  5 United Kingdom          934.      58245   62.3 
+    ##  6 Argentina               927.      38322   41.3 
+    ##  7 Chile                   917.      15356   16.7 
+    ##  8 Italy                   910.      54904   60.3 
+    ##  9 Ecuador                 908.      13423   14.8 
+    ## 10 Bolivia                 900.       8949    9.95
+    ## 11 Brazil                  858.     172561  201.  
+    ## 12 United States           851.     263946  310.  
+    ## 13 France                  802.      51965   64.8 
+    ## 14 Czech Republic          777.       8138   10.5 
+    ## 15 Colombia                762.      36401   47.8 
     ## 16 Sweden                  699.       6681    9.56
-    ## 17 Iran                    617.      47486   76.9 
-    ## 18 Netherlands             560.       9313   16.6 
+    ## 17 Iran                    622.      47875   76.9 
+    ## 18 Netherlands             561.       9336   16.6 
     ## 19 Switzerland             559.       4236    7.58
-    ## 20 Bulgaria                524.       3749    7.15
+    ## 20 Bulgaria                534.       3814    7.15
 
 ## Save data
 
