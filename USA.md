@@ -12,7 +12,7 @@ Mitsuo Shiota
   - [Highest deaths per population
     states](#highest-deaths-per-population-states)
 
-Updated: 2020-12-14
+Updated: 2020-12-15
 
 ## Summary
 
@@ -21,6 +21,12 @@ App](https://mitsuoxv.shinyapps.io/covid/) on May 25, 2020. I use data
 of 50 states and 1 federal district (District of Columbia) from
 [USAFacts
 page](https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/).
+
+    ## Warning: Missing column names filled in: 'X332' [332]
+
+    ## Warning: 1 parsing failure.
+    ##  row  col expected actual                                                                                          file
+    ## 3196 X332 a double        'https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_deaths_usafacts.csv'
 
 I separate red or blue by state governors (in case of DC, a mayor),
 according to [List of United States
