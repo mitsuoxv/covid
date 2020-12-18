@@ -12,7 +12,7 @@ Mitsuo Shiota
     areas](#highest-deaths-per-population-areas)
   - [Save data](#save-data)
 
-Updated: 2020-12-18
+Updated: 2020-12-19
 
 I added “USA, Covid-19 situation by state” in [another page](USA.md).
 
