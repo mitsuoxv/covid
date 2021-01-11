@@ -43,7 +43,7 @@ conf_raw <- conf_raw %>%
   drop_na(countyFIPS)
 
 conf_total <- conf_raw %>% 
-  gather(key = "publish_date", value = "cum_conf", -c(1:4)) %>% 
+  pivot_longer(!c(1:4), names_to = "publish_date", values_to = "cum_conf") %>% 
   mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
   group_by(publish_date) %>% 
   summarize(cum_conf = sum(cum_conf), .groups = "drop_last") %>% 
@@ -55,7 +55,7 @@ conf_total <- conf_raw %>%
   mutate(State = "Total")
 
 conf_by_state <- conf_raw %>% 
-  gather(key = "publish_date", value = "cum_conf", -c(1:4)) %>% 
+  pivot_longer(!c(1:4), names_to = "publish_date", values_to = "cum_conf") %>% 
   mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
   group_by(State, publish_date) %>% 
   summarize(cum_conf = sum(cum_conf), .groups = "drop_last") %>% 
@@ -78,7 +78,7 @@ deaths_raw <- read_csv("https://usafactsstatic.blob.core.windows.net/public/data
                        )
 
 deaths_total <- deaths_raw %>% 
-  gather(key = "publish_date", value = "cum_deaths", -c(1:4)) %>% 
+  pivot_longer(!c(1:4), names_to = "publish_date", values_to = "cum_deaths") %>% 
   mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
   group_by(publish_date) %>% 
   summarize(cum_deaths = sum(cum_deaths), .groups = "drop_last") %>% 
@@ -90,7 +90,7 @@ deaths_total <- deaths_raw %>%
   mutate(State = "Total")
 
 deaths_by_state <- deaths_raw %>% 
-  gather(key = "publish_date", value = "cum_deaths", -c(1:4)) %>% 
+  pivot_longer(!c(1:4), names_to = "publish_date", values_to = "cum_deaths") %>% 
   mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
   group_by(State, publish_date) %>% 
   summarize(cum_deaths = sum(cum_deaths), .groups = "drop_last") %>% 
