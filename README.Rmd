@@ -214,7 +214,7 @@ table2a %>%
   summarize(new_deaths = sum(new_deaths, na.rm = TRUE), .groups = "drop_last") %>% 
   as_tsibble(key = region, index = publish_date) %>% 
   tq_ma(n = 7) %>% 
-  pivot_wider(names_from = region, values_from = new_conf, values_fill = 0) %>% 
+  pivot_wider(names_from = region, values_from = new_deaths, values_fill = 0) %>% 
   write.csv("data/new_deaths_7ma_by_region.csv", row.names = FALSE)
 
 ```
