@@ -12,7 +12,7 @@ Mitsuo Shiota
 -   [Highest deaths per population
     states](#highest-deaths-per-population-states)
 
-Updated: 2021-02-01
+Updated: 2021-02-02
 
 ## Summary
 
@@ -43,7 +43,7 @@ Populations in millions by red or blue are:
 
     ## # A tibble: 2 x 2
     ##   party      pop_mil
-    ##   <chr>        <dbl>
+    ## * <chr>        <dbl>
     ## 1 Democratic    178.
     ## 2 Republican    151.
 
