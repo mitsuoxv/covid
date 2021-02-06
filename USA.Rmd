@@ -21,6 +21,7 @@ I added the United States page to [my Shiny App](https://mitsuoxv.shinyapps.io/c
 
 ```{r library, include=FALSE}
 library(tidyverse)
+library(lubridate)
 library(rvest)
 library(readxl)
 library(maps)
@@ -45,7 +46,7 @@ conf_raw <- conf_raw %>%
 
 conf_total <- conf_raw %>% 
   pivot_longer(!c(1:4), names_to = "publish_date", values_to = "cum_conf") %>% 
-  mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
+  mutate(publish_date = ymd(publish_date)) %>% 
   group_by(publish_date) %>% 
   summarize(cum_conf = sum(cum_conf), .groups = "drop_last") %>% 
   mutate(
@@ -57,7 +58,7 @@ conf_total <- conf_raw %>%
 
 conf_by_state <- conf_raw %>% 
   pivot_longer(!c(1:4), names_to = "publish_date", values_to = "cum_conf") %>% 
-  mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
+  mutate(publish_date = ymd(publish_date)) %>% 
   group_by(State, publish_date) %>% 
   summarize(cum_conf = sum(cum_conf), .groups = "drop_last") %>% 
   mutate(
@@ -80,7 +81,7 @@ deaths_raw <- read_csv("https://usafactsstatic.blob.core.windows.net/public/data
 
 deaths_total <- deaths_raw %>% 
   pivot_longer(!c(1:4), names_to = "publish_date", values_to = "cum_deaths") %>% 
-  mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
+  mutate(publish_date = ymd(publish_date)) %>% 
   group_by(publish_date) %>% 
   summarize(cum_deaths = sum(cum_deaths), .groups = "drop_last") %>% 
   mutate(
@@ -92,7 +93,7 @@ deaths_total <- deaths_raw %>%
 
 deaths_by_state <- deaths_raw %>% 
   pivot_longer(!c(1:4), names_to = "publish_date", values_to = "cum_deaths") %>% 
-  mutate(publish_date = as.Date(publish_date, "%m/%d/%y")) %>% 
+  mutate(publish_date = ymd(publish_date)) %>% 
   group_by(State, publish_date) %>% 
   summarize(cum_deaths = sum(cum_deaths), .groups = "drop_last") %>% 
   mutate(
