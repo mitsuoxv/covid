@@ -5,14 +5,14 @@ Mitsuo Shiota
 
 -   [Summary](#summary)
 -   [U.S. confirmed cases (new) by red or blue
-    states](#u.s.-confirmed-cases-new-by-red-or-blue-states)
+    states](#us-confirmed-cases-new-by-red-or-blue-states)
 -   [Fastest spreading states in the last 14
     days](#fastest-spreading-states-in-the-last-14-days)
 -   [Highest fatality rate states](#highest-fatality-rate-states)
 -   [Highest deaths per population
     states](#highest-deaths-per-population-states)
 
-Updated: 2021-02-20
+Updated: 2021-02-21
 
 ## Summary
 
