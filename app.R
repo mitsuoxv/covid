@@ -10,6 +10,7 @@
 # libraries
 library(shiny)
 library(tidyverse)
+library(scales)
 
 # load data
 table1 <- readRDS("data/table1.rds")
@@ -25,13 +26,13 @@ table1 <- table2 %>%
 
 # tidy data
 world <- table2 %>% 
-  gather(key = "concept", value = "value", -area, -publish_date)
+  pivot_longer(!c(area, publish_date), names_to = "concept", values_to = "value")
 
 in_china <- table1 %>% 
-  gather(key = "concept", value = "value", -region, -publish_date)
+  pivot_longer(!c(region, publish_date), names_to = "concept", values_to = "value")
 
 in_usa <- data_usa %>% 
-  gather(key = "concept", value = "value", -State, -publish_date, -state_name) %>% 
+  pivot_longer(!c(State, publish_date, state_name), names_to = "concept", values_to = "value") %>% 
   select(-State) %>% 
   rename(state = state_name)
 
@@ -209,12 +210,12 @@ server <- function(input, output) {
       ggplot(aes(publish_date, value, color = area)) +
       geom_hline(yintercept = 0, color = "white", size = 2) +
       geom_line(size = 1) +
+      scale_y_continuous(labels = comma) +
       labs(
         title = lookup[lookup$menu == input$select_concept_area, "title"] %>% as.character(),
-        x = "published date", 
+        x = "published date", y = NULL,
         caption = str_c("Latest: ", max(chart_data_area()$publish_date))
       ) +
-      ylab(NULL) +
       theme(legend.position = "top",
             plot.title = element_text(size = rel(2)))
   })
@@ -233,12 +234,12 @@ server <- function(input, output) {
       ggplot(aes(publish_date, value, color = region)) +
       geom_hline(yintercept = 0, color = "white", size = 2) +
       geom_line(size = 1) +
+      scale_y_continuous(labels = comma) +
       labs(
         title = lookup[lookup$menu == input$select_concept_region, "title"] %>% as.character(),
-        x = "published date", 
+        x = "published date", y = NULL,
         caption = str_c("Latest: ", max(chart_data_region()$publish_date))
       ) +
-      ylab(NULL) +
       theme(legend.position = "top",
             plot.title = element_text(size = rel(2)))
   })
@@ -258,12 +259,12 @@ server <- function(input, output) {
       ggplot(aes(publish_date, value, color = state)) +
       geom_hline(yintercept = 0, color = "white", size = 2) +
       geom_line(size = 1) +
+      scale_y_continuous(labels = comma) +
       labs(
         title = lookup[lookup$menu == input$select_concept_state, "title"] %>% as.character(),
-        x = "published date", 
+        x = "published date", y = NULL,
         caption = str_c("Latest: ", max(chart_data_state()$publish_date))
       ) +
-      ylab(NULL) +
       theme(legend.position = "top",
             plot.title = element_text(size = rel(2)))
   })
