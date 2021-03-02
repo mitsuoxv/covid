@@ -125,6 +125,7 @@ data_usa <- data_usa %>%
   left_join(states, by = "State")
 
 saveRDS(data_usa, "data/data_usa.rds")
+
 ```
 
 
@@ -174,6 +175,18 @@ population <- population %>%
 
 data_usa <- data_usa %>% 
   left_join(population, by = "state_name")
+
+data_usa_ma7_std <- data_usa %>% 
+  select(-State) %>% 
+  rename(state = state_name) %>% 
+  mutate(state = state %>% str_to_lower()) %>% 
+  as_tsibble(key = c(state, party, pop), index = publish_date) %>% 
+  tq_ma(7) %>% 
+  as_tibble() %>% 
+  mutate(across(cum_conf:new_deaths, ~ .x * 1000000 / pop))
+
+saveRDS(data_usa_ma7_std, "data/data_usa_ma7_std.rds")
+
 ```
 
 I separate red or blue by state governors (in case of DC, a mayor), according to [List of United States governors](https://en.wikipedia.org/wiki/List_of_United_States_governors). Out of the map below, Alaska is red and Hawaii is blue. I download population data in data directory from [Census Bureau page](https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html), and use estimated population as of July 1, 2019.

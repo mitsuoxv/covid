@@ -11,11 +11,15 @@
 library(shiny)
 library(tidyverse)
 library(scales)
+library(maps)
 
 # load data
 table1 <- readRDS("data/table1.rds")
 table2 <- readRDS("data/table2.rds")
 data_usa <- readRDS("data/data_usa.rds")
+
+data_usa_ma7_std <- readRDS("data/data_usa_ma7_std.rds")
+states_map <- map_data("state")
 
 # make table1 with Total
 table1 <- table2 %>% 
@@ -36,6 +40,10 @@ in_usa <- data_usa %>%
   select(-State) %>% 
   rename(state = state_name)
 
+in_usa_map <- data_usa_ma7_std %>% 
+  filter(!is.na(new_conf)) %>% 
+  pivot_longer(cum_conf:new_deaths, names_to = "concept", values_to = "value")
+  
 # create menus
 area_menu <- unique(world$area) %>% sort()
 
@@ -192,6 +200,40 @@ ui <- navbarPage("WHO, Covid-19 situation report",
                           plotOutput("plot_state")
                         )
                       ),
+              ),
+              tabPanel("In the United States (map)",
+                       sidebarLayout(
+                         sidebarPanel(
+                           selectInput("select_concept_map", label = h4("Select concept"),
+                                       choices = concept_menu, selected = "new_conf"),
+                           
+                           hr(),
+                           
+                           sliderInput("date_usa",
+                                       label = h4("Select date"), 
+                                       min = min(in_usa_map$publish_date),
+                                       max = max(in_usa_map$publish_date),
+                                       value = max(in_usa_map$publish_date),
+                                       timeFormat="%m %d",
+                                       step = 7,
+                                       animate = TRUE
+                                       ),
+                           
+                           hr(),
+                           
+                           # Show source and Shiny app creator
+                           a(href = "https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/",
+                             "Source: USAFacts"),
+                           br(),
+                           a(href = "https://mitsuoxv.rbind.io/",
+                             "Shiny app creator: Mitsuo Shiota")
+                         ),
+                         
+                         # Show a map
+                         mainPanel(
+                           plotOutput("map_conf")
+                         )
+                       ),
              )
 )
 
@@ -244,8 +286,6 @@ server <- function(input, output) {
             plot.title = element_text(size = rel(2)))
   })
 
-  
-  
   chart_data_state <- reactive({
     in_usa %>% 
       filter(state %in% c(input$select_state1, input$select_state2),
@@ -267,6 +307,26 @@ server <- function(input, output) {
       ) +
       theme(legend.position = "top",
             plot.title = element_text(size = rel(2)))
+  })
+
+  map_data <- reactive({
+    in_usa_map %>% 
+      filter(
+        concept == input$select_concept_map,
+        publish_date == input$date_usa
+        )
+  })
+  
+  output$map_conf <- renderPlot({
+    states_map %>% 
+      left_join(map_data(), by = c("region" = "state")) %>% 
+      ggplot(aes(x = long, y = lat, group = group, fill = value)) +
+      geom_polygon(color = "white") +
+      coord_map("polyconic") +
+      scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
+                           midpoint = median(map_data()$value)) +
+      labs(fill = "cases per 1 million\n(7 day average)") +
+      theme_void()
   })
 }
 
