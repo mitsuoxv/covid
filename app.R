@@ -12,6 +12,7 @@ library(shiny)
 library(tidyverse)
 library(scales)
 library(maps)
+library(mapproj)
 
 # load data
 table1 <- readRDS("rds/table1.rds")
@@ -19,6 +20,7 @@ table2 <- readRDS("rds/table2.rds")
 data_usa <- readRDS("rds/data_usa.rds")
 
 data_usa_ma7_std <- readRDS("rds/data_usa_ma7_std.rds")
+
 states_map <- map_data("state")
 
 # make table1 with Total
