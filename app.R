@@ -14,11 +14,11 @@ library(scales)
 library(maps)
 
 # load data
-table1 <- readRDS("data/table1.rds")
-table2 <- readRDS("data/table2.rds")
-data_usa <- readRDS("data/data_usa.rds")
+table1 <- readRDS("rds/table1.rds")
+table2 <- readRDS("rds/table2.rds")
+data_usa <- readRDS("rds/data_usa.rds")
 
-data_usa_ma7_std <- readRDS("data/data_usa_ma7_std.rds")
+data_usa_ma7_std <- readRDS("rds/data_usa_ma7_std.rds")
 states_map <- map_data("state")
 
 # make table1 with Total

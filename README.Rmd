@@ -251,7 +251,7 @@ table2 %>%
 table2 <- table2 %>% 
   select(publish_date, area, new_conf, new_deaths, cum_conf, cum_deaths)
 
-saveRDS(table2, "data/table2.rds")
+saveRDS(table2, "rds/table2.rds")
 ```
 
 EOL

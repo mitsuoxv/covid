@@ -124,7 +124,7 @@ states <-
 data_usa <- data_usa %>% 
   left_join(states, by = "State")
 
-saveRDS(data_usa, "data/data_usa.rds")
+saveRDS(data_usa, "rds/data_usa.rds")
 
 ```
 
@@ -185,7 +185,7 @@ data_usa_ma7_std <- data_usa %>%
   as_tibble() %>% 
   mutate(across(cum_conf:new_deaths, ~ .x * 1000000 / pop))
 
-saveRDS(data_usa_ma7_std, "data/data_usa_ma7_std.rds")
+saveRDS(data_usa_ma7_std, "rds/data_usa_ma7_std.rds")
 
 ```
 
