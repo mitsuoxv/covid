@@ -48,21 +48,15 @@ in_usa_map <- data_usa_ma7_std %>%
 area_menu <- unique(world$area) %>% sort()
 
 concept_menu <- unique(world$concept) %>% sort()
+names(concept_menu) <- c(
+  "Confirmed cases (cumulative)",
+  "Deaths (cumulative)",
+  "Confirmed cases (new)",
+  "Deaths (new)")
 
 region_menu <- unique(in_china$region)
 
 state_menu <- unique(in_usa$state)
-
-# menu to title
-lookup <- tibble(
-  menu = concept_menu,
-  title = c(
-    "Confirmed cases (cumulative)",
-    "Deaths (cumulative)",
-    "Confirmed cases (new)",
-    "Deaths (new)"  )
-)
-
 
 
 # Define UI for application
@@ -231,7 +225,7 @@ ui <- navbarPage("WHO, Covid-19 situation report",
                          
                          # Show a map
                          mainPanel(
-                           plotOutput("map_conf")
+                           plotOutput("plot_map")
                          )
                        ),
              )
@@ -254,7 +248,7 @@ server <- function(input, output) {
       geom_line(size = 1) +
       scale_y_continuous(labels = comma) +
       labs(
-        title = lookup[lookup$menu == input$select_concept_area, "title"] %>% as.character(),
+        title = names(concept_menu)[concept_menu == input$select_concept_area],
         x = "published date", y = NULL,
         caption = str_c("Latest: ", max(chart_data_area()$publish_date))
       ) +
@@ -278,7 +272,7 @@ server <- function(input, output) {
       geom_line(size = 1) +
       scale_y_continuous(labels = comma) +
       labs(
-        title = lookup[lookup$menu == input$select_concept_region, "title"] %>% as.character(),
+        title = names(concept_menu)[concept_menu == input$select_concept_region],
         x = "published date", y = NULL,
         caption = str_c("Latest: ", max(chart_data_region()$publish_date))
       ) +
@@ -301,7 +295,7 @@ server <- function(input, output) {
       geom_line(size = 1) +
       scale_y_continuous(labels = comma) +
       labs(
-        title = lookup[lookup$menu == input$select_concept_state, "title"] %>% as.character(),
+        title = names(concept_menu)[concept_menu == input$select_concept_state],
         x = "published date", y = NULL,
         caption = str_c("Latest: ", max(chart_data_state()$publish_date))
       ) +
@@ -309,7 +303,7 @@ server <- function(input, output) {
             plot.title = element_text(size = rel(2)))
   })
 
-  map_data <- reactive({
+  chart_data_map <- reactive({
     in_usa_map %>% 
       filter(
         concept == input$select_concept_map,
@@ -317,16 +311,21 @@ server <- function(input, output) {
         )
   })
   
-  output$map_conf <- renderPlot({
+  output$plot_map <- renderPlot({
     states_map %>% 
-      left_join(map_data(), by = c("region" = "state")) %>% 
+      left_join(chart_data_map(), by = c("region" = "state")) %>% 
       ggplot(aes(x = long, y = lat, group = group, fill = value)) +
       geom_polygon(color = "white") +
       coord_map("polyconic") +
       scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
-                           midpoint = median(map_data()$value)) +
-      labs(fill = "cases per 1 million\n(7 day average)") +
-      theme_void()
+                           midpoint = median(chart_data_map()$value)) +
+      labs(
+        title = names(concept_menu)[concept_menu == input$select_concept_map],
+        fill = "cases per 1 million\n(7 day average)"
+        ) +
+      theme_void(
+        base_size = 16
+      )
   })
 }
 
