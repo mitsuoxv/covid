@@ -24,10 +24,17 @@ library(tidyverse)
 library(lubridate)
 library(rvest)
 library(readxl)
-library(maps)
 library(tsibble)
 library(tqr)
 library(scales)
+
+library(albersusa)
+library(sf)
+library(sp)
+library(rgeos)
+library(maptools)
+library(ggalt)
+library(ggthemes)
 ```
 
 ```{r read_from_USAfacts, echo=FALSE, cache=FALSE}
@@ -171,10 +178,11 @@ names(population) <- c("state_name", "pop")
 population <- population %>% 
   mutate(
     state_name = str_sub(state_name, 2L, -1L)
-    )
+  ) %>% 
+  left_join(states, by = "state_name")
 
 data_usa <- data_usa %>% 
-  left_join(population, by = "state_name")
+  left_join(population, by = c("State", "state_name"))
 
 data_usa_ma7_std <- data_usa %>% 
   select(-State) %>% 
@@ -189,24 +197,20 @@ saveRDS(data_usa_ma7_std, "rds/data_usa_ma7_std.rds")
 
 ```
 
-I separate red or blue by state governors (in case of DC, a mayor), according to [List of United States governors](https://en.wikipedia.org/wiki/List_of_United_States_governors). Out of the map below, Alaska is red and Hawaii is blue. I download population data in data directory from [Census Bureau page](https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html), and use estimated population as of July 1, 2019.
+I separate red or blue by state governors (in case of DC, a mayor), according to [List of United States governors](https://en.wikipedia.org/wiki/List_of_United_States_governors). I download population data in data directory from [Census Bureau page](https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html), and use estimated population as of July 1, 2019.
 
 ```{r map, echo=FALSE}
-states_map <- map_data("state")
+states_map <- usa_sf("laea")
 
 states_party <- gov_dc_df %>% 
   left_join(population, by = "state_name") %>% 
-  mutate(
-    state = tolower(state_name),
-    pop_mil = pop / 1000000
-    ) %>% 
-  select(-state_name, -pop)
+  mutate(pop_mil = pop / 1000000) %>% 
+  select(-pop)
 
 states_map %>% 
-  left_join(states_party, by = c("region" = "state")) %>% 
-  ggplot(aes(x = long, y = lat, group = group, fill = party, alpha = pop_mil)) +
-  geom_polygon(color = "white") +
-  coord_map("polyconic") +
+  left_join(states_party, by = c("iso_3166_2" = "State")) %>% 
+  ggplot() +
+  geom_sf(aes(fill = party), color = "white") +  
   scale_fill_manual(values = c("blue", "red")) +
   theme_void()
 ```
@@ -252,17 +256,14 @@ Highest "increase_in_14_days",  which is an increase in cumulative confirmed cas
 
 ```{r per_capita, echo=FALSE}
 states_speed <- data_usa %>% 
-  group_by(state_name) %>% 
+  group_by(State) %>% 
   filter(publish_date > max(publish_date) - 14) %>% 
-  summarize(increase_in_14_days = sum(new_conf), .groups = "drop_last") %>% 
-  mutate(state = tolower(state_name)) %>% 
-  select(-state_name)
+  summarize(increase_in_14_days = sum(new_conf), .groups = "drop_last")
 
 states_map %>% 
-  left_join(states_speed, by = c("region" = "state")) %>% 
-  ggplot(aes(x = long, y = lat, group = group, fill = increase_in_14_days)) +
-  geom_polygon(color = "white") +
-  coord_map("polyconic") +
+  left_join(states_speed, by = c("iso_3166_2" = "State")) %>% 
+  ggplot() +
+  geom_sf(aes(fill = increase_in_14_days), color = "white") +  
   scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
                        midpoint = median(states_speed$increase_in_14_days)) +
   theme_void()
@@ -272,17 +273,14 @@ Above calculation might be unfair to populous states. Highest "increase_std_in_1
 
 ```{r standardized, echo=FALSE}
 states_speed_std <- data_usa %>% 
-  group_by(state_name) %>% 
+  group_by(State) %>% 
   filter(publish_date > max(publish_date) - 14) %>% 
-  summarize(increase_std_in_14_days = sum(new_conf * 1000000 / pop), .groups = "drop_last") %>% 
-  mutate(state = tolower(state_name)) %>% 
-  select(-state_name)
+  summarize(increase_std_in_14_days = sum(new_conf * 1000000 / pop), .groups = "drop_last")
 
 states_map %>% 
-  left_join(states_speed_std, by = c("region" = "state")) %>% 
-  ggplot(aes(x = long, y = lat, group = group, fill = increase_std_in_14_days)) +
-  geom_polygon(color = "white") +
-  coord_map("polyconic") +
+  left_join(states_speed_std, by = c("iso_3166_2" = "State")) %>% 
+  ggplot() +
+  geom_sf(aes(fill = increase_std_in_14_days), color = "white") +  
   scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
                        midpoint = median(states_speed_std$increase_std_in_14_days)) +
   theme_void()
@@ -299,16 +297,12 @@ states_fatality <- data_usa %>%
     cum_deaths > 10,
     publish_date == max(publish_date)
     ) %>% 
-  mutate(fatality_rate = cum_deaths * 100 / cum_conf) %>% 
-  select(state_name, fatality_rate) %>% 
-  mutate(state = tolower(state_name)) %>% 
-  select(-state_name)
+  mutate(fatality_rate = cum_deaths * 100 / cum_conf)
 
 states_map %>% 
-  left_join(states_fatality, by = c("region" = "state")) %>% 
-  ggplot(aes(x = long, y = lat, group = group, fill = fatality_rate)) +
-  geom_polygon(color = "white") +
-  coord_map("polyconic") +
+  left_join(states_fatality, by = c("iso_3166_2" = "State")) %>% 
+  ggplot() +
+  geom_sf(aes(fill = fatality_rate), color = "white") +  
   scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
                        midpoint = median(states_fatality$fatality_rate)) +
   theme_void()
@@ -320,22 +314,16 @@ Highest "deaths_per_1m", which is cumulative deaths per 1 million population, ar
 
 ```{r deaths_per_population, echo=FALSE}
 states_deaths <- data_usa %>% 
-  filter(
-    publish_date == max(publish_date)
-    ) %>% 
+  filter(publish_date == max(publish_date)) %>% 
   mutate(
     pop_mil = pop / 1000000,
     deaths_per_1m = cum_deaths / pop_mil
-    ) %>% 
-  select(state_name, deaths_per_1m) %>% 
-  mutate(state = tolower(state_name)) %>% 
-  select(-state_name)
+    )
 
 states_map %>% 
-  left_join(states_deaths, by = c("region" = "state")) %>% 
-  ggplot(aes(x = long, y = lat, group = group, fill = deaths_per_1m)) +
-  geom_polygon(color = "white") +
-  coord_map("polyconic") +
+  left_join(states_deaths, by = c("iso_3166_2" = "State")) %>% 
+  ggplot() +
+  geom_sf(aes(fill = deaths_per_1m), color = "white") +  
   scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
                        midpoint = median(states_deaths$deaths_per_1m)) +
   theme_void()

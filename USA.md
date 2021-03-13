@@ -25,8 +25,7 @@ page](https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/).
 I separate red or blue by state governors (in case of DC, a mayor),
 according to [List of United States
 governors](https://en.wikipedia.org/wiki/List_of_United_States_governors).
-Out of the map below, Alaska is red and Hawaii is blue. I download
-population data in data directory from [Census Bureau
+I download population data in data directory from [Census Bureau
 page](https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html),
 and use estimated population as of July 1, 2019.
 
