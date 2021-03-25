@@ -122,7 +122,7 @@ ui <- navbarPage(
                hr(),
                
                # Show source and Shiny app creator
-               a(href = "https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports/",
+               a(href = "hhttps://covid19.who.int/",
                  "Source: WHO"),
                br(),
                a(href = "https://mitsuoxv.rbind.io/",
@@ -174,7 +174,7 @@ ui <- navbarPage(
                hr(),
                
                # Show source and Shiny app creator
-               a(href = "https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports/",
+               a(href = "https://covid19.who.int/",
                  "Source: WHO"),
                br(),
                a(href = "https://mitsuoxv.rbind.io/",
@@ -280,7 +280,7 @@ ui <- navbarPage(
 
 
 # Define server logic required to draw a chart
-server <- function(input, output) {
+server <- function(input, output, session) {
   chart_data_area <- reactive({
     world %>%
       filter(
@@ -295,20 +295,7 @@ server <- function(input, output) {
   
   output$plot1 <- renderPlot({
     chart_data_area() %>%
-      ggplot(aes(publish_date, value, color = area)) +
-      geom_hline(yintercept = 0,
-                 color = "white",
-                 size = 2) +
-      geom_line(size = 1) +
-      scale_y_continuous(labels = comma) +
-      labs(
-        title = names(concept_menu)[concept_menu == input$select_concept_area],
-        x = "published date",
-        y = NULL,
-        caption = str_c("Latest: ", max(chart_data_area()$publish_date))
-      ) +
-      theme(legend.position = "top",
-            plot.title = element_text(size = rel(2)))
+      draw_line_chart(area, concept_menu, input)
   })
   
   
@@ -326,20 +313,7 @@ server <- function(input, output) {
   
   output$plot_region <- renderPlot({
     chart_data_region() %>%
-      ggplot(aes(publish_date, value, color = region)) +
-      geom_hline(yintercept = 0,
-                 color = "white",
-                 size = 2) +
-      geom_line(size = 1) +
-      scale_y_continuous(labels = comma) +
-      labs(
-        title = names(concept_menu)[concept_menu == input$select_concept_region],
-        x = "published date",
-        y = NULL,
-        caption = str_c("Latest: ", max(chart_data_region()$publish_date))
-      ) +
-      theme(legend.position = "top",
-            plot.title = element_text(size = rel(2)))
+      draw_line_chart(region, concept_menu, input)
   })
   
   chart_data_state <- reactive({
@@ -354,20 +328,7 @@ server <- function(input, output) {
   
   output$plot_state <- renderPlot({
     chart_data_state() %>%
-      ggplot(aes(publish_date, value, color = state)) +
-      geom_hline(yintercept = 0,
-                 color = "white",
-                 size = 2) +
-      geom_line(size = 1) +
-      scale_y_continuous(labels = comma) +
-      labs(
-        title = names(concept_menu)[concept_menu == input$select_concept_state],
-        x = "published date",
-        y = NULL,
-        caption = str_c("Latest: ", max(chart_data_state()$publish_date))
-      ) +
-      theme(legend.position = "top",
-            plot.title = element_text(size = rel(2)))
+      draw_line_chart(state, concept_menu, input)
   })
   
   chart_data_map <- reactive({

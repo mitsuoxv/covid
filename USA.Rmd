@@ -168,7 +168,7 @@ data_usa <- data_usa %>%
   left_join(gov_dc_df, by = "state_name")
 
 # add population
-population <- read_excel("data/nst-est2019-01.xlsx", 
+population <- read_excel("data-raw/nst-est2019-01.xlsx", 
     col_names = FALSE, skip = 9)
 
 population <- population[1:51, c(1, 13)]

@@ -46,7 +46,8 @@ I also use the data, like area name and population, from https://countrycode.org
 
 ```{r read_from_WHO, echo=FALSE}
 # Read csv from url
-WHO_COVID_19_global_data <- read_csv("https://covid19.who.int/WHO-COVID-19-global-data.csv",
+WHO_COVID_19_global_data <- 
+  read_csv("https://covid19.who.int/WHO-COVID-19-global-data.csv",
                         col_types = cols(Date_reported = col_date(format = "%Y-%m-%d")),
                         na = c(""))
 
@@ -70,7 +71,7 @@ cc_df <- cc_df %>%
     iso_alpha2 = str_sub(`ISO CODES`, 1L, 2L)
   )
 
-UNSD_Methodology <- read_excel("data/UNSD-Methodology.xlsx")
+UNSD_Methodology <- read_excel("data-raw/UNSD-Methodology.xlsx")
 
 cc_df <- cc_df %>% 
   left_join(UNSD_Methodology, by = c("iso_alpha2" = "ISO-alpha2 Code"))
