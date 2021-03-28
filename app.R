@@ -84,17 +84,11 @@ ui <- navbarPage(
            sidebarLayout(
              sidebarPanel(
                selectInput(
-                 "select_area1",
-                 label = h4("Select area1"),
+                 "select_area",
+                 label = h4("Select areas (add/remove)"),
                  choices = area_menu,
-                 selected = "Japan"
-               ),
-               
-               selectInput(
-                 "select_area2",
-                 label = h4("Select area2"),
-                 choices = area_menu,
-                 selected = "Singapore"
+                 selected = "Japan",
+                 multiple = TRUE
                ),
                
                hr(),
@@ -136,17 +130,11 @@ ui <- navbarPage(
            sidebarLayout(
              sidebarPanel(
                selectInput(
-                 "select_region1",
-                 label = h4("Select region1"),
+                 "select_region",
+                 label = h4("Select regions (add/remove)"),
                  choices = region_menu,
-                 selected = "Total"
-               ),
-               
-               selectInput(
-                 "select_region2",
-                 label = h4("Select region2"),
-                 choices = region_menu,
-                 selected = "Hubei"
+                 selected = "Hubei",
+                 multiple = TRUE
                ),
                
                hr(),
@@ -189,17 +177,11 @@ ui <- navbarPage(
     sidebarLayout(
       sidebarPanel(
         selectInput(
-          "select_state1",
-          label = h4("Select state1"),
+          "select_state",
+          label = h4("Select states (add/remove)"),
           choices = state_menu,
-          selected = "Total"
-        ),
-        
-        selectInput(
-          "select_state2",
-          label = h4("Select state2"),
-          choices = state_menu,
-          selected = "New York"
+          selected = "New York",
+          multiple = TRUE
         ),
         
         hr(),
@@ -284,7 +266,7 @@ server <- function(input, output, session) {
   chart_data_area <- reactive({
     world %>%
       filter(
-        area %in% c(input$select_area1, input$select_area2),
+        area %in% c(input$select_area),
         concept == input$select_concept_area
       ) %>%
       filter(
@@ -302,7 +284,7 @@ server <- function(input, output, session) {
   chart_data_region <- reactive({
     in_china %>%
       filter(
-        region %in% c(input$select_region1, input$select_region2),
+        region %in% c(input$select_region),
         concept == input$select_concept_region
       ) %>%
       filter(
@@ -319,7 +301,7 @@ server <- function(input, output, session) {
   chart_data_state <- reactive({
     in_usa %>%
       filter(
-        state %in% c(input$select_state1, input$select_state2),
+        state %in% c(input$select_state),
         concept == input$select_concept_state
       ) %>%
       filter(publish_date >= input$date_range_usa[1],
