@@ -53,6 +53,7 @@ conf_raw <- conf_raw %>%
 
 conf_total <- conf_raw %>% 
   pivot_longer(!c(1:4), names_to = "publish_date", values_to = "cum_conf") %>% 
+  rename(state_abb = State) %>% 
   mutate(publish_date = ymd(publish_date)) %>% 
   group_by(publish_date) %>% 
   summarize(cum_conf = sum(cum_conf), .groups = "drop_last") %>% 
@@ -61,12 +62,13 @@ conf_total <- conf_raw %>%
     new_conf = cum_conf - cum_conf_lag
   ) %>% 
   select(-cum_conf_lag) %>% 
-  mutate(State = "Total")
+  mutate(state_abb = "Total")
 
 conf_by_state <- conf_raw %>% 
   pivot_longer(!c(1:4), names_to = "publish_date", values_to = "cum_conf") %>% 
+  rename(state_abb = State) %>% 
   mutate(publish_date = ymd(publish_date)) %>% 
-  group_by(State, publish_date) %>% 
+  group_by(state_abb, publish_date) %>% 
   summarize(cum_conf = sum(cum_conf), .groups = "drop_last") %>% 
   mutate(
     cum_conf_lag = lag(cum_conf),
@@ -88,6 +90,7 @@ deaths_raw <- read_csv("https://usafactsstatic.blob.core.windows.net/public/data
 
 deaths_total <- deaths_raw %>% 
   pivot_longer(!c(1:4), names_to = "publish_date", values_to = "cum_deaths") %>% 
+  rename(state_abb = State) %>% 
   mutate(publish_date = ymd(publish_date)) %>% 
   group_by(publish_date) %>% 
   summarize(cum_deaths = sum(cum_deaths), .groups = "drop_last") %>% 
@@ -96,12 +99,13 @@ deaths_total <- deaths_raw %>%
     new_deaths = cum_deaths - cum_deaths_lag
   ) %>% 
   select(-cum_deaths_lag) %>% 
-  mutate(State = "Total")
+  mutate(state_abb = "Total")
 
 deaths_by_state <- deaths_raw %>% 
   pivot_longer(!c(1:4), names_to = "publish_date", values_to = "cum_deaths") %>% 
+  rename(state_abb = State) %>% 
   mutate(publish_date = ymd(publish_date)) %>% 
-  group_by(State, publish_date) %>% 
+  group_by(state_abb, publish_date) %>% 
   summarize(cum_deaths = sum(cum_deaths), .groups = "drop_last") %>% 
   mutate(
     cum_deaths_lag = lag(cum_deaths),
@@ -113,25 +117,23 @@ deaths <- bind_rows(deaths_total, deaths_by_state) %>%
   filter(!is.na(publish_date))
 
 # Bind
-data_usa <- left_join(conf, deaths, by = c("State", "publish_date"))
+data_usa <- left_join(conf, deaths, by = c("state_abb", "publish_date"))
 
 # Add state name column
 states <- 
   bind_rows(
     tibble(
-      State = state.abb,
-      state_name = state.name
+      state_abb = state.abb,
+      state = state.name
     ),
     tibble(
-      State = c("DC", "Total"),
-      state_name = c("District of Columbia", "Total")
+      state_abb = c("DC", "Total"),
+      state = c("District of Columbia", "Total")
     )
   )
 
 data_usa <- data_usa %>% 
-  left_join(states, by = "State")
-
-saveRDS(data_usa, "rds/data_usa.rds")
+  left_join(states, by = "state_abb")
 
 ```
 
@@ -147,7 +149,7 @@ gov_df <- gov_html %>%
 
 gov_df <- gov_df[-1, c(1, 5)]
 
-names(gov_df) <- c("state_name", "party")
+names(gov_df) <- c("state", "party")
 
 gov_df <- gov_df %>% 
   mutate(party = str_sub(party, 1L, 10L))
@@ -159,39 +161,49 @@ dc_df <- gov_html %>%
 
 dc_df <- dc_df[-1, c(1, 5)]
 
-names(dc_df) <- c("state_name", "party")
+names(dc_df) <- c("state", "party")
 
 gov_dc_df <- bind_rows(gov_df, dc_df)
 
 data_usa <- data_usa %>% 
-  filter(State != "Total") %>% 
-  left_join(gov_dc_df, by = "state_name")
+  left_join(gov_dc_df, by = "state")
 
 # add population
-population <- read_excel("data-raw/nst-est2019-01.xlsx", 
+pop <- read_excel("data-raw/nst-est2019-01.xlsx", 
     col_names = FALSE, skip = 9)
 
-population <- population[1:51, c(1, 13)]
+pop <- pop[1:51, c(1, 13)]
 
-names(population) <- c("state_name", "pop")
+names(pop) <- c("state", "population")
 
-population <- population %>% 
+pop <- pop %>% 
   mutate(
-    state_name = str_sub(state_name, 2L, -1L)
+    state = str_sub(state, 2L, -1L)
   ) %>% 
-  left_join(states, by = "state_name")
+  left_join(states, by = "state")
+
+pop <- pop %>% 
+  bind_rows(
+    pop %>% 
+      summarize(
+        state = "Total",
+        population = sum(population),
+        state_abb = "Total"
+      )
+  )
 
 data_usa <- data_usa %>% 
-  left_join(population, by = c("State", "state_name"))
+  left_join(pop %>% select(-state), by = "state_abb")
+
+saveRDS(data_usa, "rds/data_usa.rds")
 
 data_usa_ma7_std <- data_usa %>% 
-  select(-State) %>% 
-  rename(state = state_name) %>% 
+  select(-state_abb) %>% 
   mutate(state = state %>% str_to_lower()) %>% 
-  as_tsibble(key = c(state, party, pop), index = publish_date) %>% 
+  as_tsibble(key = c(state, party, population), index = publish_date) %>% 
   tq_ma(7) %>% 
   as_tibble() %>% 
-  mutate(across(cum_conf:new_deaths, ~ .x * 1000000 / pop))
+  mutate(across(cum_conf:new_deaths, ~ .x * 1000000 / population))
 
 saveRDS(data_usa_ma7_std, "rds/data_usa_ma7_std.rds")
 
@@ -203,12 +215,12 @@ I separate red or blue by state governors (in case of DC, a mayor), according to
 states_map <- usa_sf("laea")
 
 states_party <- gov_dc_df %>% 
-  left_join(population, by = "state_name") %>% 
-  mutate(pop_mil = pop / 1000000) %>% 
-  select(-pop)
+  left_join(pop, by = "state") %>% 
+  mutate(pop_mil = population / 1000000) %>% 
+  select(-population)
 
 states_map %>% 
-  left_join(states_party, by = c("iso_3166_2" = "State")) %>% 
+  left_join(states_party, by = c("iso_3166_2" = "state_abb")) %>% 
   ggplot() +
   geom_sf(aes(fill = party), color = "white") +  
   scale_fill_manual(values = c("blue", "red")) +
@@ -221,6 +233,7 @@ I am worrying that too vigorous "reopen economy" movements in the red states in 
 
 ```{r chart1, echo=FALSE, warning=FALSE}
 data_usa %>% 
+  filter(state_abb != "Total") %>% 
   group_by(publish_date, party) %>% 
   summarize(new_conf = sum(new_conf), .groups = "drop_last") %>% 
   as_tsibble(key = party, index = publish_date) %>% 
@@ -244,9 +257,10 @@ Populations in millions by red or blue are:
 
 ```{r population_by_party, echo=FALSE}
 data_usa %>% 
+  filter(state_abb != "Total") %>% 
   filter(publish_date == max(publish_date)) %>% 
   group_by(party) %>% 
-  summarize(pop_mil = sum(pop) / 1000000, .groups = "drop_last")
+  summarize(pop_mil = sum(population) / 1000000, .groups = "drop_last")
 ```
 
 
@@ -256,12 +270,13 @@ Highest "increase_in_14_days",  which is an increase in cumulative confirmed cas
 
 ```{r per_capita, echo=FALSE}
 states_speed <- data_usa %>% 
-  group_by(State) %>% 
+  filter(state_abb != "Total") %>% 
+  group_by(state_abb) %>% 
   filter(publish_date > max(publish_date) - 14) %>% 
   summarize(increase_in_14_days = sum(new_conf), .groups = "drop_last")
 
 states_map %>% 
-  left_join(states_speed, by = c("iso_3166_2" = "State")) %>% 
+  left_join(states_speed, by = c("iso_3166_2" = "state_abb")) %>% 
   ggplot() +
   geom_sf(aes(fill = increase_in_14_days), color = "white") +  
   scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
@@ -273,12 +288,13 @@ Above calculation might be unfair to populous states. Highest "increase_std_in_1
 
 ```{r standardized, echo=FALSE}
 states_speed_std <- data_usa %>% 
-  group_by(State) %>% 
+  filter(state_abb != "Total") %>% 
+  group_by(state_abb) %>% 
   filter(publish_date > max(publish_date) - 14) %>% 
-  summarize(increase_std_in_14_days = sum(new_conf * 1000000 / pop), .groups = "drop_last")
+  summarize(increase_std_in_14_days = sum(new_conf * 1000000 / population), .groups = "drop_last")
 
 states_map %>% 
-  left_join(states_speed_std, by = c("iso_3166_2" = "State")) %>% 
+  left_join(states_speed_std, by = c("iso_3166_2" = "state_abb")) %>% 
   ggplot() +
   geom_sf(aes(fill = increase_std_in_14_days), color = "white") +  
   scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
@@ -293,6 +309,7 @@ Among states with more than 10 cumulative deaths, highest "fatality_rate", which
 
 ```{r fatality_rates, echo=FALSE}
 states_fatality <- data_usa %>% 
+  filter(state_abb != "Total") %>% 
   filter(
     cum_deaths > 10,
     publish_date == max(publish_date)
@@ -300,7 +317,7 @@ states_fatality <- data_usa %>%
   mutate(fatality_rate = cum_deaths * 100 / cum_conf)
 
 states_map %>% 
-  left_join(states_fatality, by = c("iso_3166_2" = "State")) %>% 
+  left_join(states_fatality, by = c("iso_3166_2" = "state_abb")) %>% 
   ggplot() +
   geom_sf(aes(fill = fatality_rate), color = "white") +  
   scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
@@ -314,14 +331,15 @@ Highest "deaths_per_1m", which is cumulative deaths per 1 million population, ar
 
 ```{r deaths_per_population, echo=FALSE}
 states_deaths <- data_usa %>% 
+  filter(state_abb != "Total") %>% 
   filter(publish_date == max(publish_date)) %>% 
   mutate(
-    pop_mil = pop / 1000000,
+    pop_mil = population / 1000000,
     deaths_per_1m = cum_deaths / pop_mil
     )
 
 states_map %>% 
-  left_join(states_deaths, by = c("iso_3166_2" = "State")) %>% 
+  left_join(states_deaths, by = c("iso_3166_2" = "state_abb")) %>% 
   ggplot() +
   geom_sf(aes(fill = deaths_per_1m), color = "white") +  
   scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",

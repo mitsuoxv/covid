@@ -13,6 +13,7 @@ library(tidyverse)
 library(scales)
 library(maps)
 library(mapproj)
+library(slider)
 
 # load data
 table1 <- readRDS("rds/table1.rds")
@@ -43,11 +44,10 @@ in_china <- table1 %>%
                values_to = "value")
 
 in_usa <- data_usa %>%
-  pivot_longer(!c(State, publish_date, state_name),
+  select(-state_abb, -party) %>%
+  pivot_longer(!c(publish_date, state, population),
                names_to = "concept",
-               values_to = "value") %>%
-  select(-State) %>%
-  rename(state = state_name)
+               values_to = "value")
 
 in_usa_map <- data_usa_ma7_std %>%
   filter(!is.na(new_conf)) %>%
@@ -125,7 +125,19 @@ ui <- navbarPage(
              ),
              
              # Show a plot of the generated line chart
-             mainPanel(plotOutput("plot1"))
+             mainPanel(
+               plotOutput("plot1"),
+               fluidRow(
+                 column(4,
+                        radioButtons("ma_area", "7 day moving average?", c("Yes", "No"),
+                                     selected = "No")),
+                 column(4,
+                        radioButtons("per1m_area", "Per 1m population?", c("Yes", "No"),
+                                     selected = "No")),
+                 column(4,
+                        downloadButton("download_area", "Download .tsv"))
+               )
+             )
            )),
   tabPanel("In China",
            sidebarLayout(
@@ -171,7 +183,13 @@ ui <- navbarPage(
              ),
              
              # Show a plot of the generated line chart
-             mainPanel(plotOutput("plot_region"))
+             mainPanel(
+               plotOutput("plot_region"),
+               fluidRow(
+                 column(4,
+                        downloadButton("download_region", "Download .tsv"))
+               )
+               )
            ),),
   tabPanel(
     "In the United States",
@@ -218,7 +236,19 @@ ui <- navbarPage(
       ),
       
       # Show a plot of the generated line chart
-      mainPanel(plotOutput("plot_state"))
+      mainPanel(
+        plotOutput("plot_state"),
+        fluidRow(
+          column(4,
+                 radioButtons("ma_state", "7 day moving average?", c("Yes", "No"),
+                              selected = "No")),
+          column(4,
+                 radioButtons("per1m_state", "Per 1m population?", c("Yes", "No"),
+                              selected = "No")),
+          column(4,
+                 downloadButton("download_state", "Download .tsv"))
+        )
+      )
     ),
   ),
   tabPanel(
@@ -265,15 +295,30 @@ ui <- navbarPage(
 # Define server logic required to draw a chart
 server <- function(input, output, session) {
   chart_data_area <- reactive({
-    world %>%
+    data <- world %>%
       filter(
-        area %in% c(input$select_area),
+        area %in% input$select_area,
         concept == input$select_concept_area
       ) %>%
       filter(
         publish_date >= input$date_range_world[1],
         publish_date <= input$date_range_world[2]
       )
+    
+    if (input$ma_area == "Yes") {
+      data <- data %>%
+        group_by(area) %>% 
+        mutate(value = slide_dbl(value, mean, na.rm = TRUE,
+                                 .before = 6, .complete = TRUE)) %>% 
+        ungroup()
+    }
+    
+    if (input$per1m_area == "Yes") {
+      data <- data %>%
+        mutate(value = value / population * 1000000)
+    }
+    
+    data
   })
   
   output$plot1 <- renderPlot({
@@ -281,11 +326,22 @@ server <- function(input, output, session) {
       draw_line_chart(area, concept_menu, input)
   })
   
+  output$download_area <- downloadHandler(
+    filename = function() {
+      name_file("area", input)
+    },
+    content = function(file) {
+      chart_data_area() %>%
+        select(publish_date, area, value) %>% 
+        pivot_wider(names_from = area) %>% 
+        vroom::vroom_write(file)
+    }
+  )
   
   chart_data_region <- reactive({
     in_china %>%
       filter(
-        region %in% c(input$select_region),
+        region %in% input$select_region,
         concept == input$select_concept_region
       ) %>%
       filter(
@@ -299,20 +355,59 @@ server <- function(input, output, session) {
       draw_line_chart(region, concept_menu, input)
   })
   
+  output$download_region <- downloadHandler(
+    filename = function() {
+      name_file("region", input)
+    },
+    content = function(file) {
+      chart_data_region() %>%
+        select(publish_date, region, value) %>% 
+        pivot_wider(names_from = region) %>% 
+        vroom::vroom_write(file)
+    }
+  )
+  
   chart_data_state <- reactive({
-    in_usa %>%
+    data <- in_usa %>%
       filter(
-        state %in% c(input$select_state),
+        state %in% input$select_state,
         concept == input$select_concept_state
       ) %>%
       filter(publish_date >= input$date_range_usa[1],
              publish_date <= input$date_range_usa[2])
+    
+    if (input$ma_state == "Yes") {
+      data <- data %>%
+        group_by(state) %>% 
+        mutate(value = slide_dbl(value, mean, na.rm = TRUE,
+                                 .before = 6, .complete = TRUE)) %>% 
+        ungroup()
+    }
+    
+    if (input$per1m_state == "Yes") {
+      data <- data %>%
+        mutate(value = value / population * 1000000)
+    }
+    
+    data
   })
   
   output$plot_state <- renderPlot({
     chart_data_state() %>%
       draw_line_chart(state, concept_menu, input)
   })
+  
+  output$download_state <- downloadHandler(
+    filename = function() {
+      name_file("state", input)
+    },
+    content = function(file) {
+      chart_data_state() %>%
+        select(publish_date, state, value) %>% 
+        pivot_wider(names_from = state) %>% 
+        vroom::vroom_write(file)
+    }
+  )
   
   chart_data_map <- reactive({
     in_usa_map %>%
