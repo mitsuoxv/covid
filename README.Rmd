@@ -36,6 +36,7 @@ library(tqr)
 library(rvest)
 library(readxl)
 library(scales)
+library(janitor)
 ```
 
 ## Read data from WHO
@@ -62,33 +63,29 @@ cc_html <- read_html("https://countrycode.org/")
 cc_df <- cc_html %>% 
   html_nodes("table") %>% 
   .[[1]] %>% 
-  html_table()
+  html_table() %>% 
+  clean_names() %>% 
+  mutate(population = parse_number(population)) %>% 
+  separate(iso_codes, c("iso2", "iso3"), sep = " / ")
 
-cc_df$POPULATION <- as.numeric(str_remove_all(cc_df$POPULATION, ","))
+UNSD_Methodology <- read_excel("data-raw/UNSD-Methodology.xlsx") %>% 
+  clean_names()
 
 cc_df <- cc_df %>% 
+  left_join(UNSD_Methodology, by = c("iso2" = "iso_alpha2_code")) %>% 
   mutate(
-    iso_alpha2 = str_sub(`ISO CODES`, 1L, 2L)
-  )
-
-UNSD_Methodology <- read_excel("data-raw/UNSD-Methodology.xlsx")
-
-cc_df <- cc_df %>% 
-  left_join(UNSD_Methodology, by = c("iso_alpha2" = "ISO-alpha2 Code"))
-
-cc_df <- cc_df %>% 
-  mutate(
-    region = if_else(`Sub-region Name` %in% c("Southern Europe", "Northern Europe", "Western Europe"), "West Europe", 
-                     if_else(`Sub-region Name` %in% c("Australia and New Zealand", "Melanesia", "Micronesia", "Polynesia"), "Oceania", `Sub-region Name`)
+    region = if_else(sub_region_name %in% c("Southern Europe", "Northern Europe", "Western Europe"), "West Europe", 
+                     if_else(sub_region_name %in% c("Australia and New Zealand", "Melanesia", "Micronesia", "Polynesia"), "Oceania", sub_region_name)
     )
-  )
+  ) %>% 
+  select(country, iso2, population, region)
 
 # Change area name according to countrycode.org
 table2 <- table2 %>% 
-  left_join(cc_df, by = "iso_alpha2") %>% 
-  mutate(COUNTRY = if_else(is.na(COUNTRY), area, COUNTRY)) %>% 
+  left_join(cc_df, by = c("iso_alpha2" = "iso2")) %>% 
+  mutate(country = if_else(is.na(country), area, country)) %>% 
   select(-area) %>% 
-  rename(area = COUNTRY)
+  rename(area = country) 
 
 ```
 
@@ -126,7 +123,7 @@ Among areas with more than 5 million population, highest "speed_since_100",  whi
 
 ```{r per_capita, echo=FALSE}
 areas_5m <- table2 %>% 
-  filter(POPULATION >= 5000000)
+  filter(population >= 5000000)
 
 areas_5m %>% 
   group_by(area) %>% 
@@ -152,8 +149,8 @@ areas_5m %>%
   filter(cum_conf > 100) %>% 
   mutate(
     days_since_100 = row_number(publish_date),
-    per_capita_cum_conf = cum_conf * 1000000 / POPULATION,
-    speed_std_since_100 = (cum_conf - min(cum_conf)) * 1000000 / POPULATION / days_since_100
+    per_capita_cum_conf = cum_conf * 1000000 / population,
+    speed_std_since_100 = (cum_conf - min(cum_conf)) * 1000000 / population / days_since_100
     ) %>% 
   ungroup() %>% 
   filter(publish_date == max(publish_date)) %>% 
@@ -189,7 +186,7 @@ areas_5m %>%
     publish_date == max(publish_date)
     ) %>% 
   mutate(
-    pop_mil = POPULATION / 1000000,
+    pop_mil = population / 1000000,
     deaths_per_1m = cum_deaths / pop_mil
     ) %>% 
   arrange(desc(deaths_per_1m)) %>% 
@@ -250,7 +247,8 @@ table2 %>%
   write.csv("data/table2.csv", row.names = FALSE)
 
 table2 <- table2 %>% 
-  select(publish_date, area, new_conf, new_deaths, cum_conf, cum_deaths)
+  select(publish_date, area, new_conf, new_deaths, cum_conf, cum_deaths,
+         population, region)
 
 saveRDS(table2, "rds/table2.rds")
 ```

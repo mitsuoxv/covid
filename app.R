@@ -25,6 +25,7 @@ states_map <- map_data("state")
 
 # make table1 with Total
 table1 <- table2 %>%
+  select(!c(population, region)) %>% 
   filter(area == "China") %>%
   rename(region = area) %>%
   mutate(region = "Total") %>%
@@ -32,7 +33,7 @@ table1 <- table2 %>%
 
 # tidy data
 world <- table2 %>%
-  pivot_longer(!c(area, publish_date),
+  pivot_longer(!c(area, population, region, publish_date),
                names_to = "concept",
                values_to = "value")
 
