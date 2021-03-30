@@ -197,10 +197,10 @@ areas_5m %>%
 ## Save data
 
 ```{r save_region, echo=FALSE}
-table2a <- table2 %>% 
+table2 <- table2 %>% 
   replace_na(list(region = "Others"))
 
-table2a %>% 
+table2 %>% 
   group_by(publish_date, region) %>% 
   summarize(new_conf = sum(new_conf, na.rm = TRUE), .groups = "drop_last") %>% 
   as_tsibble(key = region, index = publish_date) %>% 
@@ -208,7 +208,7 @@ table2a %>%
   pivot_wider(names_from = region, values_from = new_conf, values_fill = 0) %>% 
   write.csv("data/new_conf_7ma_by_region.csv", row.names = FALSE)
 
-table2a %>% 
+table2 %>% 
   group_by(publish_date, region) %>% 
   summarize(new_deaths = sum(new_deaths, na.rm = TRUE), .groups = "drop_last") %>% 
   as_tsibble(key = region, index = publish_date) %>% 
@@ -240,12 +240,7 @@ europe %>%
 
 ```
 
-You can see the data I use in table2.csv in data directory of this repository.
-
 ```{r save, echo=FALSE}
-table2 %>% 
-  write.csv("data/table2.csv", row.names = FALSE)
-
 table2 <- table2 %>% 
   select(publish_date, area, new_conf, new_deaths, cum_conf, cum_deaths,
          population, region)
