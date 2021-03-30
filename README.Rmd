@@ -194,8 +194,6 @@ areas_5m %>%
   head(20)
 ```
 
-## Save data
-
 ```{r save_region, echo=FALSE}
 table2 <- table2 %>% 
   replace_na(list(region = "Others"))
