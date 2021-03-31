@@ -51,8 +51,12 @@ pop <- read_csv("data-raw/FEH_00200524_210331081757.csv",
                 locale = locale(encoding = "SHIFT-JIS"), 
                 skip = 12)
 
-pop <- pop[, c(3, 4, 6)]
-names(pop) <- c("code", "prefecture", "population")
+pop <- pop[, c(3, 6)]
+names(pop) <- c("code", "population")
+
+pref_eng <- read_csv("data-raw/pref_eng.csv")
+
+pop <- bind_cols(pop, pref_eng)
 
 pop <- pop %>% 
   mutate(
@@ -61,7 +65,8 @@ pop <- pop %>%
     )
 
 data_japan <- data_japan %>% 
-  left_join(pop %>% select(-prefecture), by = "code")
+  select(-prefecture) %>% 
+  left_join(pop, by = "code")
 
 saveRDS(data_japan, "rds/data_japan.rds")
 

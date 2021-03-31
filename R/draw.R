@@ -1,7 +1,7 @@
 draw_line_chart <- function(df, var_str) {
   var <- sym(var_str)
   
-  p <- df %>%
+  df %>%
     mutate({{ var }} := {{ var }} %>% fct_reorder2(publish_date, value)) %>% 
     ggplot(aes(publish_date, value, color = {{ var }})) +
     geom_hline(yintercept = 0,
@@ -11,12 +11,6 @@ draw_line_chart <- function(df, var_str) {
     scale_y_continuous(labels = comma) +
     labs(x = "published date", y = NULL,
          caption = str_c("Latest: ", max(df$publish_date)))
-  
-  if (var_str == "prefecture") {
-    p + theme(legend.text = element_text(family = "Noto Sans CJK"))
-  } else {
-    p
-  }
 }
 
 draw_map_usa <- function(map_df, df, var_str) {
