@@ -268,20 +268,17 @@ data_usa %>%
 
 Highest "increase_in_14_days",  which is an increase in cumulative confirmed cases in the last 14 days, are:
 
-```{r per_capita, echo=FALSE}
+```{r spreading, echo=FALSE}
 states_speed <- data_usa %>% 
   filter(state_abb != "Total") %>% 
   group_by(state_abb) %>% 
   filter(publish_date > max(publish_date) - 14) %>% 
   summarize(increase_in_14_days = sum(new_conf), .groups = "drop_last")
 
-states_map %>% 
-  left_join(states_speed, by = c("iso_3166_2" = "state_abb")) %>% 
-  ggplot() +
-  geom_sf(aes(fill = increase_in_14_days), color = "white") +  
-  scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
-                       midpoint = median(states_speed$increase_in_14_days)) +
-  theme_void()
+source("R/draw.R")
+
+draw_map_usa(states_map, states_speed, "increase_in_14_days")
+
 ```
 
 Above calculation might be unfair to populous states. Highest "increase_std_in_14_days", which is an increase in cumulative confirmed cases in the last 14 days per 1 million population, are:
@@ -293,13 +290,8 @@ states_speed_std <- data_usa %>%
   filter(publish_date > max(publish_date) - 14) %>% 
   summarize(increase_std_in_14_days = sum(new_conf * 1000000 / population), .groups = "drop_last")
 
-states_map %>% 
-  left_join(states_speed_std, by = c("iso_3166_2" = "state_abb")) %>% 
-  ggplot() +
-  geom_sf(aes(fill = increase_std_in_14_days), color = "white") +  
-  scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
-                       midpoint = median(states_speed_std$increase_std_in_14_days)) +
-  theme_void()
+draw_map_usa(states_map, states_speed_std, "increase_std_in_14_days")
+
 ```
 
 
@@ -316,13 +308,8 @@ states_fatality <- data_usa %>%
     ) %>% 
   mutate(fatality_rate = cum_deaths * 100 / cum_conf)
 
-states_map %>% 
-  left_join(states_fatality, by = c("iso_3166_2" = "state_abb")) %>% 
-  ggplot() +
-  geom_sf(aes(fill = fatality_rate), color = "white") +  
-  scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
-                       midpoint = median(states_fatality$fatality_rate)) +
-  theme_void()
+draw_map_usa(states_map, states_fatality, "fatality_rate")
+
 ```
 
 ## Highest deaths per population states
@@ -338,13 +325,8 @@ states_deaths <- data_usa %>%
     deaths_per_1m = cum_deaths / pop_mil
     )
 
-states_map %>% 
-  left_join(states_deaths, by = c("iso_3166_2" = "state_abb")) %>% 
-  ggplot() +
-  geom_sf(aes(fill = deaths_per_1m), color = "white") +  
-  scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
-                       midpoint = median(states_deaths$deaths_per_1m)) +
-  theme_void()
+draw_map_usa(states_map, states_deaths, "deaths_per_1m")
+
 ```
 
 EOL

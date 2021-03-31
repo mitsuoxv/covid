@@ -51,7 +51,7 @@ Populations in millions by red or blue are:
 Highest “increase\_in\_14\_days”, which is an increase in cumulative
 confirmed cases in the last 14 days, are:
 
-![](USA_files/figure-gfm/per_capita-1.png)<!-- -->
+![](USA_files/figure-gfm/spreading-1.png)<!-- -->
 
 Above calculation might be unfair to populous states. Highest
 “increase\_std\_in\_14\_days”, which is an increase in cumulative

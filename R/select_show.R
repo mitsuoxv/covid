@@ -9,6 +9,7 @@ select_showUI <- function(id, df, var_str, a_menu, c_menu) {
           var_str == "area" ~ "Japan",
           var_str == "region" ~ c("Total", "Northern America"),
           var_str == "state" ~ "New York",
+          var_str == "prefecture" ~ "東京都",
           TRUE ~ "foo"
         ),
         multiple = TRUE
@@ -98,7 +99,7 @@ select_showServer <- function(id, df, var_str) {
     
     output$download <- downloadHandler(
       filename = function() {
-        name_file(var_str, input)
+        name_file(input)
       },
       content = function(file) {
         chart_data() %>%

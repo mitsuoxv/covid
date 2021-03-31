@@ -11,18 +11,23 @@
 library(shiny)
 library(tidyverse)
 library(scales)
+library(slider)
+
 library(maps)
 library(mapproj)
-library(slider)
+
+library(NipponMap)
+library(sf)
 
 # load data
 table2 <- readRDS("rds/table2.rds")
 data_usa <- readRDS("rds/data_usa.rds")
-
 data_usa_ma7_std <- readRDS("rds/data_usa_ma7_std.rds")
+data_japan <- readRDS("rds/data_japan.rds")
 
 states_map <- map_data("state")
-
+prefectures_map <-
+  st_read(system.file("shapes/jpn.shp", package = "NipponMap"))
 
 # tidy data
 world_area <- table2 %>%
@@ -55,6 +60,26 @@ in_usa_map <- data_usa_ma7_std %>%
   pivot_longer(cum_conf:new_deaths,
                names_to = "concept")
 
+in_japan <- data_japan %>%
+  select(-code) %>%
+  pivot_longer(!c(publish_date, prefecture, population),
+               names_to = "concept")
+
+in_japan_map <- data_japan %>% 
+  group_by(code) %>% 
+  mutate(
+    across(new_conf:cum_deaths,
+      ~ .x / population * 1000000
+    ),
+    across(new_conf:cum_deaths,
+      ~ slide_dbl(.x, mean, na.rm = TRUE,
+                       .before = 6, .complete = TRUE)
+    )
+  ) %>% 
+  ungroup() %>% 
+  filter(!is.na(new_conf)) %>% 
+  pivot_longer(new_conf:cum_deaths, names_to = "concept")
+
 # create menus
 area_menu <- unique(world_area$area) %>% sort()
 
@@ -70,10 +95,11 @@ region_menu <- c("Total", unique(world_reg$region) %>% sort())
 
 state_menu <- unique(in_usa$state)
 
+prefecture_menu <- unique(in_japan$prefecture)
 
 # Define UI for application
 ui <- navbarPage(
-  "WHO, Covid-19 situation report",
+  "Covid-19 situation",
   
   tags$head(includeHTML((
     "google-analytics.html"
@@ -87,46 +113,18 @@ ui <- navbarPage(
   tabPanel("Areas",
            select_showUI("world_area", world_area, "area",
                          a_menu = area_menu, c_menu = concept_menu)),
-  tabPanel("In the United States",
+  tabPanel("In Japan",
+           select_showUI("japan", in_japan, "prefecture",
+                         a_menu = prefecture_menu, c_menu = concept_menu)),
+  tabPanel("In Japan (map)",
+           draw_mapUI("japan_map", in_japan_map, "prefecture",
+                      c_menu = concept_menu)),
+  tabPanel("In the U.S.",
            select_showUI("usa", in_usa, "state",
                          a_menu = state_menu, c_menu = concept_menu)),
-  tabPanel(
-    "In the United States (map)",
-    sidebarLayout(
-      sidebarPanel(
-        selectInput(
-          "select_concept_map",
-          label = h4("Select concept"),
-          choices = concept_menu,
-          selected = "new_conf"
-        ),
-        
-        hr(),
-        
-        sliderInput(
-          "date_usa",
-          label = h4("Select date"),
-          min = min(in_usa_map$publish_date),
-          max = max(in_usa_map$publish_date),
-          value = max(in_usa_map$publish_date),
-          timeFormat = "%m %d",
-          step = 7,
-          animate = TRUE
-        ),
-        
-        hr(),
-        
-        # Show source and Shiny app creator
-        data_source("state"),
-        br(),
-        a(href = "https://mitsuoxv.rbind.io/",
-          "Shiny app creator: Mitsuo Shiota")
-      ),
-      
-      # Show a map
-      mainPanel(plotOutput("plot_map"))
-    ),
-  )
+  tabPanel("In the U.S. (map)",
+           draw_mapUI("usa_map", in_usa_map, "state",
+                      c_menu = concept_menu))
 )
 
 
@@ -134,35 +132,11 @@ ui <- navbarPage(
 server <- function(input, output, session) {
   select_showServer("world_region", world_region, "region")
   select_showServer("world_area", world_area, "area")
+  select_showServer("japan", in_japan, "prefecture")
   select_showServer("usa", in_usa, "state")
   
-  chart_data_map <- reactive({
-    in_usa_map %>%
-      filter(concept == input$select_concept_map,
-             publish_date == input$date_usa)
-  })
-  
-  output$plot_map <- renderPlot({
-    states_map %>%
-      left_join(chart_data_map(), by = c("region" = "state")) %>%
-      ggplot(aes(
-        x = long,
-        y = lat,
-        group = group,
-        fill = value
-      )) +
-      geom_polygon(color = "white") +
-      coord_map("polyconic") +
-      scale_fill_gradient2(
-        low = "#559999",
-        mid = "grey90",
-        high = "#BB650B",
-        midpoint = median(chart_data_map()$value)
-      ) +
-      labs(title = names(concept_menu)[concept_menu == input$select_concept_map],
-           fill = "cases per 1 million\n(7 day average)") +
-      theme_void(base_size = 16)
-  })
+  draw_mapServer("usa_map", states_map, in_usa_map, "state")
+  draw_mapServer("japan_map", prefectures_map, in_japan_map, "prefecture")
 }
 
 # Run the application

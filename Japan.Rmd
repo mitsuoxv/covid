@@ -1,0 +1,140 @@
+---
+title: "Japan, Covid-19 situation by prefecture"
+author: "Mitsuo Shiota"
+date: "2021-03-31"
+output: 
+  github_document:
+    toc: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Updated: `r Sys.Date()`
+
+## Summary
+
+I added Japan page to [my Shiny App](https://mitsuoxv.shinyapps.io/covid/) on March 31, 2021. I use data of 47 prefectures from [NHK site ](https://www3.nhk.or.jp/news/special/coronavirus/data/).
+
+```{r library, include=FALSE}
+library(tidyverse)
+library(lubridate)
+
+library(NipponMap)
+library(sf)
+
+```
+
+## Read data from NHK site
+
+```{r read_data_from_NHK, message=FALSE}
+
+data_raw <- read_csv("https://www3.nhk.or.jp/n-data/opendata/coronavirus/nhk_news_covid19_prefectures_daily_data.csv")
+names(data_raw) <- c("publish_date", "code", "prefecture",
+                     "new_conf", "cum_conf", "new_deaths", "cum_deaths")
+
+data_japan <- data_raw %>% 
+  mutate(publish_date = ymd(publish_date))
+
+```
+
+## Add population column
+
+I download population by prefecture data from [e-stat page](https://www.e-stat.go.jp/stat-search/database?page=1&layout=datalist&toukei=00200524&bunya_l=02&tstat=000000090001&cycle=0&tclass1=000001136886&statdisp_id=0003412316&tclass2val=0). The data are estimated as of October 1, 2019.
+
+```{r population, echo=FALSE, message=FALSE}
+
+pop <- read_csv("data-raw/FEH_00200524_210331081757.csv", 
+                locale = locale(encoding = "SHIFT-JIS"), 
+                skip = 12)
+
+pop <- pop[, c(3, 4, 6)]
+names(pop) <- c("code", "prefecture", "population")
+
+pop <- pop %>% 
+  mutate(
+    code = code %>% str_sub(end = 2L),
+    population = population * 1000
+    )
+
+data_japan <- data_japan %>% 
+  left_join(pop %>% select(-prefecture), by = "code")
+
+saveRDS(data_japan, "rds/data_japan.rds")
+
+```
+
+
+```{r map_draw_prepare, echo=FALSE, message=FALSE}
+
+# read map data
+prefectures_map <-
+  st_read(system.file("shapes/jpn.shp", package = "NipponMap"))
+
+source("R/draw.R")
+
+```
+
+## Fastest spreading prefecutures in the last 14 days
+
+Highest "increase_in_14_days", which is an increase in cumulative confirmed cases in the last 14 days, are:
+
+```{r spreading, echo=FALSE}
+prefectures_speed <- data_japan %>% 
+  group_by(code) %>% 
+  filter(publish_date > max(publish_date) - 14) %>% 
+  summarize(increase_in_14_days = sum(new_conf), .groups = "drop_last")
+
+draw_map_japan(prefectures_map, prefectures_speed, "increase_in_14_days")
+
+```
+
+Above calculation might be unfair to populous prefectures. Highest "increase_std_in_14_days", which is an increase in cumulative confirmed cases in the last 14 days per 1 million population, are:
+
+```{r standardized, echo=FALSE}
+prefectures_speed_std <- data_japan %>% 
+  group_by(code) %>% 
+  filter(publish_date > max(publish_date) - 14) %>% 
+  summarize(increase_std_in_14_days = sum(new_conf * 1000000 / population), .groups = "drop_last")
+
+draw_map_japan(prefectures_map, prefectures_speed_std, "increase_std_in_14_days")
+
+```
+
+
+## Highest fatality rate prefectures
+
+Among prefectures with more than 10 cumulative deaths, highest "fatality_rate", which is cumulative deaths per 100 cumulative confirmed cases, are:
+
+```{r fatality_rates, echo=FALSE}
+prefectures_fatality <- data_japan %>% 
+  filter(
+    cum_deaths > 10,
+    publish_date == max(publish_date)
+    ) %>% 
+  mutate(fatality_rate = cum_deaths * 100 / cum_conf)
+
+draw_map_japan(prefectures_map, prefectures_fatality, "fatality_rate")
+
+```
+
+## Highest deaths per population prefectures
+
+Highest "deaths_per_1m", which is cumulative deaths per 1 million population, are:
+
+```{r deaths_per_population, echo=FALSE}
+prefectures_deaths <- data_japan %>% 
+  filter(publish_date == max(publish_date)) %>% 
+  mutate(
+    pop_mil = population / 1000000,
+    deaths_per_1m = cum_deaths / pop_mil
+    )
+
+draw_map_japan(prefectures_map, prefectures_deaths, "deaths_per_1m")
+
+```
+
+EOL

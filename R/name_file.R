@@ -1,6 +1,4 @@
-name_file <- function(cat, input) {
-  stopifnot(cat %in% c("area", "region", "state"))
-  
+name_file <- function(input) {
   fname <- input$select_concept
   
   if (input$ma == "Yes") {

@@ -15,6 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Updated: `r Sys.Date()`
 
+I added "Japan, Covid-19 situation by prefecture" in [another page](Japan.md).
 I added "USA, Covid-19 situation by state" in [another page](USA.md).
 
 ## Summary

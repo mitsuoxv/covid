@@ -10,11 +10,12 @@ Mitsuo Shiota
 -   [Highest fatality rate areas](#highest-fatality-rate-areas)
 -   [Highest deaths per population
     areas](#highest-deaths-per-population-areas)
--   [Save data](#save-data)
 
 Updated: 2021-03-31
 
-I added “USA, Covid-19 situation by state” in [another page](USA.md).
+I added “Japan, Covid-19 situation by prefecture” in [another
+page](Japan.md). I added “USA, Covid-19 situation by state” in [another
+page](USA.md).
 
 ## Summary
 
