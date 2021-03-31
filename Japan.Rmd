@@ -45,7 +45,7 @@ data_japan <- data_raw %>%
 
 I download population by prefecture data from [e-stat page](https://www.e-stat.go.jp/stat-search/database?page=1&layout=datalist&toukei=00200524&bunya_l=02&tstat=000000090001&cycle=0&tclass1=000001136886&statdisp_id=0003412316&tclass2val=0). The data are estimated as of October 1, 2019.
 
-```{r population, echo=FALSE, message=FALSE}
+```{r population, echo=FALSE, message=FALSE, warning=FALSE}
 
 pop <- read_csv("data-raw/FEH_00200524_210331081757.csv", 
                 locale = locale(encoding = "SHIFT-JIS"), 
@@ -68,7 +68,7 @@ saveRDS(data_japan, "rds/data_japan.rds")
 ```
 
 
-```{r map_draw_prepare, echo=FALSE, message=FALSE}
+```{r map_draw_prepare, include=FALSE}
 
 # read map data
 prefectures_map <-
