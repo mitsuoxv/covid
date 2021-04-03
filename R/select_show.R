@@ -9,7 +9,7 @@ select_showUI <- function(id, df, var_str, a_menu, c_menu) {
           var_str == "area" ~ "Japan",
           var_str == "region" ~ c("Total", "Northern America"),
           var_str == "state" ~ "New York",
-          var_str == "prefecture" ~ "Tokyo",
+          var_str == "prefecture" ~ c("Tokyo", "Osaka"),
           TRUE ~ "foo"
         ),
         multiple = TRUE
