@@ -144,7 +144,7 @@ gov_html <- read_html("https://en.wikipedia.org/wiki/List_of_United_States_gover
 
 gov_df <- gov_html %>% 
   html_nodes("table") %>% 
-  .[[1]] %>% 
+  .[[2]] %>% 
   html_table(fill = TRUE)
 
 gov_df <- gov_df[-1, c(1, 5)]
