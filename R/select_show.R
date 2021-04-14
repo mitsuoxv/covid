@@ -40,7 +40,7 @@ select_showUI <- function(id, df, var_str, a_menu, c_menu) {
       hr(),
       
       # Show source and Shiny app creator
-      data_source(var_str),
+      data_source(id),
       br(),
       a(href = "https://mitsuoxv.rbind.io/",
         "Shiny app creator: Mitsuo Shiota")

@@ -28,6 +28,9 @@ library(tsibble)
 library(tqr)
 library(scales)
 
+library(maps)
+library(mapproj)
+
 library(albersusa)
 library(sf)
 library(sp)
@@ -195,8 +198,6 @@ pop <- pop %>%
 data_usa <- data_usa %>% 
   left_join(pop %>% select(-state), by = "state_abb")
 
-saveRDS(data_usa, "rds/data_usa.rds")
-
 data_usa_ma7_std <- data_usa %>% 
   select(-state_abb) %>% 
   mutate(state = state %>% str_to_lower()) %>% 
@@ -205,7 +206,22 @@ data_usa_ma7_std <- data_usa %>%
   as_tibble() %>% 
   mutate(across(cum_conf:new_deaths, ~ .x * 1000000 / population))
 
-saveRDS(data_usa_ma7_std, "rds/data_usa_ma7_std.rds")
+states_map <- map_data("state") %>% 
+  as_tibble()
+
+in_usa <- data_usa %>%
+  select(-state_abb, -party) %>%
+  pivot_longer(!c(publish_date, state, population),
+               names_to = "concept")
+
+in_usa_map <- data_usa_ma7_std %>%
+  filter(!is.na(new_conf)) %>%
+  pivot_longer(cum_conf:new_deaths,
+               names_to = "concept")
+
+state_menu <- unique(in_usa$state)
+
+usethis::use_data(states_map, in_usa, in_usa_map, state_menu)
 
 ```
 
@@ -275,7 +291,7 @@ states_speed <- data_usa %>%
   filter(publish_date > max(publish_date) - 14) %>% 
   summarize(increase_in_14_days = sum(new_conf), .groups = "drop_last")
 
-source("R/draw.R")
+source("R/draw_no_shiny.R")
 
 draw_map_usa(states_map, states_speed, "increase_in_14_days")
 

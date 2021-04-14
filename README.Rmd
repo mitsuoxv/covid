@@ -38,6 +38,8 @@ library(rvest)
 library(readxl)
 library(scales)
 library(janitor)
+library(maps)
+library(mapproj)
 ```
 
 ## Read data from WHO
@@ -195,56 +197,73 @@ areas_5m %>%
   head(20)
 ```
 
-```{r save_region, echo=FALSE}
-table2 <- table2 %>% 
-  replace_na(list(region = "Others"))
 
-table2 %>% 
-  group_by(publish_date, region) %>% 
-  summarize(new_conf = sum(new_conf, na.rm = TRUE), .groups = "drop_last") %>% 
-  as_tsibble(key = region, index = publish_date) %>% 
-  tq_ma(n = 7) %>% 
-  pivot_wider(names_from = region, values_from = new_conf, values_fill = 0) %>% 
-  write.csv("data/new_conf_7ma_by_region.csv", row.names = FALSE)
-
-table2 %>% 
-  group_by(publish_date, region) %>% 
-  summarize(new_deaths = sum(new_deaths, na.rm = TRUE), .groups = "drop_last") %>% 
-  as_tsibble(key = region, index = publish_date) %>% 
-  tq_ma(n = 7) %>% 
-  pivot_wider(names_from = region, values_from = new_deaths, values_fill = 0) %>% 
-  write.csv("data/new_deaths_7ma_by_region.csv", row.names = FALSE)
-
-```
-
-```{r save_europe, echo=FALSE}
-europe <- table2 %>% 
-  filter(iso_alpha2 %in% c("FR", "DE", "IT", "ES", "GB"))
-
-europe %>% 
-  group_by(publish_date, area) %>% 
-  summarize(new_conf = sum(new_conf, na.rm = TRUE), .groups = "drop_last") %>% 
-  as_tsibble(key = area, index = publish_date) %>% 
-  tq_ma(n = 7) %>% 
-  pivot_wider(names_from = area, values_from = new_conf, values_fill = 0) %>% 
-  write.csv("data/new_conf_7ma_europe.csv", row.names = FALSE)
-
-europe %>% 
-  group_by(publish_date, area) %>% 
-  summarize(new_deaths = sum(new_deaths, na.rm = TRUE), .groups = "drop_last") %>% 
-  as_tsibble(key = area, index = publish_date) %>% 
-  tq_ma(n = 7) %>% 
-  pivot_wider(names_from = area, values_from = new_deaths, values_fill = 0) %>% 
-  write.csv("data/new_deaths_7ma_europe.csv", row.names = FALSE)
-
-```
 
 ```{r save, echo=FALSE}
 table2 <- table2 %>% 
+  replace_na(list(region = "Others")) %>% 
   select(publish_date, area, new_conf, new_deaths, cum_conf, cum_deaths,
          population, region)
 
-saveRDS(table2, "rds/table2.rds")
+world_map <- map_data("world") %>% 
+  as_tibble() %>% 
+  filter(region != "Antarctica") %>% 
+  mutate(region = case_when(
+    region == "USA" ~ "United States",
+    region == "UK" ~ "United Kingdom",
+    TRUE ~ region
+  ))
+
+# tidy data
+world_area <- table2 %>%
+  pivot_longer(!c(publish_date, area, population, region),
+               names_to = "concept")
+
+world_total <- table2 %>% 
+  group_by(publish_date) %>% 
+  summarize(across(!c(area, region), sum, na.rm = TRUE), .groups = "drop") %>% 
+  mutate(region = "Total")
+
+world_reg <- table2 %>% 
+  filter(region != "Others") %>% 
+  group_by(publish_date, region) %>% 
+  summarize(across(!area, sum, na.rm = TRUE), .groups = "drop")
+
+world_region <- 
+  bind_rows(world_reg, world_total) %>% 
+  pivot_longer(!c(publish_date, region, population),
+               names_to = "concept")
+
+in_world_map <- table2 %>% 
+  mutate(
+    across(new_conf:cum_deaths,
+           ~ .x / population * 1e6
+    ),
+    across(new_conf:cum_deaths,
+           ~ slide_dbl(.x, mean, na.rm = TRUE,
+                       .before = 6, .complete = TRUE)
+    )
+  ) %>% 
+  filter(!is.na(new_conf)) %>% 
+  pivot_longer(new_conf:cum_deaths, names_to = "concept")
+
+
+# create menus
+area_menu <- unique(world_area$area) %>% sort()
+
+concept_menu <- unique(world_area$concept) %>% sort()
+names(concept_menu) <- c(
+  "Confirmed cases (cumulative)",
+  "Deaths (cumulative)",
+  "Confirmed cases (new)",
+  "Deaths (new)"
+)
+
+region_menu <- c("Total", unique(world_reg$region) %>% sort())
+
+usethis::use_data(world_map, world_area, world_region, in_world_map,
+                  area_menu, concept_menu, region_menu)
+
 ```
 
 EOL

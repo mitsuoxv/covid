@@ -1,4 +1,4 @@
-draw_mapUI <- function(id, df, var_str, c_menu) {
+draw_mapUI <- function(id, df, c_menu) {
   sidebarLayout(
     sidebarPanel(
       selectInput(
@@ -24,7 +24,7 @@ draw_mapUI <- function(id, df, var_str, c_menu) {
       hr(),
       
       # Show source and Shiny app creator
-      data_source(var_str),
+      data_source(id),
       br(),
       a(href = "https://mitsuoxv.rbind.io/",
         "Shiny app creator: Mitsuo Shiota")
@@ -35,7 +35,7 @@ draw_mapUI <- function(id, df, var_str, c_menu) {
   )
 }
 
-draw_mapServer <- function(id, map_df, df, var_str) {
+draw_mapServer <- function(id, map_df, df) {
   moduleServer(id, function(input, output, session) {
     chart_data_map <- reactive({
       df %>%
@@ -44,12 +44,14 @@ draw_mapServer <- function(id, map_df, df, var_str) {
     })
     
     output$plot_map <- renderPlot({
-      if (var_str == "state") {
+      if (id == "usa_map") {
         draw_map_usa_simple(map_df, chart_data_map())
-      } else if (var_str == "prefecture") {
+      } else if (id == "japan_map") {
         draw_map_japan_simple(map_df, chart_data_map())
+      } else if (id == "world_map") {
+        draw_map_world(map_df, chart_data_map())
       } else {
-        stop('Error: var_str must be either "state" or "prefecture"')
+        stop('Error: id must be either "world_map", "usa_map" or "japan_map"')
       }
     })
   })

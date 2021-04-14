@@ -13,18 +13,6 @@ draw_line_chart <- function(df, var_str) {
          caption = str_c("Latest: ", max(df$publish_date)))
 }
 
-draw_map_usa <- function(map_df, df, var_str) {
-  var <- sym(var_str)
-  
-  map_df %>% 
-    left_join(df, by = c("iso_3166_2" = "state_abb")) %>% 
-    ggplot() +
-    geom_sf(aes(fill = {{ var }}), color = "white") +  
-    scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
-                         midpoint = median(df[[{{ var }}]])) +
-    theme_void()
-}
-
 draw_map_usa_simple <- function(map_df, df) {
   map_df %>%
     left_join(df, by = c("region" = "state")) %>%
@@ -37,18 +25,6 @@ draw_map_usa_simple <- function(map_df, df) {
     theme_void(base_size = 16)
 }
 
-draw_map_japan <- function(map_df, df, var_str) {
-  var <- sym(var_str)
-  
-  map_df %>% 
-    left_join(df, by = c("jiscode" = "code")) %>% 
-    ggplot() +
-    geom_sf(aes(fill = {{ var }}), color = "white") +  
-    scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
-                         midpoint = median(df[[{{ var }}]])) +
-    theme_void()
-}
-
 draw_map_japan_simple <- function(map_df, df) {
   map_df %>% 
     left_join(df, by = c("jiscode" = "code")) %>% 
@@ -58,4 +34,15 @@ draw_map_japan_simple <- function(map_df, df) {
                          midpoint = median(df$value)) +
     labs(fill = "cases per 1 million\n(7 day average)") +
     theme_void(base_size = 16)
+}
+
+draw_map_world <- function(map_df, df) {
+  map_df %>% 
+    regex_left_join(df, by = c(region = "area")) %>% 
+    ggplot(aes(long, lat, group = group, fill = value)) +
+    geom_polygon(color = "black", size = 0.1) +
+    scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
+                         midpoint = median(df$value)) +
+    labs(fill = "cases per 1 million\n(7 day average)") +
+    theme_map()
 }

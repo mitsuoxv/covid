@@ -68,8 +68,32 @@ data_japan <- data_japan %>%
   select(-prefecture) %>% 
   left_join(pop, by = "code")
 
-saveRDS(data_japan, "rds/data_japan.rds")
+prefectures_map <-
+  st_read(system.file("shapes/jpn.shp", package = "NipponMap"))
 
+in_japan <- data_japan %>%
+  select(-code) %>%
+  pivot_longer(!c(publish_date, prefecture, population),
+               names_to = "concept")
+
+in_japan_map <- data_japan %>% 
+  group_by(code) %>% 
+  mutate(
+    across(new_conf:cum_deaths,
+      ~ .x / population * 1e6
+    ),
+    across(new_conf:cum_deaths,
+      ~ slide_dbl(.x, mean, na.rm = TRUE,
+                       .before = 6, .complete = TRUE)
+    )
+  ) %>% 
+  ungroup() %>% 
+  filter(!is.na(new_conf)) %>% 
+  pivot_longer(new_conf:cum_deaths, names_to = "concept")
+
+prefecture_menu <- unique(in_japan$prefecture)
+
+usethis::use_data(prefectures_map, in_japan, in_japan_map, prefecture_menu)
 ```
 
 
@@ -79,7 +103,7 @@ saveRDS(data_japan, "rds/data_japan.rds")
 prefectures_map <-
   st_read(system.file("shapes/jpn.shp", package = "NipponMap"))
 
-source("R/draw.R")
+source("R/draw_no_shiny.R")
 
 ```
 
