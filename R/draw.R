@@ -2,7 +2,7 @@ draw_line_chart <- function(df, var_str) {
   var <- sym(var_str)
   
   df %>%
-    mutate({{ var }} := {{ var }} %>% fct_reorder2(publish_date, value)) %>% 
+#    mutate({{ var }} := {{ var }} %>% fct_reorder2(publish_date, value)) %>% 
     ggplot(aes(publish_date, value, color = {{ var }})) +
     geom_hline(yintercept = 0,
                color = "white",

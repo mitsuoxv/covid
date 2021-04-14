@@ -221,7 +221,15 @@ in_usa_map <- data_usa_ma7_std %>%
 
 state_menu <- unique(in_usa$state)
 
-usethis::use_data(states_map, in_usa, in_usa_map, state_menu)
+# make a list
+usa <- list(
+  map_df = states_map,
+  area_df = in_usa,
+  ma7_df = in_usa_map,
+  area_menu = state_menu
+)
+
+save(usa, file = "data/usa.rda")
 
 ```
 
@@ -291,7 +299,17 @@ states_speed <- data_usa %>%
   filter(publish_date > max(publish_date) - 14) %>% 
   summarize(increase_in_14_days = sum(new_conf), .groups = "drop_last")
 
-source("R/draw_no_shiny.R")
+draw_map_usa <- function(map_df, df, var_str) {
+  var <- sym(var_str)
+  
+  map_df %>%
+    left_join(df, by = c(iso_3166_2 = "state_abb")) %>%
+    ggplot() +
+    geom_sf(aes(fill = {{ var }}), color = "white") +
+    scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
+                         midpoint = median(df[[{{ var }}]])) +
+    theme_void()
+}
 
 draw_map_usa(states_map, states_speed, "increase_in_14_days")
 

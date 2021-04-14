@@ -40,6 +40,7 @@ library(scales)
 library(janitor)
 library(maps)
 library(mapproj)
+library(slider)
 ```
 
 ## Read data from WHO
@@ -261,8 +262,18 @@ names(concept_menu) <- c(
 
 region_menu <- c("Total", unique(world_reg$region) %>% sort())
 
-usethis::use_data(world_map, world_area, world_region, in_world_map,
-                  area_menu, concept_menu, region_menu)
+# make a list
+world <- list(
+  map_df = world_map,
+  area_df = world_area,
+  region_df = world_region,
+  ma7_df = in_world_map,
+  area_menu = area_menu,
+  concept_menu = concept_menu,
+  region_menu = region_menu
+)
+
+save(world, file = "data/world.rda")
 
 ```
 

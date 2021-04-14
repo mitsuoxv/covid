@@ -23,23 +23,9 @@ library(fuzzyjoin)
 library(ggthemes)
 
 # load data
-load("data/world_map")
-load("data/world_area")
-load("data/world_region")
-load("data/in_world_map")
-load("data/area_menu")
-load("data/concept_menu")
-load("data/region_menu")
-
-load("data/states_map")
-load("data/in_usa")
-load("data/in_usa_map")
-load("data/state_menu")
-
-load("data/prefectures_map")
-load("data/in_japan")
-load("data/in_japan_map")
-load("data/prefecture_menu")
+load("data/world.rda")
+load("data/usa.rda")
+load("data/japan.rda")
 
 # Define UI for application
 ui <- navbarPage(
@@ -52,39 +38,39 @@ ui <- navbarPage(
   selected = "Regions",
   
   tabPanel("Regions",
-           select_showUI("world_region", world_region, "region",
-                         a_menu = region_menu, c_menu = concept_menu)),
+           select_showUI("world_region", world$region_df, "region",
+                         a_menu = world$region_menu, c_menu = world$concept_menu)),
   tabPanel("World (map)",
-           draw_mapUI("world_map", in_world_map, 
-                      c_menu = concept_menu)),
+           draw_mapUI("world_map", world$ma7_df, 
+                      c_menu = world$concept_menu)),
   tabPanel("Areas",
-           select_showUI("world_area", world_area, "area",
-                         a_menu = area_menu, c_menu = concept_menu)),
+           select_showUI("world_area", world$area_df, "area",
+                         a_menu = world$area_menu, c_menu = world$concept_menu)),
   tabPanel("In Japan",
-           select_showUI("japan", in_japan, "prefecture",
-                         a_menu = prefecture_menu, c_menu = concept_menu)),
+           select_showUI("japan", japan$area_df, "prefecture",
+                         a_menu = japan$area_menu, c_menu = world$concept_menu)),
   tabPanel("In Japan (map)",
-           draw_mapUI("japan_map", in_japan_map, 
-                      c_menu = concept_menu)),
+           draw_mapUI("japan_map", japan$ma7_df, 
+                      c_menu = world$concept_menu)),
   tabPanel("In the U.S.",
-           select_showUI("usa", in_usa, "state",
-                         a_menu = state_menu, c_menu = concept_menu)),
+           select_showUI("usa", usa$area_df, "state",
+                         a_menu = usa$area_menu, c_menu = world$concept_menu)),
   tabPanel("In the U.S. (map)",
-           draw_mapUI("usa_map", in_usa_map, 
-                      c_menu = concept_menu))
+           draw_mapUI("usa_map", usa$ma7_df, 
+                      c_menu = world$concept_menu))
 )
 
 
 # Define server logic required to draw a chart
 server <- function(input, output, session) {
-  select_showServer("world_region", world_region, "region")
-  select_showServer("world_area", world_area, "area")
-  select_showServer("japan", in_japan, "prefecture")
-  select_showServer("usa", in_usa, "state")
+  select_showServer("world_region", world$region_df, "region")
+  select_showServer("world_area", world$area_df, "area")
+  select_showServer("japan", japan$area_df, "prefecture")
+  select_showServer("usa", usa$area_df, "state")
   
-  draw_mapServer("usa_map", states_map, in_usa_map)
-  draw_mapServer("japan_map", prefectures_map, in_japan_map)
-  draw_mapServer("world_map", world_map, in_world_map)
+  draw_mapServer("usa_map", usa$map_df, usa$ma7_df)
+  draw_mapServer("japan_map", japan$map_df, japan$ma7_df)
+  draw_mapServer("world_map", world$map_df, world$ma7_df)
 }
 
 # Run the application

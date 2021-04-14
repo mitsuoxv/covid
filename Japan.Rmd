@@ -26,6 +26,7 @@ library(lubridate)
 library(NipponMap)
 library(sf)
 
+library(slider)
 ```
 
 ## Read data from NHK site
@@ -93,7 +94,15 @@ in_japan_map <- data_japan %>%
 
 prefecture_menu <- unique(in_japan$prefecture)
 
-usethis::use_data(prefectures_map, in_japan, in_japan_map, prefecture_menu)
+# make a list
+japan <- list(
+  map_df = prefectures_map,
+  area_df = in_japan,
+  ma7_df = in_japan_map,
+  area_menu = prefecture_menu
+)
+
+save(japan, file = "data/japan.rda")
 ```
 
 
@@ -103,7 +112,17 @@ usethis::use_data(prefectures_map, in_japan, in_japan_map, prefecture_menu)
 prefectures_map <-
   st_read(system.file("shapes/jpn.shp", package = "NipponMap"))
 
-source("R/draw_no_shiny.R")
+draw_map_japan <- function(map_df, df, var_str) {
+  var <- sym(var_str)
+  
+  map_df %>%
+    left_join(df, by = c(jiscode = "code")) %>%
+    ggplot() +
+    geom_sf(aes(fill = {{ var }}), color = "white") +
+    scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
+                         midpoint = median(df[[{{ var }}]])) +
+    theme_void()
+}
 
 ```
 
