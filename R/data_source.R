@@ -1,3 +1,13 @@
+#' Display data source
+#'
+#' @param id A character vector of length 1.
+#'
+#' @return A HTML element.
+#'
+#' @examples
+#' \dontrun{
+#' data_source("usa")
+#' }
 data_source <- function(id) {
   if (id %in% c("usa", "usa_map")) {
     a(href = "https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/",

@@ -102,7 +102,8 @@ japan <- list(
   area_menu = prefecture_menu
 )
 
-save(japan, file = "data/japan.rda")
+usethis::use_data(japan, overwrite = TRUE)
+
 ```
 
 

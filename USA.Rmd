@@ -229,7 +229,7 @@ usa <- list(
   area_menu = state_menu
 )
 
-save(usa, file = "data/usa.rda")
+usethis::use_data(usa, overwrite = TRUE)
 
 ```
 

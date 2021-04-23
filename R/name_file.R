@@ -1,3 +1,13 @@
+#' Define download file name
+#'
+#' @param input A Shiny input.
+#'
+#' @return A character vector of length 1.
+#'
+#' @examples
+#' \dontrun{
+#' name_file(input)
+#' }
 name_file <- function(input) {
   fname <- input$select_concept
   

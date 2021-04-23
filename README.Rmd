@@ -273,7 +273,7 @@ world <- list(
   region_menu = region_menu
 )
 
-save(world, file = "data/world.rda")
+usethis::use_data(world, overwrite = TRUE)
 
 ```
 

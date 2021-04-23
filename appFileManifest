@@ -1,0 +1,15 @@
+app.R
+DESCRIPTION
+NAMESPACE
+R/data_source.R
+R/data.R
+R/draw_map.R
+R/draw.R
+R/main.R
+R/name_file.R
+R/select_show.R
+R/utils-pipe.R
+data/japan.rda
+data/usa.rda
+data/world.rda
+google-analytics.html

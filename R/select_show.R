@@ -1,11 +1,24 @@
-select_showUI <- function(id, df, var_str, a_menu, c_menu) {
+#' Select show module UI
+#'
+#' @param id A character vector of length 1.
+#' @param df A data frame with columns: publish_date, concept, value and var.
+#' @param var_str A string of var.
+#' @param a_menu A named character vector, area menu.
+#'
+#' @return A module UI.
+#'
+#' @examples
+#' \dontrun{
+#' select_showUI("world_region", world$region_df, "region", world$region_menu)
+#' }
+select_showUI <- function(id, df, var_str, a_menu) {
   sidebarLayout(
     sidebarPanel(
       selectInput(
         NS(id, "select_area"),
         label = h4(paste0("Select ", var_str, "s (add/remove)")),
         choices = a_menu,
-        selected = case_when(
+        selected = dplyr::case_when(
           var_str == "area" ~ "Japan",
           var_str == "region" ~ c("Total", "Northern America"),
           var_str == "state" ~ "New York",
@@ -20,7 +33,7 @@ select_showUI <- function(id, df, var_str, a_menu, c_menu) {
       selectInput(
         NS(id, "select_concept"),
         label = h4("Select concept"),
-        choices = c_menu,
+        choices = world$concept_menu,
         selected = "new_conf"
       ),
       
@@ -63,30 +76,40 @@ select_showUI <- function(id, df, var_str, a_menu, c_menu) {
   )
 }
 
+#' Select show module Server
+#'
+#' @param id A character vector of length 1.
+#' @param df A data frame with columns: publish_date, concept, value and var.
+#' @param var_str A string of var.
+#'
+#' @return A module server.
+#'
+#' @examples
+#' \dontrun{
+#' select_showServer("world_region", world$region_df, "region")
+#' }
 select_showServer <- function(id, df, var_str) {
   moduleServer(id, function(input, output, session) {
     chart_data <- reactive({
       data <- df %>%
-        filter(
+        dplyr::filter(
           .data[[var_str]] %in% input$select_area,
-          concept == input$select_concept
-        ) %>%
-        filter(
+          concept == input$select_concept,
           publish_date >= input$date_range[1],
           publish_date <= input$date_range[2]
         )
       
       if (input$ma == "Yes") {
         data <- data %>%
-          group_by(.data[[var_str]]) %>% 
-          mutate(value = slide_dbl(value, mean, na.rm = TRUE,
+          dplyr::group_by(.data[[var_str]]) %>% 
+          dplyr::mutate(value = slider::slide_dbl(value, mean, na.rm = TRUE,
                                    .before = 6, .complete = TRUE)) %>% 
-          ungroup()
+          dplyr::ungroup()
       }
       
       if (input$per1m == "Yes") {
         data <- data %>%
-          mutate(value = value / population * 1000000)
+          dplyr::mutate(value = value / population * 1000000)
       }
       
       data
@@ -102,9 +125,11 @@ select_showServer <- function(id, df, var_str) {
         name_file(input)
       },
       content = function(file) {
+        var <- rlang::sym(var_str)
+        
         chart_data() %>%
-          select(publish_date, all_of(var_str), value) %>% 
-          pivot_wider(names_from = all_of(var_str)) %>% 
+          dplyr::select(publish_date, var, value) %>%
+          tidyr::pivot_wider(names_from = var) %>%
           vroom::vroom_write(file)
       }
     )

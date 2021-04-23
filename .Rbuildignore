@@ -1,0 +1,12 @@
+^LICENSE\.md$
+^.*\.Rproj$
+^\.Rproj\.user$
+^google-analytics\.html$
+^rsconnect$
+^appFileManifest$
+^app\.R$
+^data-raw$
+^Japan.*$
+^USA.*$
+^README.*$
+^old-codes$
