@@ -13,7 +13,7 @@ Mitsuo Shiota
 -   [Highest deaths per population
     prefectures](#highest-deaths-per-population-prefectures)
 
-Updated: 2021-04-23
+Updated: 2021-04-24
 
 ## Summary
 
@@ -38,13 +38,6 @@ data_japan <- data_raw %>%
 I download population by prefecture data from [e-stat
 page](https://www.e-stat.go.jp/stat-search/database?page=1&layout=datalist&toukei=00200524&bunya_l=02&tstat=000000090001&cycle=0&tclass1=000001136886&statdisp_id=0003412316&tclass2val=0).
 The data are estimated as of October 1, 2019.
-
-    ## Reading layer `jpn' from data source `/home/mitsuoxv/R/x86_64-pc-linux-gnu-library/4.0/NipponMap/shapes/jpn.shp' using driver `ESRI Shapefile'
-    ## Simple feature collection with 47 features and 5 fields
-    ## Geometry type: POLYGON
-    ## Dimension:     XY
-    ## Bounding box:  xmin: 127.6461 ymin: 26.0709 xmax: 148.8678 ymax: 45.5331
-    ## CRS:           NA
 
 ## Fastest spreading prefecutures in the last 14 days
 

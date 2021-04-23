@@ -200,7 +200,7 @@ areas_5m %>%
 
 
 
-```{r save, echo=FALSE}
+```{r save, echo=FALSE, message=FALSE}
 table2 <- table2 %>% 
   replace_na(list(region = "Others")) %>% 
   select(publish_date, area, new_conf, new_deaths, cum_conf, cum_deaths,
