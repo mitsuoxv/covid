@@ -5,6 +5,7 @@ R/data_source.R
 R/data.R
 R/draw_map.R
 R/draw.R
+R/extract_var_str.R
 R/main.R
 R/name_file.R
 R/select_show.R
