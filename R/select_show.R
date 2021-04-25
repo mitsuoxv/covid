@@ -21,7 +21,7 @@ select_showUI <- function(id, df, var_str, a_menu) {
         selected = dplyr::case_when(
           var_str == "area" ~ "Japan",
           var_str == "region" ~ c("Total", "Northern America"),
-          var_str == "state" ~ "New York",
+          var_str == "state" ~ c("New York", "Michigan"),
           var_str == "prefecture" ~ c("Tokyo", "Osaka"),
           TRUE ~ "foo"
         ),
@@ -122,7 +122,7 @@ select_showServer <- function(id, df, var_str) {
     
     output$download <- downloadHandler(
       filename = function() {
-        name_file(input)
+        name_file(input$select_concept, input$ma, input$per1m)
       },
       content = function(file) {
         var <- rlang::sym(var_str)

@@ -4,10 +4,14 @@
 \alias{name_file}
 \title{Define download file name}
 \usage{
-name_file(input)
+name_file(select_concept, ma, per1m)
 }
 \arguments{
-\item{input}{A Shiny input.}
+\item{select_concept}{A character vector of length 1.}
+
+\item{ma}{A character vector of length 1.}
+
+\item{per1m}{A character vector of length 1.}
 }
 \value{
 A character vector of length 1.
@@ -17,6 +21,6 @@ Define download file name
 }
 \examples{
 \dontrun{
-name_file(input)
+name_file("new_conf", "Yes", "No")
 }
 }
