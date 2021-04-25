@@ -4,14 +4,12 @@
 \alias{select_showServer}
 \title{Select show module Server}
 \usage{
-select_showServer(id, df, var_str)
+select_showServer(id, df)
 }
 \arguments{
 \item{id}{A character vector of length 1.}
 
 \item{df}{A data frame with columns: publish_date, concept, value and var.}
-
-\item{var_str}{A string of var.}
 }
 \value{
 A module server.
@@ -21,6 +19,6 @@ Select show module Server
 }
 \examples{
 \dontrun{
-select_showServer("world_region", world$region_df, "region")
+select_showServer("world_region", world$region_df)
 }
 }

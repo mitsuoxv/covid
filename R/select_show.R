@@ -2,16 +2,17 @@
 #'
 #' @param id A character vector of length 1.
 #' @param df A data frame with columns: publish_date, concept, value and var.
-#' @param var_str A string of var.
 #' @param a_menu A named character vector, area menu.
 #'
 #' @return A module UI.
 #'
 #' @examples
 #' \dontrun{
-#' select_showUI("world_region", world$region_df, "region", world$region_menu)
+#' select_showUI("world_region", world$region_df, world$region_menu)
 #' }
-select_showUI <- function(id, df, var_str, a_menu) {
+select_showUI <- function(id, df, a_menu) {
+  var_str <- extract_var_str(df)
+  
   sidebarLayout(
     sidebarPanel(
       selectInput(
@@ -80,16 +81,17 @@ select_showUI <- function(id, df, var_str, a_menu) {
 #'
 #' @param id A character vector of length 1.
 #' @param df A data frame with columns: publish_date, concept, value and var.
-#' @param var_str A string of var.
 #'
 #' @return A module server.
 #'
 #' @examples
 #' \dontrun{
-#' select_showServer("world_region", world$region_df, "region")
+#' select_showServer("world_region", world$region_df)
 #' }
-select_showServer <- function(id, df, var_str) {
+select_showServer <- function(id, df) {
   moduleServer(id, function(input, output, session) {
+    var_str <- extract_var_str(df)
+    
     chart_data <- reactive({
       data <- df %>%
         dplyr::filter(

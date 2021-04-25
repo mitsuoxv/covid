@@ -19,20 +19,20 @@ mainApp <- function() {
     selected = "Regions",
     
     tabPanel("Regions",
-             select_showUI("world_region", world$region_df, "region",
+             select_showUI("world_region", world$region_df,
                            a_menu = world$region_menu)),
     tabPanel("World (map)",
              draw_mapUI("world_map", world$ma7_df)),
     tabPanel("Areas",
-             select_showUI("world_area", world$area_df, "area",
+             select_showUI("world_area", world$area_df,
                            a_menu = world$area_menu)),
     tabPanel("In Japan",
-             select_showUI("japan", japan$area_df, "prefecture",
+             select_showUI("japan", japan$area_df,
                            a_menu = japan$area_menu)),
     tabPanel("In Japan (map)",
              draw_mapUI("japan_map", japan$ma7_df)),
     tabPanel("In the U.S.",
-             select_showUI("usa", usa$area_df, "state",
+             select_showUI("usa", usa$area_df,
                            a_menu = usa$area_menu)),
     tabPanel("In the U.S. (map)",
              draw_mapUI("usa_map", usa$ma7_df))
@@ -41,10 +41,10 @@ mainApp <- function() {
   
   # Define server logic required to draw a chart
   server <- function(input, output, session) {
-    select_showServer("world_region", world$region_df, "region")
-    select_showServer("world_area", world$area_df, "area")
-    select_showServer("japan", japan$area_df, "prefecture")
-    select_showServer("usa", usa$area_df, "state")
+    select_showServer("world_region", world$region_df)
+    select_showServer("world_area", world$area_df)
+    select_showServer("japan", japan$area_df)
+    select_showServer("usa", usa$area_df)
     
     draw_mapServer("usa_map", usa$ma7_df)
     draw_mapServer("japan_map", japan$ma7_df)

@@ -4,14 +4,12 @@
 \alias{select_showUI}
 \title{Select show module UI}
 \usage{
-select_showUI(id, df, var_str, a_menu)
+select_showUI(id, df, a_menu)
 }
 \arguments{
 \item{id}{A character vector of length 1.}
 
 \item{df}{A data frame with columns: publish_date, concept, value and var.}
-
-\item{var_str}{A string of var.}
 
 \item{a_menu}{A named character vector, area menu.}
 }
@@ -23,6 +21,6 @@ Select show module UI
 }
 \examples{
 \dontrun{
-select_showUI("world_region", world$region_df, "region", world$region_menu)
+select_showUI("world_region", world$region_df, world$region_menu)
 }
 }
