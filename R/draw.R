@@ -38,7 +38,7 @@ draw_map_usa_simple <- function(df, var_str) {
   var <- rlang::sym(var_str)
   
   usa$map_df %>%
-    dplyr::left_join(df %>% mutate(state = stringr::str_to_lower(state)),
+    dplyr::left_join(df %>% dplyr::mutate(state = stringr::str_to_lower(state)),
                      by = c(region = "state")) %>%
     ggplot2::ggplot(ggplot2::aes(long, lat, group = group, fill = {{ var }})) +
     ggplot2::geom_polygon(color = "white") +
