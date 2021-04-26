@@ -19,6 +19,6 @@ Draw map module UI
 }
 \examples{
 \dontrun{
-draw_mapUI("world_map", world$ma7_df)
+draw_mapUI("world_map", world$area_df)
 }
 }

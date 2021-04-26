@@ -4,10 +4,12 @@
 \alias{draw_map_japan_simple}
 \title{Draw Japan prefecture map}
 \usage{
-draw_map_japan_simple(df)
+draw_map_japan_simple(df, var_str)
 }
 \arguments{
 \item{df}{A data frame with columns: publish_date, concept, value, code.}
+
+\item{var_str}{A character vector of length 1.}
 }
 \value{
 A plot.
@@ -17,6 +19,6 @@ Draw Japan prefecture map
 }
 \examples{
 \dontrun{
-draw_map_japan_simple(df)
+draw_map_japan_simple(df, "value_ma")
 }
 }

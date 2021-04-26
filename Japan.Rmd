@@ -73,24 +73,16 @@ prefectures_map <-
   st_read(system.file("shapes/jpn.shp", package = "NipponMap"))
 
 in_japan <- data_japan %>%
-  select(-code) %>%
-  pivot_longer(!c(publish_date, prefecture, population),
-               names_to = "concept")
-
-in_japan_map <- data_japan %>% 
-  group_by(code) %>% 
+  pivot_longer(!c(publish_date, code, prefecture, population),
+               names_to = "concept", values_to = "value") %>% 
+  group_by(code, concept) %>% 
   mutate(
-    across(new_conf:cum_deaths,
-      ~ .x / population * 1e6
-    ),
-    across(new_conf:cum_deaths,
-      ~ slide_dbl(.x, mean, na.rm = TRUE,
-                       .before = 6, .complete = TRUE)
-    )
-  ) %>% 
-  ungroup() %>% 
-  filter(!is.na(new_conf)) %>% 
-  pivot_longer(new_conf:cum_deaths, names_to = "concept")
+    value_ma = slide_dbl(value, mean, na.rm = TRUE,
+                       .before = 6, .complete = TRUE),
+    value_per1m = value / population * 1e6,
+    value_ma_per1m = value_ma / population * 1e6
+      ) %>% 
+  ungroup()
 
 prefecture_menu <- unique(in_japan$prefecture)
 
@@ -98,7 +90,6 @@ prefecture_menu <- unique(in_japan$prefecture)
 japan <- list(
   map_df = prefectures_map,
   area_df = in_japan,
-  ma7_df = in_japan_map,
   area_menu = prefecture_menu
 )
 

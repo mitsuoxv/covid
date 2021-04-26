@@ -4,10 +4,12 @@
 \alias{draw_map_usa_simple}
 \title{Draw USA state map}
 \usage{
-draw_map_usa_simple(df)
+draw_map_usa_simple(df, var_str)
 }
 \arguments{
 \item{df}{A data frame with columns: publish_date, concept, value, state.}
+
+\item{var_str}{A character vector of length 1.}
 }
 \value{
 A plot.
@@ -17,6 +19,6 @@ Draw USA state map
 }
 \examples{
 \dontrun{
-draw_map_usa_simple(df)
+draw_map_usa_simple(df, "value")
 }
 }

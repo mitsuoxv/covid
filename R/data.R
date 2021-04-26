@@ -8,19 +8,13 @@
 #' \describe{
 #' \item{publish_date}{2020-01-16}
 #' \item{population}{5250000}
+#' \item{code}{xxxx}
 #' \item{prefecture}{"Hokkaido"}
 #' \item{concept}{"new_conf"}
 #' \item{value}{0}
-#' }
-#' }
-#' \item{ma7_df}{
-#' @format A tibble.
-#' \describe{
-#' \item{publish_date}{2020-01-22}
-#' \item{population}{5250000}
-#' \item{prefecture}{"Hokkaido"}
-#' \item{concept}{"new_conf"}
-#' \item{value}{0}
+#' \item{value_ma}{0}
+#' \item{value_per1m}{0}
+#' \item{value_ma_per1m}{0}
 #' }
 #' }
 #' \item{map_df}{
@@ -60,17 +54,9 @@
 #' \item{population}{731545}
 #' \item{concept}{"cum_conf"}
 #' \item{value}{0}
-#' }
-#' }
-#' \item{ma7_df}{
-#' @format A tibble.
-#' \describe{
-#' \item{publish_date}{2020-01-29}
-#' \item{state}{"alabama"}
-#' \item{party}{"Republican"}
-#' \item{population}{4903185}
-#' \item{concept}{"cum_conf"}
-#' \item{value}{0}
+#' \item{value_ma}{0}
+#' \item{value_per1m}{0}
+#' \item{value_ma_per1m}{0}
 #' }
 #' }
 #' \item{map_df}{
@@ -111,17 +97,9 @@
 #' \item{region}{"Southern Asia"}
 #' \item{concept}{"new_conf"}
 #' \item{value}{0}
-#' }
-#' }
-#' \item{ma7_df}{
-#' @format A tibble.
-#' \describe{
-#' \item{publish_date}{2020-01-09}
-#' \item{area}{"Afghanistan"}
-#' \item{population}{29121286}
-#' \item{region}{"Southern Asia"}
-#' \item{concept}{"new_conf"}
-#' \item{value}{0}
+#' \item{value_ma}{0}
+#' \item{value_per1m}{0}
+#' \item{value_ma_per1m}{0}
 #' }
 #' }
 #' \item{region_df}{

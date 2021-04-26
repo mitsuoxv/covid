@@ -22,7 +22,7 @@ mainApp <- function() {
              select_showUI("world_region", world$region_df,
                            a_menu = world$region_menu)),
     tabPanel("World (map)",
-             draw_mapUI("world_map", world$ma7_df)),
+             draw_mapUI("world_map", world$area_df)),
     tabPanel("Areas",
              select_showUI("world_area", world$area_df,
                            a_menu = world$area_menu)),
@@ -30,12 +30,12 @@ mainApp <- function() {
              select_showUI("japan", japan$area_df,
                            a_menu = japan$area_menu)),
     tabPanel("In Japan (map)",
-             draw_mapUI("japan_map", japan$ma7_df)),
+             draw_mapUI("japan_map", japan$area_df)),
     tabPanel("In the U.S.",
              select_showUI("usa", usa$area_df,
                            a_menu = usa$area_menu)),
     tabPanel("In the U.S. (map)",
-             draw_mapUI("usa_map", usa$ma7_df))
+             draw_mapUI("usa_map", usa$area_df))
   )
   
   
@@ -46,9 +46,9 @@ mainApp <- function() {
     select_showServer("japan", japan$area_df)
     select_showServer("usa", usa$area_df)
     
-    draw_mapServer("usa_map", usa$ma7_df)
-    draw_mapServer("japan_map", japan$ma7_df)
-    draw_mapServer("world_map", world$ma7_df)
+    draw_mapServer("usa_map", usa$area_df)
+    draw_mapServer("japan_map", japan$area_df)
+    draw_mapServer("world_map", world$area_df)
   }
   
   # Run the application

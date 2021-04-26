@@ -16,18 +16,9 @@ A tibble.
 \item{population}{731545}
 \item{concept}{"cum_conf"}
 \item{value}{0}
-}
-}
-\item{ma7_df}{
-
-A tibble.
-\describe{
-\item{publish_date}{2020-01-29}
-\item{state}{"alabama"}
-\item{party}{"Republican"}
-\item{population}{4903185}
-\item{concept}{"cum_conf"}
-\item{value}{0}
+\item{value_ma}{0}
+\item{value_per1m}{0}
+\item{value_ma_per1m}{0}
 }
 }
 \item{map_df}{

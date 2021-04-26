@@ -17,18 +17,9 @@ A tibble.
 \item{region}{"Southern Asia"}
 \item{concept}{"new_conf"}
 \item{value}{0}
-}
-}
-\item{ma7_df}{
-
-A tibble.
-\describe{
-\item{publish_date}{2020-01-09}
-\item{area}{"Afghanistan"}
-\item{population}{29121286}
-\item{region}{"Southern Asia"}
-\item{concept}{"new_conf"}
-\item{value}{0}
+\item{value_ma}{0}
+\item{value_per1m}{0}
+\item{value_ma_per1m}{0}
 }
 }
 \item{region_df}{

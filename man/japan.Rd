@@ -13,20 +13,13 @@ A tibble.
 \describe{
 \item{publish_date}{2020-01-16}
 \item{population}{5250000}
+\item{code}{xxxx}
 \item{prefecture}{"Hokkaido"}
 \item{concept}{"new_conf"}
 \item{value}{0}
-}
-}
-\item{ma7_df}{
-
-A tibble.
-\describe{
-\item{publish_date}{2020-01-22}
-\item{population}{5250000}
-\item{prefecture}{"Hokkaido"}
-\item{concept}{"new_conf"}
-\item{value}{0}
+\item{value_ma}{0}
+\item{value_per1m}{0}
+\item{value_ma_per1m}{0}
 }
 }
 \item{map_df}{

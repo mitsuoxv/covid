@@ -4,10 +4,12 @@
 \alias{draw_map_world}
 \title{Draw World map}
 \usage{
-draw_map_world(df)
+draw_map_world(df, var_str)
 }
 \arguments{
 \item{df}{A data frame with columns: publish_date, concept, value, area.}
+
+\item{var_str}{A character vector of length 1.}
 }
 \value{
 A plot.
@@ -17,6 +19,6 @@ Draw World map
 }
 \examples{
 \dontrun{
-draw_map_world(df)
+draw_map_world(df, "value_ma_per1m")
 }
 }

@@ -10,6 +10,7 @@ R/main.R
 R/name_file.R
 R/select_show.R
 R/utils-pipe.R
+R/value_var.R
 data/japan.rda
 data/usa.rda
 data/world.rda

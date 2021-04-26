@@ -27,6 +27,7 @@ Imports:
     sf,
     shiny,
     slider,
+    stringr,
     tidyr,
     vroom
 Depends: 

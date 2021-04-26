@@ -9,7 +9,7 @@ draw_mapServer(id, df)
 \arguments{
 \item{id}{A character vector of length 1.}
 
-\item{df}{A data frame with 3 columns: publish_date, concept and value.}
+\item{df}{A data frame. Columns: publish_date, concept and value_map.}
 }
 \value{
 A module server.
@@ -19,6 +19,6 @@ Draw map module Server
 }
 \examples{
 \dontrun{
-draw_mapServer("usa_map", usa$ma7_df)
+draw_mapServer("usa_map", usa$area_df)
 }
 }

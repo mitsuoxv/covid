@@ -27,6 +27,7 @@ library(readxl)
 library(tsibble)
 library(tqr)
 library(scales)
+library(slider)
 
 library(maps)
 library(mapproj)
@@ -204,7 +205,7 @@ data_usa_ma7_std <- data_usa %>%
   as_tsibble(key = c(state, party, population), index = publish_date) %>% 
   tq_ma(7) %>% 
   as_tibble() %>% 
-  mutate(across(cum_conf:new_deaths, ~ .x * 1000000 / population))
+  mutate(across(cum_conf:new_deaths, ~ .x / population * 1e6))
 
 states_map <- map_data("state") %>% 
   as_tibble()
@@ -212,12 +213,15 @@ states_map <- map_data("state") %>%
 in_usa <- data_usa %>%
   select(-state_abb, -party) %>%
   pivot_longer(!c(publish_date, state, population),
-               names_to = "concept")
-
-in_usa_map <- data_usa_ma7_std %>%
-  filter(!is.na(new_conf)) %>%
-  pivot_longer(cum_conf:new_deaths,
-               names_to = "concept")
+               names_to = "concept", values_to = "value") %>% 
+  group_by(state, concept) %>% 
+  mutate(
+    value_ma = slide_dbl(value, mean, na.rm = TRUE,
+                       .before = 6, .complete = TRUE),
+    value_per1m = value / population * 1e6,
+    value_ma_per1m = value_ma / population * 1e6
+      ) %>% 
+  ungroup()
 
 state_menu <- unique(in_usa$state)
 
@@ -225,7 +229,6 @@ state_menu <- unique(in_usa$state)
 usa <- list(
   map_df = states_map,
   area_df = in_usa,
-  ma7_df = in_usa_map,
   area_menu = state_menu
 )
 

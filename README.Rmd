@@ -216,10 +216,6 @@ world_map <- map_data("world") %>%
   ))
 
 # tidy data
-world_area <- table2 %>%
-  pivot_longer(!c(publish_date, area, population, region),
-               names_to = "concept")
-
 world_total <- table2 %>% 
   group_by(publish_date) %>% 
   summarize(across(!c(area, region), sum, na.rm = TRUE), .groups = "drop") %>% 
@@ -235,19 +231,17 @@ world_region <-
   pivot_longer(!c(publish_date, region, population),
                names_to = "concept")
 
-in_world_map <- table2 %>% 
+world_area <- table2 %>%
+  pivot_longer(!c(publish_date, area, population, region),
+               names_to = "concept", values_to = "value") %>% 
+  group_by(area, concept) %>% 
   mutate(
-    across(new_conf:cum_deaths,
-           ~ .x / population * 1e6
-    ),
-    across(new_conf:cum_deaths,
-           ~ slide_dbl(.x, mean, na.rm = TRUE,
-                       .before = 6, .complete = TRUE)
-    )
-  ) %>% 
-  filter(!is.na(new_conf)) %>% 
-  pivot_longer(new_conf:cum_deaths, names_to = "concept")
-
+    value_ma = slide_dbl(value, mean, na.rm = TRUE,
+                       .before = 6, .complete = TRUE),
+    value_per1m = value / population * 1e6,
+    value_ma_per1m = value_ma / population * 1e6
+      ) %>% 
+  ungroup()
 
 # create menus
 area_menu <- unique(world_area$area) %>% sort()
@@ -267,7 +261,6 @@ world <- list(
   map_df = world_map,
   area_df = world_area,
   region_df = world_region,
-  ma7_df = in_world_map,
   area_menu = area_menu,
   concept_menu = concept_menu,
   region_menu = region_menu
