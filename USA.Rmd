@@ -125,15 +125,9 @@ data_usa <- left_join(conf, deaths, by = c("state_abb", "publish_date"))
 
 # Add state name column
 states <- 
-  bind_rows(
-    tibble(
-      state_abb = state.abb,
-      state = state.name
-    ),
-    tibble(
-      state_abb = c("DC", "Total"),
-      state = c("District of Columbia", "Total")
-    )
+  tibble(
+    state_abb = c(state.abb, "DC", "Total"),
+    state = c(state.name, "District of Columbia", "Total")
   )
 
 data_usa <- data_usa %>% 
@@ -201,18 +195,20 @@ data_usa <- data_usa %>%
 
 data_usa_ma7_std <- data_usa %>% 
   select(-state_abb) %>% 
-  mutate(state = state %>% str_to_lower()) %>% 
+  mutate(state = str_to_lower(state)) %>% 
   as_tsibble(key = c(state, party, population), index = publish_date) %>% 
   tq_ma(7) %>% 
   as_tibble() %>% 
   mutate(across(cum_conf:new_deaths, ~ .x / population * 1e6))
 
 states_map <- map_data("state") %>% 
-  as_tibble()
+  as_tibble() %>% 
+  left_join(states %>% mutate(state = str_to_lower(state)),
+            by = c(region = "state"))
 
 in_usa <- data_usa %>%
-  select(-state_abb, -party) %>%
-  pivot_longer(!c(publish_date, state, population),
+  select(-party) %>%
+  pivot_longer(!c(publish_date, state, state_abb, population),
                names_to = "concept", values_to = "value") %>% 
   group_by(state, concept) %>% 
   mutate(
@@ -302,19 +298,19 @@ states_speed <- data_usa %>%
   filter(publish_date > max(publish_date) - 14) %>% 
   summarize(increase_in_14_days = sum(new_conf), .groups = "drop_last")
 
-draw_map_usa <- function(map_df, df, var_str) {
+draw_map_usa <- function(df, var_str) {
   var <- sym(var_str)
   
-  map_df %>%
+  states_map %>%
     left_join(df, by = c(iso_3166_2 = "state_abb")) %>%
     ggplot() +
     geom_sf(aes(fill = {{ var }}), color = "white") +
     scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
-                         midpoint = median(df[[{{ var }}]])) +
+                         midpoint = median(df[[var_str]])) +
     theme_void()
 }
 
-draw_map_usa(states_map, states_speed, "increase_in_14_days")
+draw_map_usa(states_speed, "increase_in_14_days")
 
 ```
 
@@ -327,7 +323,7 @@ states_speed_std <- data_usa %>%
   filter(publish_date > max(publish_date) - 14) %>% 
   summarize(increase_std_in_14_days = sum(new_conf * 1000000 / population), .groups = "drop_last")
 
-draw_map_usa(states_map, states_speed_std, "increase_std_in_14_days")
+draw_map_usa(states_speed_std, "increase_std_in_14_days")
 
 ```
 
@@ -345,7 +341,7 @@ states_fatality <- data_usa %>%
     ) %>% 
   mutate(fatality_rate = cum_deaths * 100 / cum_conf)
 
-draw_map_usa(states_map, states_fatality, "fatality_rate")
+draw_map_usa(states_fatality, "fatality_rate")
 
 ```
 
@@ -358,11 +354,11 @@ states_deaths <- data_usa %>%
   filter(state_abb != "Total") %>% 
   filter(publish_date == max(publish_date)) %>% 
   mutate(
-    pop_mil = population / 1000000,
+    pop_mil = population / 1e6,
     deaths_per_1m = cum_deaths / pop_mil
     )
 
-draw_map_usa(states_map, states_deaths, "deaths_per_1m")
+draw_map_usa(states_deaths, "deaths_per_1m")
 
 ```
 

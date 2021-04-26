@@ -51,6 +51,7 @@
 #' \describe{
 #' \item{publish_date}{2020-01-22}
 #' \item{state}{"Alaska"}
+#' \item{state_abb}{"AL"}
 #' \item{population}{731545}
 #' \item{concept}{"cum_conf"}
 #' \item{value}{0}
@@ -68,6 +69,7 @@
 #' \item{order}{1}
 #' \item{region}{"alabama"}
 #' \item{subregion}{NA_character_}
+#' \item{state_abb}{"AL"}
 #' }
 #' }
 #' \item{area_menu}{
