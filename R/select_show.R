@@ -11,19 +11,19 @@
 #' select_showUI("world_region", world$region_df, world$region_menu)
 #' }
 select_showUI <- function(id, df, a_menu) {
-  var_str <- extract_var_str(df)
+  area_var <- extract_area_var(df)
   
   sidebarLayout(
     sidebarPanel(
       selectInput(
         NS(id, "select_area"),
-        label = h4(paste0("Select ", var_str, "s (add/remove)")),
+        label = h4(paste0("Select ", area_var, "s (add/remove)")),
         choices = a_menu,
         selected = dplyr::case_when(
-          var_str == "area" ~ "Japan",
-          var_str == "region" ~ c("Total", "Northern America"),
-          var_str == "state" ~ c("New York", "Michigan"),
-          var_str == "prefecture" ~ c("Tokyo", "Osaka"),
+          area_var == "area" ~ "Japan",
+          area_var == "region" ~ c("Total", "Northern America"),
+          area_var == "state" ~ c("New York", "Michigan"),
+          area_var == "prefecture" ~ c("Tokyo", "Osaka"),
           TRUE ~ "foo"
         ),
         multiple = TRUE
@@ -90,36 +90,25 @@ select_showUI <- function(id, df, a_menu) {
 #' }
 select_showServer <- function(id, df) {
   moduleServer(id, function(input, output, session) {
-    var_str <- extract_var_str(df)
+    area_var <- extract_area_var(df)
+    
+    value_var <- reactive({
+      get_value_var(input$ma, input$per1m)
+    })
     
     chart_data <- reactive({
-      data <- df %>%
+      df %>%
         dplyr::filter(
-          .data[[var_str]] %in% input$select_area,
+          .data[[area_var]] %in% input$select_area,
           concept == input$select_concept,
           publish_date >= input$date_range[1],
           publish_date <= input$date_range[2]
         )
-      
-      if (input$ma == "Yes") {
-        data <- data %>%
-          dplyr::group_by(.data[[var_str]]) %>% 
-          dplyr::mutate(value = slider::slide_dbl(value, mean, na.rm = TRUE,
-                                   .before = 6, .complete = TRUE)) %>% 
-          dplyr::ungroup()
-      }
-      
-      if (input$per1m == "Yes") {
-        data <- data %>%
-          dplyr::mutate(value = value / population * 1000000)
-      }
-      
-      data
     })
     
     output$plot1 <- renderPlot({
       chart_data() %>%
-        draw_line_chart(var_str)
+        draw_line_chart(area_var, value_var())
     })
     
     output$download <- downloadHandler(
@@ -127,11 +116,9 @@ select_showServer <- function(id, df) {
         name_file(input$select_concept, input$ma, input$per1m)
       },
       content = function(file) {
-        var <- rlang::sym(var_str)
-        
         chart_data() %>%
-          dplyr::select(publish_date, var, value) %>%
-          tidyr::pivot_wider(names_from = var) %>%
+          dplyr::select(publish_date, .data[[area_var]], value) %>%
+          tidyr::pivot_wider(names_from = .data[[area_var]]) %>%
           vroom::vroom_write(file)
       }
     )

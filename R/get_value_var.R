@@ -7,9 +7,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' value_var("Yes", "No")
+#' get_value_var("Yes", "No")
 #' }
-value_var <- function(ma, per1m) {
+get_value_var <- function(ma, per1m) {
   var <- "value"
   
   if (ma == "Yes") {

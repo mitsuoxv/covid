@@ -5,12 +5,12 @@ R/data_source.R
 R/data.R
 R/draw_map.R
 R/draw.R
-R/extract_var_str.R
+R/extract_area_var.R
+R/get_value_var.R
 R/main.R
 R/name_file.R
 R/select_show.R
 R/utils-pipe.R
-R/value_var.R
 data/japan.rda
 data/usa.rda
 data/world.rda

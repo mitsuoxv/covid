@@ -74,8 +74,8 @@ draw_mapUI <- function(id, df) {
 #' }
 draw_mapServer <- function(id, df) {
   moduleServer(id, function(input, output, session) {
-    value_var_str <- reactive({
-      value_var(input$ma, input$per1m)
+    value_var <- reactive({
+      get_value_var(input$ma, input$per1m)
     })
 
     chart_data_map <- reactive({
@@ -88,11 +88,11 @@ draw_mapServer <- function(id, df) {
 
     output$plot_map <- renderPlot({
       if (id == "usa_map") {
-        draw_map_usa_simple(chart_data_map(), value_var_str())
+        draw_map_usa_simple(chart_data_map(), value_var())
       } else if (id == "japan_map") {
-        draw_map_japan_simple(chart_data_map(), value_var_str())
+        draw_map_japan_simple(chart_data_map(), value_var())
       } else if (id == "world_map") {
-        draw_map_world(chart_data_map(), value_var_str())
+        draw_map_world(chart_data_map(), value_var())
       } else {
         stop('Error: id must be either "world_map", "usa_map" or "japan_map"')
       }

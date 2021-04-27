@@ -21,11 +21,9 @@ Imports:
     mapproj,
     maps,
     pkgload,
-    rlang,
     scales,
     sf,
     shiny,
-    slider,
     tidyr,
     vroom
 Depends: 

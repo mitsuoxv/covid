@@ -4,12 +4,14 @@
 \alias{draw_line_chart}
 \title{Draw line chart}
 \usage{
-draw_line_chart(df, var_str)
+draw_line_chart(df, area_var, value_var)
 }
 \arguments{
 \item{df}{A data frame with columns: publish_date, concept, value, var.}
 
-\item{var_str}{A character vector of length 1.}
+\item{area_var}{"area", "region", "state" or "prefecture".}
+
+\item{value_var}{"value", "value_ma", "value_per1m" or "value_ma_per1m".}
 }
 \value{
 A plot.
@@ -19,6 +21,6 @@ Draw line chart
 }
 \examples{
 \dontrun{
-draw_line_chart(df, var_str)
+draw_line_chart(df, area_var, value_var)
 }
 }

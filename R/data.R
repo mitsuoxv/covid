@@ -112,6 +112,9 @@
 #' \item{population}{61142769}
 #' \item{concept}{"new_conf"}
 #' \item{value}{0}
+#' \item{value_ma}{0}
+#' \item{value_per1m}{0}
+#' \item{value_ma_per1m}{0}
 #' }
 #' }
 #' \item{map_df}{

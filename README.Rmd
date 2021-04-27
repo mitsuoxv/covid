@@ -229,7 +229,15 @@ world_reg <- table2 %>%
 world_region <- 
   bind_rows(world_reg, world_total) %>% 
   pivot_longer(!c(publish_date, region, population),
-               names_to = "concept")
+               names_to = "concept", values_to = "value") %>% 
+  group_by(region, concept) %>% 
+  mutate(
+    value_ma = slide_dbl(value, mean, na.rm = TRUE,
+                       .before = 6, .complete = TRUE),
+    value_per1m = value / population * 1e6,
+    value_ma_per1m = value_ma / population * 1e6
+      ) %>% 
+  ungroup()
 
 world_area <- table2 %>%
   pivot_longer(!c(publish_date, area, population, region),

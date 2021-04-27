@@ -6,9 +6,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' extract_var_str(world$region_df)
+#' extract_area_var(world$region_df)
 #' }
-extract_var_str <- function(df) {
+extract_area_var <- function(df) {
   columns <- names(df)
   
   if ("area" %in% columns) {
