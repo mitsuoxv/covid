@@ -31,9 +31,9 @@ draw_line_chart <- function(df, area_var, value_var) {
 #'
 #' @examples
 #' \dontrun{
-#' draw_map_usa_simple(df, "value")
+#' draw_map_usa(df, "value")
 #' }
-draw_map_usa_simple <- function(df, value_var) {
+draw_map_usa <- function(df, value_var) {
   usa$map_df %>%
     dplyr::left_join(df, by = "state_abb") %>%
     ggplot2::ggplot(ggplot2::aes(long, lat, group = group, fill = .data[[value_var]])) +
@@ -54,9 +54,9 @@ draw_map_usa_simple <- function(df, value_var) {
 #'
 #' @examples
 #' \dontrun{
-#' draw_map_japan_simple(df, "value_ma")
+#' draw_map_japan(df, "value_ma")
 #' }
-draw_map_japan_simple <- function(df, value_var) {
+draw_map_japan <- function(df, value_var) {
   japan$map_df %>% 
     dplyr::left_join(df, by = c(jiscode = "code")) %>% 
     ggplot2::ggplot() +

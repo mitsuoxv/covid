@@ -19,36 +19,36 @@ mainApp <- function() {
     selected = "Regions",
     
     tabPanel("Regions",
-             select_showUI("world_region", world$region_df,
+             selectShowUI("world_region", world$region_df,
                            a_menu = world$region_menu)),
     tabPanel("World (map)",
-             draw_mapUI("world_map", world$area_df)),
+             drawMapUI("world_map", world$area_df)),
     tabPanel("Areas",
-             select_showUI("world_area", world$area_df,
+             selectShowUI("world_area", world$area_df,
                            a_menu = world$area_menu)),
     tabPanel("In Japan",
-             select_showUI("japan", japan$area_df,
+             selectShowUI("japan", japan$area_df,
                            a_menu = japan$area_menu)),
     tabPanel("In Japan (map)",
-             draw_mapUI("japan_map", japan$area_df)),
+             drawMapUI("japan_map", japan$area_df)),
     tabPanel("In the U.S.",
-             select_showUI("usa", usa$area_df,
+             selectShowUI("usa", usa$area_df,
                            a_menu = usa$area_menu)),
     tabPanel("In the U.S. (map)",
-             draw_mapUI("usa_map", usa$area_df))
+             drawMapUI("usa_map", usa$area_df))
   )
   
   
   # Define server logic required to draw a chart
   server <- function(input, output, session) {
-    select_showServer("world_region", world$region_df)
-    select_showServer("world_area", world$area_df)
-    select_showServer("japan", japan$area_df)
-    select_showServer("usa", usa$area_df)
+    selectShowServer("world_region", world$region_df)
+    selectShowServer("world_area", world$area_df)
+    selectShowServer("japan", japan$area_df)
+    selectShowServer("usa", usa$area_df)
     
-    draw_mapServer("usa_map", usa$area_df)
-    draw_mapServer("japan_map", japan$area_df)
-    draw_mapServer("world_map", world$area_df)
+    drawMapServer("usa_map", usa$area_df)
+    drawMapServer("japan_map", japan$area_df)
+    drawMapServer("world_map", world$area_df)
   }
   
   # Run the application

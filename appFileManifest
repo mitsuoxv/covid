@@ -3,13 +3,13 @@ DESCRIPTION
 NAMESPACE
 R/data_source.R
 R/data.R
-R/draw_map.R
+R/drawMap.R
 R/draw.R
 R/extract_area_var.R
 R/get_value_var.R
 R/main.R
 R/name_file.R
-R/select_show.R
+R/selectShow.R
 R/utils-pipe.R
 data/japan.rda
 data/usa.rda

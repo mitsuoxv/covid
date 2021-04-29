@@ -8,9 +8,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' select_showUI("world_region", world$region_df, world$region_menu)
+#' selectShowUI("world_region", world$region_df, world$region_menu)
 #' }
-select_showUI <- function(id, df, a_menu) {
+selectShowUI <- function(id, df, a_menu) {
   area_var <- extract_area_var(df)
   
   sidebarLayout(
@@ -86,9 +86,9 @@ select_showUI <- function(id, df, a_menu) {
 #'
 #' @examples
 #' \dontrun{
-#' select_showServer("world_region", world$region_df)
+#' selectShowServer("world_region", world$region_df)
 #' }
-select_showServer <- function(id, df) {
+selectShowServer <- function(id, df) {
   moduleServer(id, function(input, output, session) {
     area_var <- extract_area_var(df)
     

@@ -7,9 +7,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' draw_mapUI("world_map", world$area_df)
+#' drawMapUI("world_map", world$area_df)
 #' }
-draw_mapUI <- function(id, df) {
+drawMapUI <- function(id, df) {
   sidebarLayout(
     sidebarPanel(
       selectInput(
@@ -70,15 +70,15 @@ draw_mapUI <- function(id, df) {
 #'
 #' @examples
 #' \dontrun{
-#' draw_mapServer("usa_map", usa$area_df)
+#' drawMapServer("usa_map", usa$area_df)
 #' }
-draw_mapServer <- function(id, df) {
+drawMapServer <- function(id, df) {
   moduleServer(id, function(input, output, session) {
     value_var <- reactive({
       get_value_var(input$ma, input$per1m)
     })
 
-    chart_data_map <- reactive({
+    chart_data <- reactive({
       df %>%
         dplyr::filter(
           concept == input$select_concept,
@@ -88,11 +88,11 @@ draw_mapServer <- function(id, df) {
 
     output$plot_map <- renderPlot({
       if (id == "usa_map") {
-        draw_map_usa_simple(chart_data_map(), value_var())
+        draw_map_usa(chart_data(), value_var())
       } else if (id == "japan_map") {
-        draw_map_japan_simple(chart_data_map(), value_var())
+        draw_map_japan(chart_data(), value_var())
       } else if (id == "world_map") {
-        draw_map_world(chart_data_map(), value_var())
+        draw_map_world(chart_data(), value_var())
       } else {
         stop('Error: id must be either "world_map", "usa_map" or "japan_map"')
       }
