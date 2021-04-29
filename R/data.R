@@ -7,8 +7,8 @@
 #' @format A tibble.
 #' \describe{
 #' \item{publish_date}{2020-01-16}
+#' \item{code}{"01"}
 #' \item{population}{5250000}
-#' \item{code}{xxxx}
 #' \item{prefecture}{"Hokkaido"}
 #' \item{concept}{"new_conf"}
 #' \item{value}{0}
