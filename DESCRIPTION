@@ -24,7 +24,6 @@ Imports:
     scales,
     sf,
     shiny,
-    skimr,
     tidyr,
     vroom
 Depends: 
