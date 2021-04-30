@@ -16,10 +16,6 @@
 #' \item{value_per1m}{0}
 #' \item{value_ma_per1m}{0}
 #' }
-#' @details 
-#' ```{r results="asis", echo=FALSE}
-#' skimr::skim(japan$area_df)
-#' ```
 #' }
 #' \item{map_df}{
 #' @format A data frame. Each row is prefecture map data. 47 rows.
@@ -63,10 +59,6 @@
 #' \item{value_per1m}{0}
 #' \item{value_ma_per1m}{0}
 #' }
-#' @details 
-#' ```{r results="asis", echo=FALSE}
-#' skimr::skim(usa$area_df)
-#' ```
 #' }
 #' \item{map_df}{
 #' @format A tibble.
@@ -111,10 +103,6 @@
 #' \item{value_per1m}{0}
 #' \item{value_ma_per1m}{0}
 #' }
-#' @details 
-#' ```{r results="asis", echo=FALSE}
-#' skimr::skim(world$area_df)
-#' ```
 #' }
 #' \item{region_df}{
 #' @format A tibble.
@@ -128,10 +116,6 @@
 #' \item{value_per1m}{0}
 #' \item{value_ma_per1m}{0}
 #' }
-#' @details 
-#' ```{r results="asis", echo=FALSE}
-#' skimr::skim(world$region_df)
-#' ```
 #' }
 #' \item{map_df}{
 #' @format A tibble.
