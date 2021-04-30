@@ -21,8 +21,6 @@ A tibble.
 \item{value_per1m}{0}
 \item{value_ma_per1m}{0}
 }
-}
-\item{map_df}{
 
 A tibble.
 \describe{
@@ -56,5 +54,46 @@ usa
 }
 \description{
 USA Covid-19 situation
+}
+\details{
+Table: Data summary\tabular{ll}{
+    \tab  \cr
+   Name \tab usa$area_df \cr
+   Number of rows \tab 96304 \cr
+   Number of columns \tab 9 \cr
+   _______________________ \tab  \cr
+   Column type frequency: \tab  \cr
+   character \tab 3 \cr
+   Date \tab 1 \cr
+   numeric \tab 5 \cr
+   ________________________ \tab  \cr
+   Group variables \tab None \cr
+}
+
+
+\strong{Variable type: character}\tabular{lrrrrrrr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab empty \tab n_unique \tab whitespace \cr
+   state_abb \tab 0 \tab 1 \tab 2 \tab 5 \tab 0 \tab 52 \tab 0 \cr
+   state \tab 0 \tab 1 \tab 4 \tab 20 \tab 0 \tab 52 \tab 0 \cr
+   concept \tab 0 \tab 1 \tab 8 \tab 10 \tab 0 \tab 4 \tab 0 \cr
+}
+
+
+\strong{Variable type: Date}\tabular{lrrlllr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab median \tab n_unique \cr
+   publish_date \tab 0 \tab 1 \tab 2020-01-22 \tab 2021-04-28 \tab 2020-09-09 \tab 463 \cr
+}
+
+
+\strong{Variable type: numeric}\tabular{lrrrrrrrrrl}{
+   skim_variable \tab n_missing \tab complete_rate \tab mean \tab sd \tab p0 \tab p25 \tab p50 \tab p75 \tab p100 \tab hist \cr
+   population \tab 0 \tab 1.00 \tab 12624597.04 \tab 44780666.80 \tab 578759.00 \tab 1790876.50 \tab 4558233.50 \tab 7845049.50 \tab 328239523.0 \tab ▇▁▁▁▁ \cr
+   value \tab 104 \tab 1.00 \tab 105531.61 \tab 1075340.37 \tab -19069.00 \tab 8.00 \tab 460.00 \tab 6748.00 \tab 31685817.0 \tab ▇▁▁▁▁ \cr
+   value_ma \tab 1248 \tab 0.99 \tab 104768.03 \tab 1066507.15 \tab -1957.29 \tab 13.43 \tab 521.00 \tab 6775.46 \tab 31539590.4 \tab ▇▁▁▁▁ \cr
+   value_per1m \tab 104 \tab 1.00 \tab 8283.25 \tab 22835.84 \tab -10640.31 \tab 1.91 \tab 123.37 \tab 1219.54 \tab 140610.6 \tab ▇▁▁▁▁ \cr
+   value_ma_per1m \tab 1248 \tab 0.99 \tab 8223.08 \tab 22659.90 \tab -714.39 \tab 3.07 \tab 138.43 \tab 1203.71 \tab 140076.1 \tab ▇▁▁▁▁ \cr
+   } \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \cr
+   \item{map_df}{ \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \cr
+}
 }
 \keyword{datasets}
