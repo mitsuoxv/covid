@@ -21,6 +21,8 @@ A tibble.
 \item{value_per1m}{0}
 \item{value_ma_per1m}{0}
 }
+}
+\item{region_df}{
 
 A tibble.
 \describe{
@@ -33,6 +35,8 @@ A tibble.
 \item{value_per1m}{0}
 \item{value_ma_per1m}{0}
 }
+}
+\item{map_df}{
 
 A tibble.
 \describe{
@@ -86,85 +90,5 @@ world
 }
 \description{
 World Covid-19 situation
-}
-\details{
-Table: Data summary\tabular{ll}{
-    \tab  \cr
-   Name \tab world$area_df \cr
-   Number of rows \tab 457884 \cr
-   Number of columns \tab 9 \cr
-   _______________________ \tab  \cr
-   Column type frequency: \tab  \cr
-   character \tab 3 \cr
-   Date \tab 1 \cr
-   numeric \tab 5 \cr
-   ________________________ \tab  \cr
-   Group variables \tab None \cr
-}
-
-
-\strong{Variable type: character}\tabular{lrrrrrrr}{
-   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab empty \tab n_unique \tab whitespace \cr
-   area \tab 0 \tab 1 \tab 4 \tab 32 \tab 0 \tab 237 \tab 0 \cr
-   region \tab 0 \tab 1 \tab 6 \tab 31 \tab 0 \tab 13 \tab 0 \cr
-   concept \tab 0 \tab 1 \tab 8 \tab 10 \tab 0 \tab 4 \tab 0 \cr
-}
-
-
-\strong{Variable type: Date}\tabular{lrrlllr}{
-   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab median \tab n_unique \cr
-   publish_date \tab 0 \tab 1 \tab 2020-01-03 \tab 2021-04-29 \tab 2020-08-31 \tab 483 \cr
-}
-
-
-\strong{Variable type: numeric}\tabular{lrrrrrrrrrl}{
-   skim_variable \tab n_missing \tab complete_rate \tab mean \tab sd \tab p0 \tab p25 \tab p50 \tab p75 \tab p100 \tab hist \cr
-   population \tab 13524 \tab 0.97 \tab 29692331.21 \tab 121324670.82 \tab 46.00 \tab 314522 \tab 4892921.50 \tab 16746491.00 \tab 1330044000.0 \tab ▇▁▁▁▁ \cr
-   value \tab 0 \tab 1.00 \tab 47836.42 \tab 606604.26 \tab -32952.00 \tab 0 \tab 9.00 \tab 628.00 \tab 31835314.0 \tab ▇▁▁▁▁ \cr
-   value_ma \tab 5688 \tab 0.99 \tab 47430.97 \tab 600908.83 \tab -4298.14 \tab 0 \tab 11.43 \tab 637.29 \tab 31692902.6 \tab ▇▁▁▁▁ \cr
-   value_per1m \tab 13524 \tab 0.97 \tab 2497.77 \tab 11906.49 \tab -8413.35 \tab 0 \tab 2.26 \tab 157.76 \tab 242933.4 \tab ▇▁▁▁▁ \cr
-   value_ma_per1m \tab 19044 \tab 0.96 \tab 2474.48 \tab 11786.87 \tab -1097.41 \tab 0 \tab 3.40 \tab 164.45 \tab 240423.2 \tab ▇▁▁▁▁ \cr
-   } \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \cr
-   \item{region_df}{ \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \cr
-}
-
-Table: Data summary\tabular{ll}{
-    \tab  \cr
-   Name \tab world$region_df \cr
-   Number of rows \tab 25116 \cr
-   Number of columns \tab 8 \cr
-   _______________________ \tab  \cr
-   Column type frequency: \tab  \cr
-   character \tab 2 \cr
-   Date \tab 1 \cr
-   numeric \tab 5 \cr
-   ________________________ \tab  \cr
-   Group variables \tab None \cr
-}
-
-
-\strong{Variable type: character}\tabular{lrrrrrrr}{
-   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab empty \tab n_unique \tab whitespace \cr
-   region \tab 0 \tab 1 \tab 5 \tab 31 \tab 0 \tab 13 \tab 0 \cr
-   concept \tab 0 \tab 1 \tab 8 \tab 10 \tab 0 \tab 4 \tab 0 \cr
-}
-
-
-\strong{Variable type: Date}\tabular{lrrlllr}{
-   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab median \tab n_unique \cr
-   publish_date \tab 0 \tab 1 \tab 2020-01-03 \tab 2021-04-29 \tab 2020-08-31 \tab 483 \cr
-}
-
-
-\strong{Variable type: numeric}\tabular{lrrrrrrrrrl}{
-   skim_variable \tab n_missing \tab complete_rate \tab mean \tab sd \tab p0 \tab p25 \tab p50 \tab p75 \tab p100 \tab hist \cr
-   population \tab 0 \tab 1.00 \tab 1.050513e+09 \tab 1.739163e+09 \tab 34909596.00 \tab 229902852.00 \tab 442494777.00 \tab 816461620.00 \tab 6.829236e+09 \tab ▇▂▁▁▁ \cr
-   value \tab 0 \tab 1.00 \tab 1.743361e+06 \tab 9.403096e+06 \tab -429.00 \tab 162.00 \tab 6019.00 \tab 144767.25 \tab 1.492170e+08 \tab ▇▁▁▁▁ \cr
-   value_ma \tab 312 \tab 0.99 \tab 1.728586e+06 \tab 9.301746e+06 \tab 0.00 \tab 177.00 \tab 6083.79 \tab 145694.25 \tab 1.468254e+08 \tab ▇▁▁▁▁ \cr
-   value_per1m \tab 0 \tab 1.00 \tab 2.179730e+03 \tab 8.692630e+03 \tab -1.25 \tab 0.43 \tab 14.21 \tab 239.34 \tab 9.601402e+04 \tab ▇▁▁▁▁ \cr
-   value_ma_per1m \tab 312 \tab 0.99 \tab 2.161370e+03 \tab 8.605380e+03 \tab 0.00 \tab 0.47 \tab 14.52 \tab 239.27 \tab 9.553221e+04 \tab ▇▁▁▁▁ \cr
-   } \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \cr
-   \item{map_df}{ \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \cr
-}
 }
 \keyword{datasets}

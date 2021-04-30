@@ -21,6 +21,8 @@ A tibble.
 \item{value_per1m}{0}
 \item{value_ma_per1m}{0}
 }
+}
+\item{map_df}{
 
 A data frame. Each row is prefecture map data. 47 rows.
 \describe{
@@ -53,46 +55,5 @@ japan
 }
 \description{
 Japan Covid-19 situation
-}
-\details{
-Table: Data summary\tabular{ll}{
-    \tab  \cr
-   Name \tab japan$area_df \cr
-   Number of rows \tab 88360 \cr
-   Number of columns \tab 9 \cr
-   _______________________ \tab  \cr
-   Column type frequency: \tab  \cr
-   character \tab 3 \cr
-   Date \tab 1 \cr
-   numeric \tab 5 \cr
-   ________________________ \tab  \cr
-   Group variables \tab None \cr
-}
-
-
-\strong{Variable type: character}\tabular{lrrrrrrr}{
-   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab empty \tab n_unique \tab whitespace \cr
-   code \tab 0 \tab 1 \tab 2 \tab 2 \tab 0 \tab 47 \tab 0 \cr
-   prefecture \tab 0 \tab 1 \tab 3 \tab 9 \tab 0 \tab 47 \tab 0 \cr
-   concept \tab 0 \tab 1 \tab 8 \tab 10 \tab 0 \tab 4 \tab 0 \cr
-}
-
-
-\strong{Variable type: Date}\tabular{lrrlllr}{
-   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab median \tab n_unique \cr
-   publish_date \tab 0 \tab 1 \tab 2020-01-16 \tab 2021-04-29 \tab 2020-09-06 \tab 470 \cr
-}
-
-
-\strong{Variable type: numeric}\tabular{lrrrrrrrrrl}{
-   skim_variable \tab n_missing \tab complete_rate \tab mean \tab sd \tab p0 \tab p25 \tab p50 \tab p75 \tab p100 \tab hist \cr
-   population \tab 0 \tab 1.00 \tab 2684404.26 \tab 2750004.73 \tab 556000 \tab 1073000 \tab 1.602e+06 \tab 2.804e+06 \tab 13921000.00 \tab ▇▁▁▁▁ \cr
-   value \tab 0 \tab 1.00 \tab 799.25 \tab 5427.52 \tab 0 \tab 0 \tab 2.000e+00 \tab 6.000e+01 \tab 138378.00 \tab ▇▁▁▁▁ \cr
-   value_ma \tab 1128 \tab 0.99 \tab 789.23 \tab 5356.00 \tab 0 \tab 0 \tab 2.290e+00 \tab 6.000e+01 \tab 135875.14 \tab ▇▁▁▁▁ \cr
-   value_per1m \tab 0 \tab 1.00 \tab 175.69 \tab 666.06 \tab 0 \tab 0 \tab 1.080e+00 \tab 2.445e+01 \tab 9940.23 \tab ▇▁▁▁▁ \cr
-   value_ma_per1m \tab 1128 \tab 0.99 \tab 173.30 \tab 655.92 \tab 0 \tab 0 \tab 1.180e+00 \tab 2.422e+01 \tab 9760.44 \tab ▇▁▁▁▁ \cr
-   } \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \cr
-   \item{map_df}{ \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \tab  \cr
-}
 }
 \keyword{datasets}
