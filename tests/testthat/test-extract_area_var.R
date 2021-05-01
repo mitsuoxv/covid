@@ -60,3 +60,18 @@ test_that("'prefecture' is extracted from japan$area_df", {
   
   expect_equal(extract_area_var(area_df), "prefecture")
 })
+
+test_that("Error is displayed from an improper data frame", {
+  area_df <- data.frame(
+    publish_date = as.Date("2020-01-16"),
+    code = "01",
+    population = 5250000,
+    concept = "new_conf",
+    value = 0,
+    value_ma = NA_real_,
+    value_per1m = 0,
+    value_ma_per1m = NA_real_
+  )
+  
+  expect_error(extract_area_var(area_df), "Columns must include either")
+})
