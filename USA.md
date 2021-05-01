@@ -40,12 +40,11 @@ states in the United States may cause the second wave.
 
 Populations in millions by red or blue are:
 
-    ## # A tibble: 3 x 2
+    ## # A tibble: 2 x 2
     ##   party      pop_mil
     ##   <chr>        <dbl>
-    ## 1 Democratic 177.   
-    ## 2 Republican 151.   
-    ## 3 <NA>         0.706
+    ## 1 Democratic    178.
+    ## 2 Republican    151.
 
 ## Fastest spreading states in the last 14 days
 

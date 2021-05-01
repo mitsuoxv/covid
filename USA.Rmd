@@ -154,7 +154,7 @@ gov_df <- gov_df %>%
 
 dc_df <- gov_html %>% 
   html_nodes("table") %>% 
-  .[[3]] %>% 
+  .[[4]] %>% 
   html_table(fill = TRUE)
 
 dc_df <- dc_df[-1, c(1, 5)]
