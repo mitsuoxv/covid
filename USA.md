@@ -1,7 +1,7 @@
 USA, Covid-19 situation by state
 ================
 Mitsuo Shiota
-2020/5/26
+2020-05-26
 
 -   [Summary](#summary)
 -   [U.S. confirmed cases (new) by red or blue
@@ -12,7 +12,7 @@ Mitsuo Shiota
 -   [Highest deaths per population
     states](#highest-deaths-per-population-states)
 
-Updated: 2021-05-07
+Updated: 2021-05-08
 
 ## Summary
 

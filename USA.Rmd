@@ -1,7 +1,7 @@
 ---
 title: "USA, Covid-19 situation by state"
 author: "Mitsuo Shiota"
-date: "2020/5/26"
+date: "2020-05-26"
 output: 
   github_document:
     toc: TRUE
