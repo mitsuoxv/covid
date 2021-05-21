@@ -299,12 +299,10 @@ states_speed <- data_usa %>%
   summarize(increase_in_14_days = sum(new_conf), .groups = "drop_last")
 
 draw_map_usa <- function(df, var_str) {
-  var <- sym(var_str)
-  
   states_map %>%
     left_join(df, by = c(iso_3166_2 = "state_abb")) %>%
     ggplot() +
-    geom_sf(aes(fill = {{ var }}), color = "white") +
+    geom_sf(aes(fill = .data[[var_str]]), color = "white") +
     scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
                          midpoint = median(df[[var_str]])) +
     theme_void()

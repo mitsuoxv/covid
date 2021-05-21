@@ -105,14 +105,12 @@ prefectures_map <-
   st_read(system.file("shapes/jpn.shp", package = "NipponMap"))
 
 draw_map_japan <- function(map_df, df, var_str) {
-  var <- sym(var_str)
-  
   map_df %>%
     left_join(df, by = c(jiscode = "code")) %>%
     ggplot() +
-    geom_sf(aes(fill = {{ var }}), color = "white") +
+    geom_sf(aes(fill = .data[[var_str]]), color = "white") +
     scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
-                         midpoint = median(df[[{{ var }}]])) +
+                         midpoint = median(df[[var_str]])) +
     theme_void()
 }
 
