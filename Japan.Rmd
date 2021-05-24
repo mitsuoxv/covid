@@ -104,13 +104,13 @@ usethis::use_data(japan, overwrite = TRUE)
 prefectures_map <-
   st_read(system.file("shapes/jpn.shp", package = "NipponMap"))
 
-draw_map_japan <- function(map_df, df, var_str) {
+draw_map_japan <- function(map_df, df, var) {
   map_df %>%
     left_join(df, by = c(jiscode = "code")) %>%
     ggplot() +
-    geom_sf(aes(fill = .data[[var_str]]), color = "white") +
+    geom_sf(aes(fill = {{ var }}), color = "white") +
     scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
-                         midpoint = median(df[[var_str]])) +
+                         midpoint = median(df %>% pull({{ var }}))) +
     theme_void()
 }
 
@@ -126,7 +126,7 @@ prefectures_speed <- data_japan %>%
   filter(publish_date > max(publish_date) - 14) %>% 
   summarize(increase_in_14_days = sum(new_conf), .groups = "drop_last")
 
-draw_map_japan(prefectures_map, prefectures_speed, "increase_in_14_days")
+draw_map_japan(prefectures_map, prefectures_speed, increase_in_14_days)
 
 ```
 
@@ -138,7 +138,7 @@ prefectures_speed_std <- data_japan %>%
   filter(publish_date > max(publish_date) - 14) %>% 
   summarize(increase_std_in_14_days = sum(new_conf * 1000000 / population), .groups = "drop_last")
 
-draw_map_japan(prefectures_map, prefectures_speed_std, "increase_std_in_14_days")
+draw_map_japan(prefectures_map, prefectures_speed_std, increase_std_in_14_days)
 
 ```
 
@@ -155,7 +155,7 @@ prefectures_fatality <- data_japan %>%
     ) %>% 
   mutate(fatality_rate = cum_deaths * 100 / cum_conf)
 
-draw_map_japan(prefectures_map, prefectures_fatality, "fatality_rate")
+draw_map_japan(prefectures_map, prefectures_fatality, fatality_rate)
 
 ```
 
@@ -171,7 +171,7 @@ prefectures_deaths <- data_japan %>%
     deaths_per_1m = cum_deaths / pop_mil
     )
 
-draw_map_japan(prefectures_map, prefectures_deaths, "deaths_per_1m")
+draw_map_japan(prefectures_map, prefectures_deaths, deaths_per_1m)
 
 ```
 
