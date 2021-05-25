@@ -33,11 +33,9 @@ library(slider)
 
 ```{r read_data_from_NHK, message=FALSE}
 
-data_raw <- read_csv("https://www3.nhk.or.jp/n-data/opendata/coronavirus/nhk_news_covid19_prefectures_daily_data.csv")
-names(data_raw) <- c("publish_date", "code", "prefecture",
-                     "new_conf", "cum_conf", "new_deaths", "cum_deaths")
-
-data_japan <- data_raw %>% 
+data_japan <- read_csv("https://www3.nhk.or.jp/n-data/opendata/coronavirus/nhk_news_covid19_prefectures_daily_data.csv") %>% 
+  setNames(c("publish_date", "code", "prefecture",
+             "new_conf", "cum_conf", "new_deaths", "cum_deaths")) %>% 
   mutate(publish_date = ymd(publish_date))
 
 ```

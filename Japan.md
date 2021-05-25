@@ -13,7 +13,7 @@ Mitsuo Shiota
 -   [Highest deaths per population
     prefectures](#highest-deaths-per-population-prefectures)
 
-Updated: 2021-05-25
+Updated: 2021-05-26
 
 ## Summary
 
@@ -25,11 +25,9 @@ site](https://www3.nhk.or.jp/news/special/coronavirus/data/).
 ## Read data from NHK site
 
 ``` r
-data_raw <- read_csv("https://www3.nhk.or.jp/n-data/opendata/coronavirus/nhk_news_covid19_prefectures_daily_data.csv")
-names(data_raw) <- c("publish_date", "code", "prefecture",
-                     "new_conf", "cum_conf", "new_deaths", "cum_deaths")
-
-data_japan <- data_raw %>% 
+data_japan <- read_csv("https://www3.nhk.or.jp/n-data/opendata/coronavirus/nhk_news_covid19_prefectures_daily_data.csv") %>% 
+  setNames(c("publish_date", "code", "prefecture",
+             "new_conf", "cum_conf", "new_deaths", "cum_deaths")) %>% 
   mutate(publish_date = ymd(publish_date))
 ```
 
