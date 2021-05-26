@@ -9,7 +9,7 @@ draw_map_usa(df, value_var)
 \arguments{
 \item{df}{A data frame with columns: publish_date, concept, value, state.}
 
-\item{value_var}{"value", "value_ma", "value_per1m" or "value_ma_per1m".}
+\item{value_var}{A symbol: value, value_ma, value_per1m or value_ma_per1m.}
 }
 \value{
 A plot.
@@ -19,6 +19,6 @@ Draw USA state map
 }
 \examples{
 \dontrun{
-draw_map_usa(df, "value")
+draw_map_usa(df, value)
 }
 }

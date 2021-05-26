@@ -1,9 +1,9 @@
-#' Generate value variable string
+#' Generate value variable symbol
 #'
 #' @param ma "Yes" or "No".
 #' @param per1m "Yes" or "No".
 #'
-#' @return A character vector of length 1.
+#' @return A symbol.
 #'
 #' @examples
 #' \dontrun{
@@ -20,5 +20,5 @@ get_value_var <- function(ma, per1m) {
     var <- paste0(var, "_per1m")
   }
   
-  var
+  rlang::sym(var)
 }

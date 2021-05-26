@@ -99,7 +99,7 @@ selectShowServer <- function(id, df) {
     chart_data <- reactive({
       df %>%
         dplyr::filter(
-          .data[[area_var]] %in% input$select_area,
+          {{ area_var }} %in% input$select_area,
           concept == input$select_concept,
           publish_date >= input$date_range[1],
           publish_date <= input$date_range[2]
@@ -108,7 +108,7 @@ selectShowServer <- function(id, df) {
     
     output$plot1 <- renderPlot({
       chart_data() %>%
-        draw_line_chart(area_var, value_var())
+        draw_line_chart(!!value_var())
     })
     
     output$download <- downloadHandler(
@@ -117,8 +117,8 @@ selectShowServer <- function(id, df) {
       },
       content = function(file) {
         chart_data() %>%
-          dplyr::select(publish_date, .data[[area_var]], value) %>%
-          tidyr::pivot_wider(names_from = .data[[area_var]]) %>%
+          dplyr::select(publish_date, {{ area_var }}, value) %>%
+          tidyr::pivot_wider(names_from = {{ area_var }}) %>%
           vroom::vroom_write(file)
       }
     )

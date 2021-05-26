@@ -11,7 +11,7 @@ test_that("'area' is extracted from world$area_df", {
     value_ma_per1m = NA_real_
   )
   
-  expect_equal(extract_area_var(area_df), "area")
+  expect_equal(extract_area_var(area_df), rlang::sym("area"))
 })
 
 test_that("'region' is extracted from world$region_df", {
@@ -26,7 +26,7 @@ test_that("'region' is extracted from world$region_df", {
     value_ma_per1m = NA_real_
   )
   
-  expect_equal(extract_area_var(area_df), "region")
+  expect_equal(extract_area_var(area_df), rlang::sym("region"))
 })
 
 test_that("'state' is extracted from usa$area_df", {
@@ -42,7 +42,7 @@ test_that("'state' is extracted from usa$area_df", {
     value_ma_per1m = NA_real_
   )
   
-  expect_equal(extract_area_var(area_df), "state")
+  expect_equal(extract_area_var(area_df), rlang::sym("state"))
 })
 
 test_that("'prefecture' is extracted from japan$area_df", {
@@ -58,7 +58,7 @@ test_that("'prefecture' is extracted from japan$area_df", {
     value_ma_per1m = NA_real_
   )
   
-  expect_equal(extract_area_var(area_df), "prefecture")
+  expect_equal(extract_area_var(area_df), rlang::sym("prefecture"))
 })
 
 test_that("Error is displayed from an improper data frame", {

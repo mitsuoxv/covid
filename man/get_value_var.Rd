@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_value_var.R
 \name{get_value_var}
 \alias{get_value_var}
-\title{Generate value variable string}
+\title{Generate value variable symbol}
 \usage{
 get_value_var(ma, per1m)
 }
@@ -12,10 +12,10 @@ get_value_var(ma, per1m)
 \item{per1m}{"Yes" or "No".}
 }
 \value{
-A character vector of length 1.
+A symbol.
 }
 \description{
-Generate value variable string
+Generate value variable symbol
 }
 \examples{
 \dontrun{

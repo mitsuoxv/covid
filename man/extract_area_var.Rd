@@ -2,7 +2,7 @@
 % Please edit documentation in R/extract_area_var.R
 \name{extract_area_var}
 \alias{extract_area_var}
-\title{Extract area variable from a data frame}
+\title{Extract area variable symbol from a data frame}
 \usage{
 extract_area_var(df)
 }
@@ -10,10 +10,10 @@ extract_area_var(df)
 \item{df}{A data frame}
 }
 \value{
-A character vector of length 1.
+A symbol.
 }
 \description{
-Extract area variable from a data frame
+Extract area variable symbol from a data frame
 }
 \examples{
 \dontrun{

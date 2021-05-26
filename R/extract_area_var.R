@@ -1,8 +1,8 @@
-#' Extract area variable from a data frame
+#' Extract area variable symbol from a data frame
 #'
 #' @param df A data frame
 #'
-#' @return A character vector of length 1.
+#' @return A symbol.
 #'
 #' @examples
 #' \dontrun{
@@ -12,12 +12,12 @@ extract_area_var <- function(df) {
   columns <- names(df)
   
   if ("area" %in% columns) {
-    "area"
+    rlang::sym("area")
   } else if ("state" %in% columns) {
-    "state"
+    rlang::sym("state")
   } else if ("prefecture" %in% columns) {
-    "prefecture"
+    rlang::sym("prefecture")
   } else if ("region" %in% columns) {
-    "region"
+    rlang::sym("region")
   } else stop("Columns must include either 'area', 'state', 'prefecture' or 'region'.")
 }

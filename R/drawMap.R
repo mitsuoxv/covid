@@ -56,7 +56,8 @@ drawMapUI <- function(id, df) {
             selected = "Yes"
           )
         )
-      )
+      ),
+      plotOutput(NS(id, "plot_bar"), height = "600px")
     )
   )
 }
@@ -88,11 +89,23 @@ drawMapServer <- function(id, df) {
 
     output$plot_map <- renderPlot({
       if (id == "usa_map") {
-        draw_map_usa(chart_data(), value_var())
+        draw_map_usa(chart_data(), !!value_var())
       } else if (id == "japan_map") {
-        draw_map_japan(chart_data(), value_var())
+        draw_map_japan(chart_data(), !!value_var())
       } else if (id == "world_map") {
-        draw_map_world(chart_data(), value_var())
+        draw_map_world(chart_data(), !!value_var())
+      } else {
+        stop('Error: id must be either "world_map", "usa_map" or "japan_map"')
+      }
+    })
+    
+    output$plot_bar <- renderPlot({
+      if (id == "japan_map") {
+        draw_bar_chart(chart_data(), !!value_var())
+      } else if (id == "usa_map") {
+        draw_bar_chart(chart_data(), !!value_var())
+      } else if (id == "world_map") {
+        draw_bar_chart(chart_data(), !!value_var())
       } else {
         stop('Error: id must be either "world_map", "usa_map" or "japan_map"')
       }
