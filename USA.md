@@ -12,7 +12,7 @@ Mitsuo Shiota
 -   [Highest deaths per population
     states](#highest-deaths-per-population-states)
 
-Updated: 2021-07-24
+Updated: 2021-07-27
 
 ## Summary
 
@@ -40,7 +40,7 @@ states in the United States may cause the second wave.
 
 Populations in millions by red or blue are:
 
-    ## # A tibble: 2 x 2
+    ## # A tibble: 2 × 2
     ##   party      pop_mil
     ##   <chr>        <dbl>
     ## 1 Democratic    178.
