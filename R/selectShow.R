@@ -22,7 +22,7 @@ selectShowUI <- function(id, df, a_menu) {
         selected = dplyr::case_when(
           area_var == "area" ~ "Japan",
           area_var == "region" ~ c("Total", "Northern America"),
-          area_var == "state" ~ c("New York", "Michigan"),
+          area_var == "state" ~ c("New York", "Florida"),
           area_var == "prefecture" ~ c("Tokyo", "Osaka"),
           TRUE ~ "foo"
         ),
@@ -66,10 +66,10 @@ selectShowUI <- function(id, df, a_menu) {
       fluidRow(
         column(4,
                radioButtons(NS(id, "ma"), "7 day moving average?", c("Yes", "No"),
-                            selected = "No")),
+                            selected = "Yes")),
         column(4,
                radioButtons(NS(id, "per1m"), "Per 1m population?", c("Yes", "No"),
-                            selected = "No")),
+                            selected = "Yes")),
         column(4,
                downloadButton(NS(id, "download"), "Download .tsv"))
       )
