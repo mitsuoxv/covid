@@ -12,7 +12,7 @@ Mitsuo Shiota
 -   [Highest deaths per population
     states](#highest-deaths-per-population-states)
 
-Updated: 2021-08-19
+Updated: 2021-08-26
 
 ## Summary
 
@@ -28,6 +28,8 @@ governors](https://en.wikipedia.org/wiki/List_of_United_States_governors).
 I download population data in data directory from [Census Bureau
 page](https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html),
 and use estimated population as of July 1, 2019.
+
+    ## old-style crs object detected; please recreate object with a recent sf::st_crs()
 
 ![](USA_files/figure-gfm/map-1.png)<!-- -->
 

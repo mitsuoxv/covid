@@ -44,7 +44,7 @@ library(ggthemes)
 ```{r read_from_USAfacts, echo=FALSE, cache=FALSE}
 # https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/
 # Read confirmed cases
-conf_raw <- read_csv("https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_confirmed_usafacts.csv",
+conf_raw <- read_csv("https://static.usafacts.org/public/data/covid-19/covid_confirmed_usafacts.csv",
                      col_types = cols(
                        .default = col_double(),
                        `County Name` = col_character(),
@@ -84,7 +84,7 @@ conf <- bind_rows(conf_total, conf_by_state) %>%
   filter(!is.na(publish_date))
 
 # Read deaths
-deaths_raw <- read_csv("https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_deaths_usafacts.csv",
+deaths_raw <- read_csv("https://static.usafacts.org/public/data/covid-19/covid_deaths_usafacts.csv",
                        col_types = cols(
                          .default = col_double(),
                          `County Name` = col_character(),
