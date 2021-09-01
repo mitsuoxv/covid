@@ -20,7 +20,7 @@ selectShowUI <- function(id, df, a_menu) {
         label = h4(paste0("Select ", area_var, "s (add/remove)")),
         choices = a_menu,
         selected = dplyr::case_when(
-          area_var == "area" ~ "Japan",
+          area_var == "area" ~ c("Japan", "Israel"),
           area_var == "region" ~ c("Total", "Northern America"),
           area_var == "state" ~ c("New York", "Florida"),
           area_var == "prefecture" ~ c("Tokyo", "Osaka"),
