@@ -26,7 +26,7 @@ library(lubridate)
 library(NipponMap)
 library(sf)
 
-library(slider)
+library(tqr)
 ```
 
 ## Read data from NHK site
@@ -75,8 +75,7 @@ in_japan <- data_japan %>%
                names_to = "concept", values_to = "value") %>% 
   group_by(code, concept) %>% 
   mutate(
-    value_ma = slide_dbl(value, mean, na.rm = TRUE,
-                       .before = 6, .complete = TRUE),
+    value_ma = moving_average(value, n = 7, na.rm = TRUE),
     value_per1m = value / population * 1e6,
     value_ma_per1m = value_ma / population * 1e6
       ) %>% 
