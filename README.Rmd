@@ -44,7 +44,7 @@ library(scales)
 library(janitor)
 library(maps)
 library(mapproj)
-library(slider)
+library(tqr)
 ```
 
 ## Read data from WHO
@@ -236,8 +236,7 @@ world_region <-
                names_to = "concept", values_to = "value") %>% 
   group_by(region, concept) %>% 
   mutate(
-    value_ma = slide_dbl(value, mean, na.rm = TRUE,
-                       .before = 6, .complete = TRUE),
+    value_ma = moving_average(value, n = 7, na.rm = TRUE),
     value_per1m = value / population * 1e6,
     value_ma_per1m = value_ma / population * 1e6
       ) %>% 
@@ -248,8 +247,7 @@ world_area <- table2 %>%
                names_to = "concept", values_to = "value") %>% 
   group_by(area, concept) %>% 
   mutate(
-    value_ma = slide_dbl(value, mean, na.rm = TRUE,
-                       .before = 6, .complete = TRUE),
+    value_ma = moving_average(value, n = 7, na.rm = TRUE),
     value_per1m = value / population * 1e6,
     value_ma_per1m = value_ma / population * 1e6
       ) %>% 

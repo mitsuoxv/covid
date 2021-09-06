@@ -27,7 +27,7 @@ library(readxl)
 library(tsibble)
 library(tqr)
 library(scales)
-library(slider)
+library(tqr)
 
 library(maps)
 library(mapproj)
@@ -212,8 +212,7 @@ in_usa <- data_usa %>%
                names_to = "concept", values_to = "value") %>% 
   group_by(state, concept) %>% 
   mutate(
-    value_ma = slide_dbl(value, mean, na.rm = TRUE,
-                       .before = 6, .complete = TRUE),
+    value_ma = moving_average(value, n = 7, na.rm = TRUE),
     value_per1m = value / population * 1e6,
     value_ma_per1m = value_ma / population * 1e6
       ) %>% 
