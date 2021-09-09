@@ -44,7 +44,7 @@ library(scales)
 library(janitor)
 library(maps)
 library(mapproj)
-library(tqr)
+
 ```
 
 ## Read data from WHO

@@ -27,7 +27,6 @@ library(readxl)
 library(tsibble)
 library(tqr)
 library(scales)
-library(tqr)
 
 library(maps)
 library(mapproj)
