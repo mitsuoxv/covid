@@ -35,7 +35,8 @@ library(tqr)
 
 data_japan <- read_csv("https://www3.nhk.or.jp/n-data/opendata/coronavirus/nhk_news_covid19_prefectures_daily_data.csv") %>% 
   setNames(c("publish_date", "code", "prefecture",
-             "new_conf", "cum_conf", "new_deaths", "cum_deaths")) %>% 
+             "new_conf", "cum_conf", "new_deaths", "cum_deaths", "dummy")) %>% 
+  select(-dummy) %>% 、
   mutate(publish_date = ymd(publish_date))
 
 ```
