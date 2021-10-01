@@ -23,9 +23,9 @@ test_that("inputs filter right data from world$region_df", {
       dplyr::filter(region == "Eastern Asia")
     
     expect_equal(data_part$population, 1531753739)
-    expect_equal(data_part$value, 412)
+    expect_equal(data_part$value, 414)
     expect_equal(data_part$value_ma, 360, tolerance = 0.001)
-    expect_equal(data_part$value_per1m, 0.269, tolerance = 0.001)
+    expect_equal(data_part$value_per1m, 0.2703, tolerance = 0.001)
     expect_equal(data_part$value_ma_per1m, 0.235, tolerance = 0.001)
   })
 })

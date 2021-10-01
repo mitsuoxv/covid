@@ -17,9 +17,9 @@ test_that("inputs filter right data from world$region_df", {
                       date_range = c(as.Date("2020-04-01"), as.Date("2020-04-01")))
     
     expect_equal(chart_data()$population, 1531753739)
-    expect_equal(chart_data()$value, 412)
+    expect_equal(chart_data()$value, 414)
     expect_equal(chart_data()$value_ma, 360, tolerance = 0.001)
-    expect_equal(chart_data()$value_per1m, 0.269, tolerance = 0.001)
+    expect_equal(chart_data()$value_per1m, 0.2703, tolerance = 0.001)
     expect_equal(chart_data()$value_ma_per1m, 0.235, tolerance = 0.001)
   })
 })
