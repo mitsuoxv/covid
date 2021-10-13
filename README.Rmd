@@ -133,6 +133,11 @@ Among areas with more than 5 million population, highest "speed_since_100",  whi
 areas_5m <- table2 %>% 
   filter(population >= 5000000)
 
+max_date <- areas_5m %>% 
+  filter(iso_alpha2 == "US") %>% 
+  slice_max(publish_date, n = 1) %>% 
+  pull(publish_date)
+
 areas_5m %>% 
   group_by(area) %>% 
   arrange(publish_date) %>% 
@@ -142,7 +147,7 @@ areas_5m %>%
     speed_since_100 = (cum_conf - min(cum_conf)) / days_since_100
     ) %>% 
   ungroup() %>% 
-  filter(publish_date == max(publish_date)) %>% 
+  filter(publish_date == max_date) %>% 
   arrange(desc(speed_since_100)) %>% 
   select(area, speed_since_100, cum_conf, days_since_100) %>% 
   head(20)
@@ -161,7 +166,7 @@ areas_5m %>%
     speed_std_since_100 = (cum_conf - min(cum_conf)) * 1000000 / population / days_since_100
     ) %>% 
   ungroup() %>% 
-  filter(publish_date == max(publish_date)) %>% 
+  filter(publish_date == max_date) %>% 
   arrange(desc(speed_std_since_100)) %>% 
   select(area, speed_std_since_100, per_capita_cum_conf, days_since_100) %>% 
   head(20)
@@ -176,7 +181,7 @@ Among areas with more than 5 million population and more than 10 cumulative deat
 areas_5m %>% 
   filter(
     cum_deaths > 10,
-    publish_date == max(publish_date)
+    publish_date == max_date
     ) %>% 
   mutate(fatality_rate = cum_deaths * 100 / cum_conf) %>% 
   arrange(desc(fatality_rate)) %>% 
@@ -191,7 +196,7 @@ Among areas with more than 5 million population, highest "deaths_per_1m", which 
 ```{r deaths_per_population, echo=FALSE}
 areas_5m %>% 
   filter(
-    publish_date == max(publish_date)
+    publish_date == max_date
     ) %>% 
   mutate(
     pop_mil = population / 1000000,
