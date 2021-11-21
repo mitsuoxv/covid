@@ -82,6 +82,7 @@ draw_map_japan <- function(df, value_var) {
 draw_map_world <- function(df, value_var) {
   world$map_df %>% 
     fuzzyjoin::regex_left_join(df, by = c(region = "area")) %>% 
+    dplyr::filter(population > 1e5) %>% 
     ggplot2::ggplot(ggplot2::aes(long, lat, group = group, fill = {{ value_var }})) +
     ggplot2::geom_polygon(color = "black", size = 0.1) +
     ggplot2::scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
