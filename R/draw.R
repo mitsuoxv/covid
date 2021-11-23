@@ -86,7 +86,9 @@ draw_map_world <- function(df, value_var) {
     ggplot2::ggplot(ggplot2::aes(long, lat, group = group, fill = {{ value_var }})) +
     ggplot2::geom_polygon(color = "black", size = 0.1) +
     ggplot2::scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
-                         midpoint = stats::median(df %>% dplyr::pull({{ value_var }}), na.rm = TRUE)) +
+                                  midpoint = df %>% 
+                                    dplyr::pull({{ value_var }}) %>% 
+                                    stats::median(na.rm = TRUE)) +
     ggplot2::labs(fill = "# of cases") +
     ggthemes::theme_map()
 }
