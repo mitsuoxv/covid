@@ -331,11 +331,9 @@ Among states with more than 10 cumulative deaths, highest "fatality_rate", which
 ```{r fatality_rates, echo=FALSE}
 states_fatality <- data_usa %>% 
   filter(state_abb != "Total") %>% 
-  filter(
-    cum_deaths > 10,
-    publish_date == max(publish_date)
-    ) %>% 
-  mutate(fatality_rate = cum_deaths * 100 / cum_conf)
+  mutate(fatality_rate = cum_deaths * 100 / cum_conf) %>% 
+  filter(!is.na(fatality_rate)) %>% 
+  filter(publish_date == max(publish_date))
 
 draw_map_usa(states_fatality, fatality_rate)
 
@@ -348,11 +346,12 @@ Highest "deaths_per_1m", which is cumulative deaths per 1 million population, ar
 ```{r deaths_per_population, echo=FALSE}
 states_deaths <- data_usa %>% 
   filter(state_abb != "Total") %>% 
-  filter(publish_date == max(publish_date)) %>% 
   mutate(
     pop_mil = population / 1e6,
     deaths_per_1m = cum_deaths / pop_mil
-    )
+    ) %>% 
+  filter(!is.na(deaths_per_1m)) %>% 
+  filter(publish_date == max(publish_date))
 
 draw_map_usa(states_deaths, deaths_per_1m)
 
