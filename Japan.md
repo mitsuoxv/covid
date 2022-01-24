@@ -13,7 +13,7 @@ Mitsuo Shiota
 -   [Highest deaths per population
     prefectures](#highest-deaths-per-population-prefectures)
 
-Updated: 2022-01-24
+Updated: 2022-01-25
 
 ## Summary
 
@@ -40,28 +40,28 @@ The data are estimated as of October 1, 2019.
 
 ## Fastest spreading prefecutures in the last 14 days
 
-Highest “increase\_in\_14\_days”, which is an increase in cumulative
+Highest “increase_in_14_days”, which is an increase in cumulative
 confirmed cases in the last 14 days, are:
 
 ![](Japan_files/figure-gfm/spreading-1.png)<!-- -->
 
 Above calculation might be unfair to populous prefectures. Highest
-“increase\_std\_in\_14\_days”, which is an increase in cumulative
-confirmed cases in the last 14 days per 1 million population, are:
+“increase_std_in_14_days”, which is an increase in cumulative confirmed
+cases in the last 14 days per 1 million population, are:
 
 ![](Japan_files/figure-gfm/standardized-1.png)<!-- -->
 
 ## Highest fatality rate prefectures
 
 Among prefectures with more than 10 cumulative deaths, highest
-“fatality\_rate”, which is cumulative deaths per 100 cumulative
-confirmed cases, are:
+“fatality_rate”, which is cumulative deaths per 100 cumulative confirmed
+cases, are:
 
 ![](Japan_files/figure-gfm/fatality_rates-1.png)<!-- -->
 
 ## Highest deaths per population prefectures
 
-Highest “deaths\_per\_1m”, which is cumulative deaths per 1 million
+Highest “deaths_per_1m”, which is cumulative deaths per 1 million
 population, are:
 
 ![](Japan_files/figure-gfm/deaths_per_population-1.png)<!-- -->
