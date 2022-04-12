@@ -21,6 +21,7 @@ I added Japan page to [my Shiny App](https://mitsuoxv.shinyapps.io/covid/) on Ma
 
 ```{r library, include=FALSE}
 library(tidyverse)
+library(readxl)
 library(lubridate)
 
 library(NipponMap)
@@ -43,26 +44,23 @@ data_japan <- read_csv("https://www3.nhk.or.jp/n-data/opendata/coronavirus/nhk_n
 
 ## Add population column
 
-I download population by prefecture data from [e-stat page](https://www.e-stat.go.jp/stat-search/database?page=1&layout=datalist&toukei=00200524&bunya_l=02&tstat=000000090001&cycle=0&tclass1=000001136886&statdisp_id=0003412316&tclass2val=0). The data are estimated as of October 1, 2019.
+I download population by prefecture data from [the Statistics Bureau, Ministry of Internal Affairs and Communications](https://www.stat.go.jp/data/nihon/02.htm). The data are estimated as of October 1, 2020.
 
 ```{r population, include=FALSE}
 
-pop <- read_csv("data-raw/FEH_00200524_210331081757.csv", 
-                locale = locale(encoding = "SHIFT-JIS"), 
-                skip = 12)
+pop <- read_excel("data-raw/n220200200.xlsx", skip = 5)
 
-pop <- pop[, c(3, 6)]
-names(pop) <- c("code", "population")
+pop <- pop[2:49, 1:2] %>% 
+  setNames(c("prefecture", "population")) %>% 
+  mutate(
+    code = sprintf("%02.0f", 0:47),
+    population = population * 1000
+    ) %>% 
+  select(-prefecture)
 
 pref_eng <- read_csv("data-raw/pref_eng.csv")
 
 pop <- bind_cols(pop, pref_eng)
-
-pop <- pop %>% 
-  mutate(
-    code = code %>% str_sub(end = 2L),
-    population = population * 1000
-    )
 
 data_japan <- data_japan %>% 
   select(-prefecture) %>% 

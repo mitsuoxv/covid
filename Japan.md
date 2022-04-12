@@ -34,9 +34,10 @@ data_japan <- read_csv("https://www3.nhk.or.jp/n-data/opendata/coronavirus/nhk_n
 
 ## Add population column
 
-I download population by prefecture data from [e-stat
-page](https://www.e-stat.go.jp/stat-search/database?page=1&layout=datalist&toukei=00200524&bunya_l=02&tstat=000000090001&cycle=0&tclass1=000001136886&statdisp_id=0003412316&tclass2val=0).
-The data are estimated as of October 1, 2019.
+I download population by prefecture data from [the Statistics Bureau,
+Ministry of Internal Affairs and
+Communications](https://www.stat.go.jp/data/nihon/02.htm). The data are
+estimated as of October 1, 2020.
 
 ## Fastest spreading prefecutures in the last 14 days
 
