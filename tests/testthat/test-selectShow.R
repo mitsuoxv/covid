@@ -42,10 +42,8 @@ test_that("inputs filter right data from japan$area_df", {
     session$setInputs(select_area = "Tokyo", select_concept = "new_conf",
                       date_range = c(as.Date("2020-04-01"), as.Date("2020-04-01")))
     
-    expect_equal(chart_data()$population, 13921000)
+    expect_equal(chart_data()$population, 13159000)
     expect_equal(chart_data()$value, 67)
     expect_equal(chart_data()$value_ma, 54.1, tolerance = 0.001)
-    expect_equal(chart_data()$value_per1m, 4.81, tolerance = 0.001)
-    expect_equal(chart_data()$value_ma_per1m, 3.89, tolerance = 0.001)
   })
 })

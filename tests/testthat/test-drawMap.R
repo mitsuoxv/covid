@@ -54,10 +54,8 @@ test_that("inputs filter right data from japan$area_df", {
     data_part <- chart_data() %>% 
       dplyr::filter(prefecture == "Tokyo")
     
-    expect_equal(data_part$population, 13921000)
+    expect_equal(data_part$population, 13159000)
     expect_equal(data_part$value, 67)
     expect_equal(data_part$value_ma, 54.1, tolerance = 0.001)
-    expect_equal(data_part$value_per1m, 4.81, tolerance = 0.001)
-    expect_equal(data_part$value_ma_per1m, 3.89, tolerance = 0.001)
   })
 })
