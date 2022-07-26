@@ -3,16 +3,20 @@ USA, Covid-19 situation by state
 Mitsuo Shiota
 2020-05-26
 
--   [Summary](#summary)
--   [U.S. confirmed cases (new) by red or blue
-    states](#us-confirmed-cases-new-by-red-or-blue-states)
--   [Fastest spreading states in the last 14
-    days](#fastest-spreading-states-in-the-last-14-days)
--   [Highest fatality rate states](#highest-fatality-rate-states)
--   [Highest deaths per population
-    states](#highest-deaths-per-population-states)
+-   <a href="#summary" id="toc-summary">Summary</a>
+-   <a href="#us-confirmed-cases-new-by-red-or-blue-states"
+    id="toc-us-confirmed-cases-new-by-red-or-blue-states">U.S. confirmed
+    cases (new) by red or blue states</a>
+-   <a href="#fastest-spreading-states-in-the-last-14-days"
+    id="toc-fastest-spreading-states-in-the-last-14-days">Fastest spreading
+    states in the last 14 days</a>
+-   <a href="#highest-fatality-rate-states"
+    id="toc-highest-fatality-rate-states">Highest fatality rate states</a>
+-   <a href="#highest-deaths-per-population-states"
+    id="toc-highest-deaths-per-population-states">Highest deaths per
+    population states</a>
 
-Updated: 2022-07-24
+Updated: 2022-07-27
 
 ## Summary
 

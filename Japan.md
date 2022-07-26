@@ -3,17 +3,22 @@ Japan, Covid-19 situation by prefecture
 Mitsuo Shiota
 2021-03-31
 
--   [Summary](#summary)
--   [Read data from NHK site](#read-data-from-nhk-site)
--   [Add population column](#add-population-column)
--   [Fastest spreading prefecutures in the last 14
-    days](#fastest-spreading-prefecutures-in-the-last-14-days)
--   [Highest fatality rate
-    prefectures](#highest-fatality-rate-prefectures)
--   [Highest deaths per population
-    prefectures](#highest-deaths-per-population-prefectures)
+-   <a href="#summary" id="toc-summary">Summary</a>
+-   <a href="#read-data-from-nhk-site" id="toc-read-data-from-nhk-site">Read
+    data from NHK site</a>
+-   <a href="#add-population-column" id="toc-add-population-column">Add
+    population column</a>
+-   <a href="#fastest-spreading-prefecutures-in-the-last-14-days"
+    id="toc-fastest-spreading-prefecutures-in-the-last-14-days">Fastest
+    spreading prefecutures in the last 14 days</a>
+-   <a href="#highest-fatality-rate-prefectures"
+    id="toc-highest-fatality-rate-prefectures">Highest fatality rate
+    prefectures</a>
+-   <a href="#highest-deaths-per-population-prefectures"
+    id="toc-highest-deaths-per-population-prefectures">Highest deaths per
+    population prefectures</a>
 
-Updated: 2022-07-26
+Updated: 2022-07-27
 
 ## Summary
 
