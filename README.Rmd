@@ -115,6 +115,7 @@ table2 %>%
   geom_hline(yintercept = 0, color = "white", size = 2) +
   geom_line(size = 1) +
   scale_y_continuous(labels = comma) +
+  scale_color_brewer(palette = "Paired") +
   labs(
     title = "Confirmed cases (new)",
     x = "published date (7 days average)",
