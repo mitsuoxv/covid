@@ -16,7 +16,7 @@ Mitsuo Shiota
     id="toc-highest-deaths-per-population-states">Highest deaths per
     population states</a>
 
-Updated: 2022-08-12
+Updated: 2022-08-17
 
 ## Summary
 
