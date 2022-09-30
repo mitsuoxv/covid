@@ -18,7 +18,7 @@ Mitsuo Shiota
     id="toc-highest-deaths-per-population-prefectures">Highest deaths per
     population prefectures</a>
 
-Updated: 2022-09-30
+Updated: 2022-10-01
 
 ## Summary
 

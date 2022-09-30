@@ -56,6 +56,6 @@ test_that("inputs filter right data from japan$area_df", {
     
     expect_equal(data_part$population, 13159000)
     expect_equal(data_part$value, 67)
-    expect_equal(data_part$value_ma, 54.1, tolerance = 0.001)
+    expect_equal(data_part$value_ma, 51.6, tolerance = 0.001)
   })
 })

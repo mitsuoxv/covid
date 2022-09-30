@@ -17,14 +17,14 @@
     Code
       data_source("japan_map")
     Output
-      <a href="https://www3.nhk.or.jp/news/special/coronavirus/data/">Source: NHK</a>
+      <a href="https://www.mhlw.go.jp/stf/covid-19/open-data.html">Source: Ministry of Health, Labour and Welfare</a>
 
 # data source is right, when id is 'japan'
 
     Code
       data_source("japan")
     Output
-      <a href="https://www3.nhk.or.jp/news/special/coronavirus/data/">Source: NHK</a>
+      <a href="https://www.mhlw.go.jp/stf/covid-19/open-data.html">Source: Ministry of Health, Labour and Welfare</a>
 
 # data source is right, when id is 'world_map'
 
