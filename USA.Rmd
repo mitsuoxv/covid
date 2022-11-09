@@ -149,7 +149,8 @@ gov_df <- gov_df[-1, c(1, 5)]
 names(gov_df) <- c("state", "party")
 
 gov_df <- gov_df %>% 
-  mutate(party = str_sub(party, 1L, 10L))
+  mutate(party = str_sub(party, 1L, 10L)) %>% 
+  mutate(party = if_else(state == "Alaska", "Republican", party)) # fill blank
 
 dc_df <- gov_html %>% 
   html_nodes("table") %>% 
