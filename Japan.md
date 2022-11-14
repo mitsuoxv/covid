@@ -3,22 +3,22 @@ Japan, Covid-19 situation by prefecture
 Mitsuo Shiota
 2021-03-31
 
--   <a href="#summary" id="toc-summary">Summary</a>
--   <a href="#read-data-from-mhlw-site"
-    id="toc-read-data-from-mhlw-site">Read data from MHLW site</a>
--   <a href="#add-population-column" id="toc-add-population-column">Add
-    population column</a>
--   <a href="#fastest-spreading-prefecutures-in-the-last-14-days"
-    id="toc-fastest-spreading-prefecutures-in-the-last-14-days">Fastest
-    spreading prefecutures in the last 14 days</a>
--   <a href="#highest-fatality-rate-prefectures"
-    id="toc-highest-fatality-rate-prefectures">Highest fatality rate
-    prefectures</a>
--   <a href="#highest-deaths-per-population-prefectures"
-    id="toc-highest-deaths-per-population-prefectures">Highest deaths per
-    population prefectures</a>
+- <a href="#summary" id="toc-summary">Summary</a>
+- <a href="#read-data-from-mhlw-site"
+  id="toc-read-data-from-mhlw-site">Read data from MHLW site</a>
+- <a href="#add-population-column" id="toc-add-population-column">Add
+  population column</a>
+- <a href="#fastest-spreading-prefecutures-in-the-last-14-days"
+  id="toc-fastest-spreading-prefecutures-in-the-last-14-days">Fastest
+  spreading prefecutures in the last 14 days</a>
+- <a href="#highest-fatality-rate-prefectures"
+  id="toc-highest-fatality-rate-prefectures">Highest fatality rate
+  prefectures</a>
+- <a href="#highest-deaths-per-population-prefectures"
+  id="toc-highest-deaths-per-population-prefectures">Highest deaths per
+  population prefectures</a>
 
-Updated: 2022-11-14
+Updated: 2022-11-15
 
 ## Summary
 
