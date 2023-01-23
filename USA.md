@@ -16,7 +16,7 @@ Mitsuo Shiota
   id="toc-highest-deaths-per-population-states">Highest deaths per
   population states</a>
 
-Updated: 2023-01-12
+Updated: 2023-01-24
 
 ## Summary
 
@@ -49,8 +49,8 @@ Populations in millions by red or blue are:
     ## # A tibble: 2 × 2
     ##   party      pop_mil
     ##   <chr>        <dbl>
-    ## 1 Democratic    180.
-    ## 2 Republican    148.
+    ## 1 Democratic    186.
+    ## 2 Republican    142.
 
 ## Fastest spreading states in the last 14 days
 
