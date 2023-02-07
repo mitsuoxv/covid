@@ -111,7 +111,7 @@ table2 %>%
   as_tsibble(key = region, index = publish_date) %>% 
   tq_ma(n = 7) %>% 
   ggplot(aes(publish_date, new_conf,
-             color = fct_reorder2(region, publish_date, new_conf))) +
+             color = fct_reorder(region, new_conf, .fun = max, .desc = TRUE))) +
   geom_hline(yintercept = 0, color = "white", size = 2) +
   geom_line(size = 1) +
   scale_y_continuous(labels = comma) +
@@ -228,13 +228,15 @@ world_map <- map_data("world") %>%
 # tidy data
 world_total <- table2 %>% 
   group_by(publish_date) %>% 
-  summarize(across(!c(area, region), sum, na.rm = TRUE), .groups = "drop") %>% 
+  summarize(across(!c(area, region), \(x) sum(x, na.rm = TRUE)),
+            .groups = "drop") %>% 
   mutate(region = "Total")
 
 world_reg <- table2 %>% 
   filter(region != "Others") %>% 
   group_by(publish_date, region) %>% 
-  summarize(across(!area, sum, na.rm = TRUE), .groups = "drop")
+  summarize(across(!area, \(x) sum(x, na.rm = TRUE)),
+            .groups = "drop")
 
 world_region <- 
   bind_rows(world_reg, world_total) %>% 
