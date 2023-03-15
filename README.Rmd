@@ -49,7 +49,7 @@ library(mapproj)
 
 ## Read data from WHO
 
-WHO offers [Data Table in its Dashboard](https://covid19.who.int/table). I use the data from https://covid19.who.int/WHO-COVID-19-global-data.csv.
+WHO offers [Data Table in its Dashboard](https://covid19.who.int/table). I use the data from https://covid19.who.int/WHO-COVID-19-global-data.csv. Starting from the week of 20 February 2023, it will be updated once per week on Wednesdays.
 
 I also use the data, like area name and population, from https://countrycode.org/.
 
