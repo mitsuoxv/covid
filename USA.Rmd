@@ -17,7 +17,7 @@ Updated: `r Sys.Date()`
 
 ## Summary
 
-I added the United States page to [my Shiny App](https://mitsuoxv.shinyapps.io/covid/) on May 25, 2020. I use data of 50 states and 1 federal district (District of Columbia) from [USAFacts page](https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/).
+I added the United States page to [my Shiny App](https://mitsuoxv.shinyapps.io/covid/) on May 25, 2020. I use data of 50 states and 1 federal district (District of Columbia) from [USAFacts page](https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/). It states, "All states updated case and death data daily early in the pandemic, but many have slowed/stopped. As of spring 2022, dozens of states update daily, others provide data once a week. Nebraska and Missouri have stopped providing regular updates".
 
 ```{r library, include=FALSE}
 library(tidyverse)

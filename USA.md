@@ -16,7 +16,7 @@ Mitsuo Shiota
   id="toc-highest-deaths-per-population-states">Highest deaths per
   population states</a>
 
-Updated: 2023-03-10
+Updated: 2023-03-30
 
 ## Summary
 
@@ -25,6 +25,10 @@ App](https://mitsuoxv.shinyapps.io/covid/) on May 25, 2020. I use data
 of 50 states and 1 federal district (District of Columbia) from
 [USAFacts
 page](https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/).
+It states, “All states updated case and death data daily early in the
+pandemic, but many have slowed/stopped. As of spring 2022, dozens of
+states update daily, others provide data once a week. Nebraska and
+Missouri have stopped providing regular updates”.
 
 I separate red or blue by state governors (in case of DC, a mayor),
 according to [List of United States
