@@ -4,9 +4,9 @@ Mitsuo Shiota
 2020-05-26
 
 - <a href="#summary" id="toc-summary">Summary</a>
-- <a href="#us-confirmed-cases-new-by-red-or-blue-states"
-  id="toc-us-confirmed-cases-new-by-red-or-blue-states">U.S. confirmed
-  cases (new) by red or blue states</a>
+- <a href="#us-cumulative-deahts-per-population-by-red-or-blue-states"
+  id="toc-us-cumulative-deahts-per-population-by-red-or-blue-states">U.S.
+  cumulative deahts per population by red or blue states</a>
 - <a href="#fastest-spreading-states-in-the-last-14-days"
   id="toc-fastest-spreading-states-in-the-last-14-days">Fastest spreading
   states in the last 14 days</a>
@@ -16,7 +16,7 @@ Mitsuo Shiota
   id="toc-highest-deaths-per-population-states">Highest deaths per
   population states</a>
 
-Updated: 2023-03-30
+Updated: 2023-04-06
 
 ## Summary
 
@@ -41,10 +41,11 @@ and use estimated population as of July 1, 2019.
 
 ![](USA_files/figure-gfm/map-1.png)<!-- -->
 
-## U.S. confirmed cases (new) by red or blue states
+## U.S. cumulative deahts per population by red or blue states
 
-I am worrying that too vigorous “reopen economy” movements in the red
-states in the United States may cause the second wave.
+There is a gap between red and blue states in cumulative deaths per
+population, probably due to too vigorous “reopen economy” movements in
+the red states in 2021.
 
 ![](USA_files/figure-gfm/chart1-1.png)<!-- -->
 

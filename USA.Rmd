@@ -249,25 +249,28 @@ states_map %>%
   theme_void()
 ```
 
-## U.S. confirmed cases (new) by red or blue states
+## U.S. cumulative deahts per population by red or blue states
 
-I am worrying that too vigorous "reopen economy" movements in the red states in the United States may cause the second wave.
+There is a gap between red and blue states in cumulative deaths per population, probably due to too vigorous "reopen economy" movements in the red states in 2021.
 
 ```{r chart1, echo=FALSE, warning=FALSE}
 data_usa %>% 
   filter(state_abb != "Total") %>% 
   group_by(publish_date, party) %>% 
-  summarize(new_conf = sum(new_conf), .groups = "drop_last") %>% 
-  as_tsibble(key = party, index = publish_date) %>% 
-  tq_ma(7) %>% 
-  ggplot(aes(publish_date, new_conf, color = party)) +
+  summarize(
+    cum_deaths = sum(cum_deaths),
+    population = sum(population),
+    .groups = "drop_last"
+    ) %>% 
+  mutate(cum_deaths_per_pop = cum_deaths / population * 1e3) %>% 
+  ggplot(aes(publish_date, cum_deaths_per_pop, color = party)) +
   geom_line(size = 1) +
   scale_color_manual(values = c("blue", "red")) +
   scale_y_continuous(labels = comma) +
   labs(
-    title = "Confirmed cases (new) by red or blue states",
-    x = "published date (7 days average)",
-    y = NULL,
+    title = "Cumulative deaths per population\nby red or blue states",
+    x = "published date",
+    y = "Deaths per one thousand",
     caption = str_c("Latest: ", max(data_usa$publish_date)),
     color = NULL
   ) +
