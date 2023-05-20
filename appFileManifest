@@ -4,14 +4,17 @@ NAMESPACE
 R/data_source.R
 R/data.R
 R/drawMap.R
+R/drawMapWk.R
 R/draw.R
 R/extract_area_var.R
 R/get_value_var.R
 R/main.R
 R/name_file.R
 R/selectShow.R
+R/selectShowWk.R
 R/utils-pipe.R
 data/japan.rda
+data/japan_wk.rda
 data/usa.rda
 data/world.rda
 google-analytics.html

@@ -48,7 +48,7 @@ A character vector of length 47.
 }
 }
 \source{
-https://www3.nhk.or.jp/news/special/coronavirus/data/
+https://www.mhlw.go.jp/stf/covid-19/open-data.html
 }
 \usage{
 japan

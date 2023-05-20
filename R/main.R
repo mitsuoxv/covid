@@ -16,7 +16,7 @@ mainApp <- function() {
       "google-analytics.html"
     ))),
     
-    selected = "Regions",
+    selected = "In Japan, weekly",
     
     tabPanel("Regions",
              selectShowUI("world_region", world$region_df,
@@ -31,6 +31,11 @@ mainApp <- function() {
                            a_menu = japan$area_menu)),
     tabPanel("In Japan (map)",
              drawMapUI("japan_map", japan$area_df)),
+    tabPanel("In Japan, weekly",
+             selectShowWkUI("japan_wk", japan_wk$area_df,
+                          a_menu = japan_wk$area_menu)),
+    tabPanel("In Japan, weekly (map)",
+             drawMapWkUI("japan_wk_map", japan_wk$area_df)),
     tabPanel("In the U.S.",
              selectShowUI("usa", usa$area_df,
                            a_menu = usa$area_menu)),
@@ -44,10 +49,12 @@ mainApp <- function() {
     selectShowServer("world_region", world$region_df)
     selectShowServer("world_area", world$area_df)
     selectShowServer("japan", japan$area_df)
+    selectShowWkServer("japan_wk", japan_wk$area_df)
     selectShowServer("usa", usa$area_df)
     
     drawMapServer("usa_map", usa$area_df)
     drawMapServer("japan_map", japan$area_df)
+    drawMapWkServer("japan_wk_map", japan_wk$area_df)
     drawMapServer("world_map", world$area_df)
   }
   

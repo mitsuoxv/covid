@@ -16,7 +16,7 @@ Mitsuo Shiota
   id="toc-highest-deaths-per-population-states">Highest deaths per
   population states</a>
 
-Updated: 2023-04-27
+Updated: 2023-05-04
 
 ## Summary
 
@@ -51,11 +51,10 @@ the red states in 2021.
 
 Populations in millions by red or blue are:
 
-    ## # A tibble: 2 × 2
-    ##   party      pop_mil
-    ##   <chr>        <dbl>
-    ## 1 Democratic    186.
-    ## 2 Republican    142.
+    ## # A tibble: 1 × 2
+    ##   party pop_mil
+    ##   <chr>   <dbl>
+    ## 1 <NA>     328.
 
 ## Fastest spreading states in the last 14 days
 

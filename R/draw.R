@@ -143,7 +143,7 @@ draw_bar_chart <- function(df, value_var) {
     ggplot2::theme_light()
 
   if (rlang::as_string(rlang::ensym(value_var)) %in% 
-      c("value_per1m", "value_ma_per1m")) {
+      c("value_per1m", "value_ma_per1m", "value_per_hospital")) {
     p +
       ggplot2::geom_vline(xintercept = national_avg, linetype = 2) +
       ggplot2::annotate("text",

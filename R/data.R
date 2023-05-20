@@ -1,6 +1,6 @@
 #' Japan Covid-19 situation
 #'
-#' @source https://www3.nhk.or.jp/news/special/coronavirus/data/
+#' @source https://www.mhlw.go.jp/stf/covid-19/open-data.html
 #' @format A list.
 #' \describe{
 #' \item{area_df}{
@@ -40,6 +40,35 @@
 #' }
 #' }
 "japan"
+
+#' Japan Covid-19 situation, weekly
+#'
+#' @source https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000121431_00432.html
+#' @format A list.
+#' \describe{
+#' \item{area_df}{
+#' @format A tibble.
+#' \describe{
+#' \item{publish_date}{2020-01-16}
+#' \item{code}{"01"}
+#' \item{prefecture}{"Hokkaido"}
+#' \item{concept}{"new_conf_wk"}
+#' \item{value}{0}
+#' \item{value_per_hospital}{0}
+#' }
+#' }
+#' \item{area_menu}{
+#' @format A character vector of length 47.
+#' \describe{
+#' \item{1}{"Hokkaido"}
+#' \item{2}{"Aomori"}
+#' \item{3}{"Iwate"}
+#' \item{4}{"Miyagi"}
+#' \item{5}{"Akita"}
+#' }
+#' }
+#' }
+"japan_wk"
 
 #' USA Covid-19 situation
 #'
