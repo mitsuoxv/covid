@@ -3,7 +3,7 @@ Japan, weekly confirmed Covid-19 cases per hospital
 Mitsuo Shiota
 2023-05-20
 
-Updated: 2023-05-20
+Updated: 2023-05-26
 
 ## Covid-19 was reclassified as tier 5 on May 8, 2023 in Japan
 
@@ -21,8 +21,6 @@ site](https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000121431_00432.html).
     ## 
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-    ##  chr [1:5] "                                           Press Release\n                                          令和５年５"| __truncated__ ...
 
 ## Weekly confirmed cases per hospital
 

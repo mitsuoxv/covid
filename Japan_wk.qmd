@@ -2,12 +2,10 @@
 title: "Japan, weekly confirmed Covid-19 cases per hospital"
 author: "Mitsuo Shiota"
 date: "2023-05-20"
-output: github_document
+format: gfm
+execute:
+  echo: false
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
 
 Updated: `r Sys.Date()`
 
@@ -15,7 +13,10 @@ Updated: `r Sys.Date()`
 
 There are no daily data available on Covid-19 since May 8, 2023 in Japan. Instead, MHLW (Ministry of Health, Labour and Welfare) publishes weekly data in [its web site](https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000121431_00432.html).
 
-```{r library, include=FALSE}
+```{r}
+#| label: setup
+#| include: false
+
 library(tidyverse)
 library(lubridate)
 library(readxl)
@@ -28,17 +29,21 @@ library(pdftools)
 
 ## Read data from MHLW site
 
-```{r end_row_num}
-end_row_num <- 36
-```
+```{r}
+#| label: pref_eng
 
-```{r pref_eng}
 pref_eng <- read_csv("data-raw/pref_eng.csv") |> 
   mutate(code = sprintf("%02.0f", 0:47))
 ```
 
-```{r read_data_from_MHLW, message=FALSE}
-conf_num <- read_excel("data-raw/001098622.xlsx",
+```{r}
+#| label: read_data_from_MHLW
+#| message: false
+
+end_row_num <- 36
+url_excel <- "data-raw/001098622.xlsx"
+
+conf_num <- read_excel(url_excel,
                        range = paste0("A5:AX", end_row_num)) |>
   set_names("start", "end", pref_eng$prefecture) |>
   pivot_longer(!start:end, names_to = "prefecture", values_to = "value") |>
@@ -48,7 +53,7 @@ conf_num <- read_excel("data-raw/001098622.xlsx",
     ) |> 
   select(publish_date = start, prefecture, value)
 
-conf_per_hospital <- read_excel("data-raw/001098622.xlsx",
+conf_per_hospital <- read_excel(url_excel,
                    range = paste0("A", end_row_num + 6, ":AX", end_row_num * 2 + 1)) |> 
   set_names("start", "end", pref_eng$prefecture) |>
   pivot_longer(!start:end, names_to = "prefecture", 
@@ -59,7 +64,9 @@ in_japan_wk <- bind_cols(conf_num, conf_per_hospital) |>
   left_join(pref_eng, by = "prefecture")
 ```
 
-```{r prepare_for_pdf}
+```{r}
+#| label: prepare_for_pdf
+
 # Split by line
 make_lines <- function(a_list) {
   a_list |> 
@@ -76,47 +83,55 @@ read_chr_vec <- function(chr_vec, skip, expect_col_num) {
     matrix(ncol = expect_col_num, byrow = TRUE) |> 
     as_tibble(.name_repair = "minimal")
 }
+
+# read pdf and return df_table
+read_pdf <- function(url_pdf) {
+  # Extract text
+  texts <- pdf_text(url_pdf)
+  
+  # Split into lines
+  lines <- texts  %>% 
+    make_lines()
+  
+  # Table
+  table_start <- str_which(lines, "新型コロナウイルス感染症（COVID-19）定点当たり報告数・都道府県別")
+  
+  table_end <- str_which(lines, "新型コロナウイルス感染症（COVID-19）定点当たり報告数推移")
+  
+  lines_table <- lines[table_start:(table_end - 2)]
+    
+  df_table <- read_chr_vec(lines_table, skip = 5, expect_col_num = 3) |> 
+    set_names("prefecture_kj", "value", "value_per_hospital") |> 
+    mutate(across(value:value_per_hospital, parse_number))
+  
+  date_line <- lines_table[2]
+  
+  py <- str_extract(date_line, "(\\d+)年", group = 1) |> as.numeric()
+  pm <- str_extract(date_line, "(\\d+)月", group = 1) |> as.numeric()
+  pd <- str_extract(date_line, "(\\d+)日", group = 1) |> as.numeric()
+  
+  # add publish_date
+  bind_cols(df_table[c(48, 1:47), ], pref_eng) |> 
+    mutate(publish_date = make_date(py, pm, pd)) |> 
+    select(-prefecture_kj)
+}
 ```
 
-```{r read_from_pdf}
-# Extract text
-texts <- pdf_text("data-raw/001098617.pdf")
+```{r}
+#| label: read_from_pdf
 
-str(texts)
-
-# Split into lines
-lines <- texts  %>% 
-  make_lines()
-
-# Table
-table_start <- str_which(lines, "新型コロナウイルス感染症（COVID-19）定点当たり報告数・都道府県別")
-
-table_end <- str_which(lines, "新型コロナウイルス感染症（COVID-19）定点当たり報告数推移")
-
-lines_table <- lines[table_start:(table_end - 2)]
-  
-df_table <- read_chr_vec(lines_table, skip = 5, expect_col_num = 3) |> 
-  set_names("prefecture_kj", "value", "value_per_hospital") |> 
-  mutate(across(value:value_per_hospital, parse_number))
-
-date_line <- lines_table[2]
-
-py <- str_extract(date_line, "(\\d+)年", group = 1) |> as.numeric()
-pm <- str_extract(date_line, "(\\d+)月", group = 1) |> as.numeric()
-pd <- str_extract(date_line, "(\\d+)日", group = 1) |> as.numeric()
-
-# add publish_date
-df_table <- bind_cols(df_table[c(48, 1:47), ], pref_eng) |> 
-  mutate(publish_date = make_date(py, pm, pd)) |> 
-  select(-prefecture_kj)
+df_table_0519 <- read_pdf("https://www.mhlw.go.jp/content/001100553.pdf")
+df_table_0526 <- read_pdf("https://www.mhlw.go.jp/content/001100720.pdf")
 
 # add pdf data
-in_japan_wk <- bind_rows(in_japan_wk, df_table)
+in_japan_wk <- bind_rows(in_japan_wk, df_table_0519, df_table_0526)
 ```
 
 ## Weekly confirmed cases per hospital
 
-```{r conf_per_hospital}
+```{r}
+#| label: conf_per_hospital
+
 in_japan_wk |> 
   filter(prefecture != "Total") |> 
   ggplot(aes(publish_date, value_per_hospital)) +
@@ -131,7 +146,9 @@ in_japan_wk |>
 
 ## Confirmed Covid-19 cases per hospital in the latest week by prefecuture
 
-```{r map_draw_prepare, include=FALSE}
+```{r}
+#| label: map_draw_prepare
+#| include: false
 
 # read map data
 prefectures_map <-
@@ -148,7 +165,9 @@ draw_map_japan <- function(map_df, df, var) {
 }
 ```
 
-```{r conf_per_hospital_last, echo=FALSE}
+```{r}
+#| label: conf_per_hospital_last
+
 in_japan_wk_last <- in_japan_wk |> 
   filter(prefecture != "Total") |> 
   group_by(code) |> 
@@ -163,7 +182,9 @@ draw_map_japan(prefectures_map,
 
 For more flexible data presentations, please check [my Shiny app](https://mitsuoxv.shinyapps.io/covid/).
 
-```{r japan_wk, include=FALSE}
+```{r}
+#| label: japan_wk
+#| include: false
 
 # make a list
 japan_wk <- list(
