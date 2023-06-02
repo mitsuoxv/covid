@@ -11,7 +11,7 @@ Updated: `r Sys.Date()`
 
 ## Covid-19 was reclassified as tier 5 on May 8, 2023 in Japan
 
-There are no daily data available on Covid-19 since May 8, 2023 in Japan. Instead, MHLW (Ministry of Health, Labour and Welfare) publishes weekly data in [its web site](https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000121431_00432.html).
+There are no daily data available on Covid-19 since May 8, 2023 in Japan. Instead, MHLW (Ministry of Health, Labour and Welfare) publishes weekly data in [its web site](https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000121431_00086.html).
 
 ```{r}
 #| label: setup
@@ -20,9 +20,6 @@ There are no daily data available on Covid-19 since May 8, 2023 in Japan. Instea
 library(tidyverse)
 library(lubridate)
 library(readxl)
-
-library(NipponMap)
-library(sf)
 
 library(pdftools)
 ```
@@ -119,6 +116,7 @@ read_pdf <- function(url_pdf) {
 
 ```{r}
 #| label: read_from_pdf
+
 urls <- paste0("https://www.mhlw.go.jp/content/",
                c("001100553", "001102876", "001103206"),
                ".pdf")
@@ -133,7 +131,7 @@ in_japan_wk <- bind_rows(in_japan_wk, df_table)
 ## Weekly confirmed cases per hospital
 
 ```{r}
-#| label: conf_per_hospital
+#| label: plot_line_chart
 
 in_japan_wk |> 
   filter(prefecture != "Total") |> 
@@ -142,45 +140,9 @@ in_japan_wk |>
   geom_line(data = in_japan_wk |> filter(prefecture == "Total"),
             color = "black", linewidth = 1) +
   labs(x = NULL, y = "Cases per hospital",
-       title = paste0("Weekly confirmed cases; latest week is up to ", max(in_japan_wk$publish_date)),
+   title = paste0("Weekly confirmed cases; latest is the week starting on ", max(in_japan_wk$publish_date)),
        subtitle = "47 prefectures are colored lines, and the national average is a black line",
        caption = "Source: Ministry of Health, Labour and Welfare")
-```
-
-## Confirmed Covid-19 cases per hospital in the latest week by prefecuture
-
-```{r}
-#| label: map_draw_prepare
-#| include: false
-
-# read map data
-prefectures_map <-
-  st_read(system.file("shapes/jpn.shp", package = "NipponMap"))
-
-draw_map_japan <- function(map_df, df, var) {
-  map_df %>%
-    left_join(df, by = c(jiscode = "code")) %>%
-    ggplot() +
-    geom_sf(aes(fill = {{ var }}), color = "white") +
-    scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
-                         midpoint = median(df %>% pull({{ var }}))) +
-    theme_void()
-}
-```
-
-```{r}
-#| label: conf_per_hospital_last
-
-in_japan_wk_last <- in_japan_wk |> 
-  filter(prefecture != "Total") |> 
-  group_by(code) |> 
-  filter(publish_date == max(publish_date)) |> 
-  ungroup()
-
-draw_map_japan(prefectures_map,
-               in_japan_wk_last,
-               value_per_hospital) +
-  labs(fill = "Cases")
 ```
 
 For more flexible data presentations, please check [my Shiny app](https://mitsuoxv.shinyapps.io/covid/).
