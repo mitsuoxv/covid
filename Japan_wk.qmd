@@ -119,12 +119,15 @@ read_pdf <- function(url_pdf) {
 
 ```{r}
 #| label: read_from_pdf
+urls <- paste0("https://www.mhlw.go.jp/content/",
+               c("001100553", "001102876", "001103206"),
+               ".pdf")
 
-df_table_0519 <- read_pdf("https://www.mhlw.go.jp/content/001100553.pdf")
-df_table_0526 <- read_pdf("https://www.mhlw.go.jp/content/001100720.pdf")
+df_table <- map(urls, read_pdf) |> 
+  list_rbind()
 
 # add pdf data
-in_japan_wk <- bind_rows(in_japan_wk, df_table_0519, df_table_0526)
+in_japan_wk <- bind_rows(in_japan_wk, df_table)
 ```
 
 ## Weekly confirmed cases per hospital
@@ -139,7 +142,7 @@ in_japan_wk |>
   geom_line(data = in_japan_wk |> filter(prefecture == "Total"),
             color = "black", linewidth = 1) +
   labs(x = NULL, y = "Cases per hospital",
-       title = paste0("Weekly confirmed cases; latest week is up to ", max(conf_per_hospital$publish_date)),
+       title = paste0("Weekly confirmed cases; latest week is up to ", max(in_japan_wk$publish_date)),
        subtitle = "47 prefectures are colored lines, and the national average is a black line",
        caption = "Source: Ministry of Health, Labour and Welfare")
 ```
