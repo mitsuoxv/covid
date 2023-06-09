@@ -118,7 +118,7 @@ read_pdf <- function(url_pdf) {
 #| label: read_from_pdf
 
 urls <- paste0("https://www.mhlw.go.jp/content/",
-               c("001100553", "001102876", "001103206"),
+               c("001100553", "001102876", "001103206", "001105457"),
                ".pdf")
 
 df_table <- map(urls, read_pdf) |> 
