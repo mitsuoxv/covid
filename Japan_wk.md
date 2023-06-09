@@ -21,6 +21,13 @@ site](https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000121431_00086.html).
     ℹ Use `spec()` to retrieve the full column specification for this data.
     ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
+## 2 csv files
+
+I make 2 csv files.
+
+- japan_wk_cases.csv
+- japan_wk_cases_per_hospital.csv
+
 ## Weekly confirmed cases per hospital
 
 ![](Japan_wk_files/figure-commonmark/plot_line_chart-1.png)

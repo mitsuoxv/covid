@@ -128,6 +128,27 @@ df_table <- map(urls, read_pdf) |>
 in_japan_wk <- bind_rows(in_japan_wk, df_table)
 ```
 
+## 2 csv files
+
+I make 2 csv files.
+
+- japan_wk_cases.csv
+- japan_wk_cases_per_hospital.csv
+
+```{r}
+#| label: write_csv_files
+
+in_japan_wk |> 
+  select(code, prefecture, publish_date, value) |> 
+  pivot_wider(names_from = publish_date, values_from = value) |> 
+  write_csv("japan_wk_cases.csv")
+
+in_japan_wk |> 
+  select(code, prefecture, publish_date, value_per_hospital) |> 
+  pivot_wider(names_from = publish_date, values_from = value_per_hospital) |> 
+  write_csv("japan_wk_cases_per_hospital.csv")
+```
+
 ## Weekly confirmed cases per hospital
 
 ```{r}
