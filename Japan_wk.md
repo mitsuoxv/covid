@@ -2,7 +2,7 @@
 Mitsuo Shiota
 2023-05-20
 
-Updated: 2023-06-23
+Updated: 2023-06-30
 
 ## Covid-19 was reclassified as tier 5 on May 8, 2023 in Japan
 
