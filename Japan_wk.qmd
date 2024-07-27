@@ -37,6 +37,7 @@ pref_eng <- read_csv("data-raw/pref_eng.csv") |>
 ```{r}
 #| label: read_data_from_MHLW
 #| message: false
+#| eval: false
 
 end_row_num <- 36
 url_excel <- "data-raw/001098622.xlsx"
@@ -117,6 +118,7 @@ read_pdf <- function(url_pdf) {
 
 ```{r}
 #| label: read_from_pdf
+#| eval: false
 
 urls <- paste0("https://www.mhlw.go.jp/content/",
                c("001100553", "001102876", "001103206", "001105457",
@@ -142,6 +144,17 @@ df_table <- map(urls, read_pdf) |>
 
 # add pdf data
 in_japan_wk <- bind_rows(in_japan_wk, df_table)
+```
+
+```{r}
+#| label: read_from_pdf_to_add
+
+load("data/japan_wk.rda")
+
+df_table <- read_pdf("https://www.mhlw.go.jp/content/001280143.pdf")
+
+# add pdf data
+in_japan_wk <- bind_rows(japan_wk$area_df, df_table)
 ```
 
 ## 2 csv files
