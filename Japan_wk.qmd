@@ -152,7 +152,7 @@ in_japan_wk <- bind_rows(in_japan_wk, df_table)
 
 load("data/japan_wk.rda")
 
-df_table <- read_pdf("https://www.mhlw.go.jp/content/001292681.pdf")
+df_table <- read_pdf("https://www.mhlw.go.jp/content/001296877.pdf")
 
 # add pdf data
 in_japan_wk <- bind_rows(japan_wk$area_df, df_table)
