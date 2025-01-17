@@ -73,16 +73,6 @@ make_lines <- function(a_list) {
     unlist()
 }
 
-# read character vector into a tibble, split by >= 5 spaces
-read_chr_vec <- function(chr_vec, skip, expect_col_num) {
-  
-  chr_vec[(skip + 1):length(chr_vec)] |> 
-    str_split("\\s{5,}") |> 
-    unlist() |> 
-    matrix(ncol = expect_col_num, byrow = TRUE) |> 
-    as_tibble(.name_repair = "minimal")
-}
-
 # read pdf and return df_table
 read_pdf <- function(url_pdf) {
   # Extract text
@@ -97,15 +87,20 @@ read_pdf <- function(url_pdf) {
   
   table_end <- str_which(lines, "新型コロナウイルス感染症（COVID-19）定点当たり報告数推移")
   
-  lines_table <- lines[table_start:(table_end - 2)]
+  lines_table <- lines[(table_start + 1):(table_end - 2)]
     
-  df_table <- read_chr_vec(lines_table, skip = 5, expect_col_num = 3) |> 
-    set_names("prefecture_kj", "value", "value_per_hospital") |> 
+  df_table <- tibble(x = lines_table[6:54]) |> 
+    separate_wider_regex(x,
+                         c(prefecture_kj = ".{17}", "\\s+",
+                           value = "[0-9,]+", "\\s+",
+                           value_per_hospital = "[0-9.]+")
+                         ) |> 
     mutate(across(value:value_per_hospital, parse_number))
   
   date_line <- lines_table[2]
   
-  py <- str_extract(date_line, "(\\d+)年", group = 1) |> as.numeric()
+  # py <- str_extract(date_line, "(\\d+)年", group = 1) |> as.numeric()
+  py <- 2024
   pm <- str_extract(date_line, "(\\d+)月", group = 1) |> as.numeric()
   pd <- str_extract(date_line, "(\\d+)日", group = 1) |> as.numeric()
   
@@ -117,42 +112,11 @@ read_pdf <- function(url_pdf) {
 ```
 
 ```{r}
-#| label: read_from_pdf
-#| eval: false
-
-# up to July 19, 2024
-urls <- paste0("https://www.mhlw.go.jp/content/",
-               c("001100553", "001102876", "001103206", "001105457",
-                 "001108590", "001111891", "001115055", "001118343",
-                 "001120797", "001122882", "001126858", "001131133",
-                 "001133321", "001135122", "001138245", "001140810",
-                 "001144212", "001146197", "001148508", "001151300",
-                 "001154253", "001155887", "001158575", "001161146",
-                 "001163905", "001165794", "001168343", "001170443",
-                 "001173342", "001176400", "001178927", "001181783",
-                 "001185610", "001187734", "001188996", "001193285",
-                 "001197418", "001202247", "001206921", "001210301",
-                 "001214098", "001216718", "001220751", "001225957",
-                 "001231623", "001236614", "001240978", "001243630",
-                 "001246648", "001249250", "001251657", "001252825",
-                 "001254674", "001256413", "001259114", "001261289",
-                 "001263595", "001266001", "001268438", "001271253",
-                 "001274316", "001276781"),
-               ".pdf")
-
-df_table <- map(urls, read_pdf) |> 
-  list_rbind()
-
-# add pdf data
-in_japan_wk <- bind_rows(in_japan_wk, df_table)
-```
-
-```{r}
 #| label: read_from_pdf_to_add
 
 load("data/japan_wk.rda")
 
-df_table <- read_pdf("https://www.mhlw.go.jp/content/001370323.pdf")
+df_table <- read_pdf("https://www.mhlw.go.jp/content/001372593.pdf")
 
 # add pdf data
 in_japan_wk <- bind_rows(japan_wk$area_df, df_table)
