@@ -99,8 +99,7 @@ read_pdf <- function(url_pdf) {
   
   date_line <- lines_table[2]
   
-  # py <- str_extract(date_line, "(\\d+)年", group = 1) |> as.numeric()
-  py <- 2024
+  py <- str_extract(date_line, "(\\d+)年", group = 1) |> as.numeric()
   pm <- str_extract(date_line, "(\\d+)月", group = 1) |> as.numeric()
   pd <- str_extract(date_line, "(\\d+)日", group = 1) |> as.numeric()
   
@@ -116,7 +115,7 @@ read_pdf <- function(url_pdf) {
 
 load("data/japan_wk.rda")
 
-df_table <- read_pdf("https://www.mhlw.go.jp/content/001372593.pdf")
+df_table <- read_pdf("https://www.mhlw.go.jp/content/001375699.pdf")
 
 # add pdf data
 in_japan_wk <- bind_rows(japan_wk$area_df, df_table)
