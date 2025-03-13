@@ -97,6 +97,9 @@ data_japan <- data_japan %>%
 prefectures_map <-
   st_read(system.file("shapes/jpn.shp", package = "NipponMap"))
 
+# inset Okinawa
+prefectures_map$geometry[[47]] <- prefectures_map$geometry[[47]] + c(7, 14)
+
 in_japan <- data_japan %>%
   pivot_longer(!c(publish_date, code, prefecture, population),
                names_to = "concept", values_to = "value") %>% 
@@ -124,15 +127,17 @@ usethis::use_data(japan, overwrite = TRUE)
 
 ```{r map_draw_prepare, include=FALSE}
 
-# read map data
-prefectures_map <-
-  st_read(system.file("shapes/jpn.shp", package = "NipponMap"))
-
 draw_map_japan <- function(map_df, df, var) {
+  lines <- cbind(c(132, 135, 137, 137), c(38, 38, 40, 43)) |> 
+    st_linestring()
+  
   map_df %>%
     left_join(df, by = c(jiscode = "code")) %>%
     ggplot() +
     geom_sf(aes(fill = {{ var }}), color = "white") +
+    geom_sf(data = lines, color = "gray80") +
+    xlim(130, 149) +
+    ylim(31, 45) +
     scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
                          midpoint = median(df %>% pull({{ var }}))) +
     theme_void()
