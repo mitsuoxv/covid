@@ -66,11 +66,10 @@ draw_map_japan <- function(df, value_var) {
     ggplot2::ggplot() +
     ggplot2::geom_sf(ggplot2::aes(fill = {{ value_var }}), color = "white") +
     ggplot2::geom_sf(data = lines, color = "gray80") +
-    ggplot2::xlim(130, 149) +
-    ggplot2::ylim(31, 45) +
     ggplot2::scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
                          midpoint = stats::median(df %>% dplyr::pull({{ value_var }}), na.rm = TRUE)) +
     ggplot2::labs(fill = "# of cases") +
+    ggplot2::coord_sf(xlim = c(130, 149), ylim = c(31, 45)) +
     ggplot2::theme_void(base_size = 16)
 }
 
