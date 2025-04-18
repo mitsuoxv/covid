@@ -85,11 +85,9 @@ read_pdf <- function(url_pdf) {
   # Table
   table_start <- str_which(lines, "新型コロナウイルス感染症（COVID-19）定点当たり報告数・都道府県別")
   
-  table_end <- str_which(lines, "新型コロナウイルス感染症（COVID-19）定点当たり報告数推移")
-  
-  lines_table <- lines[(table_start + 1):(table_end - 2)]
+  lines_table <- lines[(table_start + 1):(table_start + 53)]
     
-  df_table <- tibble(x = lines_table[6:54]) |> 
+  df_table <- tibble(x = lines_table[6:53]) |> 
     separate_wider_regex(x,
                          c(prefecture_kj = ".{17}", "\\s+",
                            value = "[0-9,]+", "\\s+",
@@ -115,7 +113,7 @@ read_pdf <- function(url_pdf) {
 
 load("data/japan_wk.rda")
 
-df_table <- read_pdf("https://www.mhlw.go.jp/content/001474721.pdf")
+df_table <- read_pdf("https://www.mhlw.go.jp/content/001477570.pdf")
 
 # add pdf data
 in_japan_wk <- bind_rows(japan_wk$area_df, df_table)
