@@ -113,7 +113,7 @@ read_pdf <- function(url_pdf) {
 
 load("data/japan_wk.rda")
 
-df_table <- read_pdf("https://www.mhlw.go.jp/content/001515858.pdf")
+df_table <- read_pdf("https://www.mhlw.go.jp/content/001519229.pdf")
 
 # add pdf data
 in_japan_wk <- bind_rows(japan_wk$area_df, df_table)
