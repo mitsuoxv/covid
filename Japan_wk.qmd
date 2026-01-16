@@ -100,9 +100,9 @@ read_pdf <- function(url_pdf) {
   py <- str_extract(date_line, "(\\d+)年", group = 1) |> as.numeric()
   pm <- str_extract(date_line, "(\\d+)月", group = 1) |> as.numeric()
   pd <- str_extract(date_line, "(\\d+)日", group = 1) |> as.numeric()
-  
+  py <- py - 1 # avoid 2026-12-29
   # add publish_date
-  bind_cols(df_table[c(48, 1:47), ], pref_eng) |> 
+  df_table <- bind_cols(df_table[c(48, 1:47), ], pref_eng) |> 
     mutate(publish_date = make_date(py, pm, pd)) |> 
     select(-prefecture_kj)
 }
@@ -113,7 +113,7 @@ read_pdf <- function(url_pdf) {
 
 load("data/japan_wk.rda")
 
-df_table <- read_pdf("https://www.mhlw.go.jp/content/001627612.pdf")
+df_table <- read_pdf("https://www.mhlw.go.jp/content/001629501.pdf")
 
 # add pdf data
 in_japan_wk <- bind_rows(japan_wk$area_df, df_table)
