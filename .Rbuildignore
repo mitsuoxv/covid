@@ -11,3 +11,5 @@
 ^README.*$
 ^old-codes$
 ^\.github$
+^\.positai$
+^\.claude$
