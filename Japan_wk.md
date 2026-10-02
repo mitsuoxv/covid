@@ -2,13 +2,14 @@
 Mitsuo Shiota
 2023-05-20
 
-Updated: 2026-09-18
+Updated: 2026-10-02
 
 ## Covid-19 was reclassified as tier 5 on May 8, 2023 in Japan
 
 There are no daily data available on Covid-19 since May 8, 2023 in
 Japan. Instead, MHLW (Ministry of Health, Labour and Welfare) publishes
-weekly data in [its web site]().
+weekly data in [its web
+site](https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000121431_00086.html).
 
 ## Read data from MHLW site
 

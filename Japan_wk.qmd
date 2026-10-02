@@ -11,7 +11,7 @@ Updated: `r Sys.Date()`
 
 ## Covid-19 was reclassified as tier 5 on May 8, 2023 in Japan
 
-There are no daily data available on Covid-19 since May 8, 2023 in Japan. Instead, MHLW (Ministry of Health, Labour and Welfare) publishes weekly data in [its web site]().
+There are no daily data available on Covid-19 since May 8, 2023 in Japan. Instead, MHLW (Ministry of Health, Labour and Welfare) publishes weekly data in [its web site](https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000121431_00086.html).
 
 ```{r}
 #| label: setup
@@ -113,7 +113,7 @@ read_pdf <- function(url_pdf) {
 
 load("data/japan_wk.rda")
 
-df_table <- read_pdf("https://www.mhlw.go.jp/content/001750910.pdf")
+df_table <- read_pdf("https://www.mhlw.go.jp/content/001755320.pdf")
 
 # add pdf data
 in_japan_wk <- bind_rows(japan_wk$area_df, df_table)
