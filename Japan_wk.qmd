@@ -90,10 +90,13 @@ read_pdf <- function(url_pdf) {
   df_table <- tibble(x = lines_table[6:53]) |> 
     separate_wider_regex(x,
                          c(prefecture_kj = ".{17}", "\\s+",
-                           value = "[0-9,]+", "\\s+",
-                           value_per_hospital = "[0-9.]+")
+                           value = "[0-9,-]+", "\\s+",
+                           value_per_hospital = "[0-9.-]+")
                          ) |> 
-    mutate(across(value:value_per_hospital, parse_number))
+    mutate(
+      across(value:value_per_hospital, \(x) if_else(x == "-", "0", x)),
+      across(value:value_per_hospital, parse_number)
+    )
   
   date_line <- lines_table[2]
   
@@ -113,7 +116,7 @@ read_pdf <- function(url_pdf) {
 
 load("data/japan_wk.rda")
 
-df_table <- read_pdf("https://www.mhlw.go.jp/content/001766167.pdf")
+df_table <- read_pdf("https://www.mhlw.go.jp/content/001768789.pdf")
 
 # add pdf data
 in_japan_wk <- bind_rows(japan_wk$area_df, df_table)
